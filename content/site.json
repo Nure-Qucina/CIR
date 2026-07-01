@@ -1,0 +1,23 @@
+{
+  "nome": "Comunità Islamica di Roma",
+  "sigla": "CIR",
+  "payoff": "Uniti per una comunità forte e consapevole",
+  "descrizione": "La Comunità Islamica di Roma (CIR) dà voce ai musulmani della capitale: 22 associazioni unite per diritti, dialogo e una città più giusta.",
+  "labelNews": "News",
+  "donazioniUrl": "https://www.launchgood.com/v4/campaign/sostieni_cir_per_crescere",
+  "social": [
+    {
+      "piattaforma": "facebook",
+      "url": "https://www.facebook.com/profile.php?id=61584109545467"
+    },
+    {
+      "piattaforma": "instagram",
+      "url": "https://www.instagram.com/comunita_islamica_roma/"
+    }
+  ],
+  "contatti": {
+    "email": "",
+    "telefono": "",
+    "indirizzo": ""
+  }
+}

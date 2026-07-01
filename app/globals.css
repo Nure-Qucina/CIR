@@ -1,0 +1,216 @@
+@import "tailwindcss";
+
+/* ============================================================
+   CIR — Design tokens
+   I quattro colori brand (crema / arancione / teal / ink) con
+   scale derivate 50–900. Definiti come CSS variables e mappati
+   nel theme Tailwind v4 via @theme inline.
+   ============================================================ */
+
+:root {
+  /* --- Brand core --- */
+  --color-cream: #f8efe3; /* sfondo base, identità a colpo d'occhio */
+  --color-orange: #ec8b36; /* accento primario: CTA, bordi, dettagli */
+  --color-teal: #5f746e; /* istituzionale: serietà, bilancia il caldo */
+  --color-ink: #2a1f0e; /* testo e contrasti forti */
+
+  /* --- Derivati principali --- */
+  --color-cream-dark: #efe2cf; /* superfici/hover su crema */
+  --color-orange-dark: #d4762a; /* hover CTA arancione */
+  --color-teal-dark: #4c5e59; /* hover su teal */
+  --color-ink-soft: #5a4f3e; /* testo secondario */
+
+  /* --- Scala crema --- */
+  --color-cream-50: #fdfaf5;
+  --color-cream-100: #f8efe3;
+  --color-cream-200: #efe2cf;
+  --color-cream-300: #e4d2b8;
+  --color-cream-400: #d3bb98;
+
+  /* --- Scala arancione --- */
+  --color-orange-50: #fdf3e8;
+  --color-orange-100: #fae0c4;
+  --color-orange-200: #f5c690;
+  --color-orange-300: #f0a85c;
+  --color-orange-400: #ec8b36;
+  --color-orange-500: #d4762a;
+  --color-orange-600: #b25f1f;
+  --color-orange-700: #8a4918;
+  --color-orange-800: #623413;
+  --color-orange-900: #3d2110;
+
+  /* --- Scala teal --- */
+  --color-teal-50: #eef1f0;
+  --color-teal-100: #d6dedb;
+  --color-teal-200: #aebbb6;
+  --color-teal-300: #869891;
+  --color-teal-400: #6e827b;
+  --color-teal-500: #5f746e;
+  --color-teal-600: #4c5e59;
+  --color-teal-700: #3c4b47;
+  --color-teal-800: #2d3835;
+  --color-teal-900: #1e2523;
+
+  /* --- Scala ink --- */
+  --color-ink-50: #f5f2ec;
+  --color-ink-100: #e6ddcd;
+  --color-ink-200: #c7b89c;
+  --color-ink-300: #9a8a6a;
+  --color-ink-400: #6f6045;
+  --color-ink-500: #5a4f3e;
+  --color-ink-600: #463c2c;
+  --color-ink-700: #38301f;
+  --color-ink-800: #2a1f0e;
+  --color-ink-900: #1a1308;
+
+  /* --- Neutri di supporto --- */
+  --color-surface: #ffffff;
+  --color-border: #e7ddcf;
+}
+
+@theme inline {
+  /* Brand */
+  --color-cream: var(--color-cream);
+  --color-cream-dark: var(--color-cream-dark);
+  --color-cream-50: var(--color-cream-50);
+  --color-cream-100: var(--color-cream-100);
+  --color-cream-200: var(--color-cream-200);
+  --color-cream-300: var(--color-cream-300);
+  --color-cream-400: var(--color-cream-400);
+
+  --color-orange: var(--color-orange);
+  --color-orange-dark: var(--color-orange-dark);
+  --color-orange-50: var(--color-orange-50);
+  --color-orange-100: var(--color-orange-100);
+  --color-orange-200: var(--color-orange-200);
+  --color-orange-300: var(--color-orange-300);
+  --color-orange-400: var(--color-orange-400);
+  --color-orange-500: var(--color-orange-500);
+  --color-orange-600: var(--color-orange-600);
+  --color-orange-700: var(--color-orange-700);
+  --color-orange-800: var(--color-orange-800);
+  --color-orange-900: var(--color-orange-900);
+
+  --color-teal: var(--color-teal);
+  --color-teal-dark: var(--color-teal-dark);
+  --color-teal-50: var(--color-teal-50);
+  --color-teal-100: var(--color-teal-100);
+  --color-teal-200: var(--color-teal-200);
+  --color-teal-300: var(--color-teal-300);
+  --color-teal-400: var(--color-teal-400);
+  --color-teal-500: var(--color-teal-500);
+  --color-teal-600: var(--color-teal-600);
+  --color-teal-700: var(--color-teal-700);
+  --color-teal-800: var(--color-teal-800);
+  --color-teal-900: var(--color-teal-900);
+
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-ink-50: var(--color-ink-50);
+  --color-ink-100: var(--color-ink-100);
+  --color-ink-200: var(--color-ink-200);
+  --color-ink-300: var(--color-ink-300);
+  --color-ink-400: var(--color-ink-400);
+  --color-ink-500: var(--color-ink-500);
+  --color-ink-600: var(--color-ink-600);
+  --color-ink-700: var(--color-ink-700);
+  --color-ink-800: var(--color-ink-800);
+  --color-ink-900: var(--color-ink-900);
+
+  --color-surface: var(--color-surface);
+  --color-border: var(--color-border);
+
+  /* Font */
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+
+  /* Type scale fluida (clamp) */
+  --text-h1: clamp(2.2rem, 5vw, 3.5rem);
+  --text-h2: clamp(1.7rem, 3.5vw, 2.5rem);
+  --text-h3: clamp(1.3rem, 2.5vw, 1.6rem);
+
+  /* Raggi */
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.125rem;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Focus state visibile e on-brand su tutti gli elementi interattivi */
+  :focus-visible {
+    outline: 2px solid var(--color-teal);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-orange);
+    color: var(--color-ink);
+  }
+}
+
+/* Rispetta prefers-reduced-motion globalmente */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Rivelazione progressiva delle card timeline (disattivata da reduced-motion). */
+.timeline-node {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+.timeline-node.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .timeline-node {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Skip-link "Vai al contenuto" */
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -3rem;
+  z-index: 100;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 0.5rem;
+}

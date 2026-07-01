@@ -1,0 +1,20 @@
+{
+  "titolo": "Festa del Eid Al-Adha",
+  "stato": "passato",
+  "dataInizio": "2026-05-31T12:00",
+  "dataFine": "2026-05-31T20:00",
+  "tuttoIlGiorno": false,
+  "luogo": {
+    "nome": "Villa Gordiani",
+    "indirizzo": "Via Prenestina, 325",
+    "citta": "Roma",
+    "lat": 41.897,
+    "lng": 12.561
+  },
+  "estratto": "Festeggiamo insieme la Festa del Eid Al-Adha.",
+  "copertina": "/images/eventi/festa-del-eid-al-adha/copertina.png",
+  "ctaEsterna": {},
+  "inEvidenza": true,
+  "descrizione": "Una giornata di festa, preghiera e comunità per celebrare insieme l'Eid Al-Adha a Villa Gordiani.",
+  "seo": {}
+}
