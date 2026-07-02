@@ -1,7 +1,16 @@
 import KeystaticApp from "./keystatic";
 
-// L'admin Keystatic ha la sua UI completa: bypassa header/footer del sito
-// renderizzando da qui (segmento isolato).
+/**
+ * Root layout indipendente per l'admin Keystatic (segmento fuori da
+ * app/[locale]: resta intenzionalmente non localizzato). Keystatic porta la
+ * propria UI/stile completi — non serve il design system del sito.
+ */
 export default function RootLayout() {
-  return <KeystaticApp />;
+  return (
+    <html lang="it">
+      <body>
+        <KeystaticApp />
+      </body>
+    </html>
+  );
 }

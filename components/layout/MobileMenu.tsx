@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import { Menu, X } from "lucide-react";
-import type { NavItem } from "@/lib/content/types";
 import { Button } from "@/components/ui/Button";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { cn } from "@/lib/utils/cn";
+
+type NavItem = { label: string; href: string };
 
 /**
  * Menu mobile a comparsa, accessibile da tastiera:
@@ -23,6 +25,7 @@ export function MobileMenu({
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const t = useTranslations("common");
   // Il menu si chiude al click sui link (vedi onClick sotto): nessun effetto
   // che chiama setState alla navigazione.
 
@@ -47,7 +50,7 @@ export function MobileMenu({
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls="mobile-menu"
-        aria-label={open ? "Chiudi menu" : "Apri menu"}
+        aria-label={open ? t("chiudiMenu") : t("apriMenu")}
         className="grid h-10 w-10 place-items-center rounded-lg text-ink hover:bg-cream-dark"
       >
         {open ? <X size={22} /> : <Menu size={22} />}
@@ -62,7 +65,7 @@ export function MobileMenu({
           "flex flex-col gap-1 overflow-y-auto border-t border-border p-6",
         )}
       >
-        <nav aria-label="Navigazione principale">
+        <nav aria-label={t("navigazionePrincipale")}>
           <ul className="flex flex-col gap-1">
             {nav.map((item) => {
               const active =
@@ -89,13 +92,16 @@ export function MobileMenu({
             })}
           </ul>
         </nav>
+
+        <LanguageSwitcher className="mt-4 border-t border-border pt-4" />
+
         <Button
           href={donazioniUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-4 w-full"
         >
-          Dona
+          {t("dona")}
         </Button>
       </div>
     </div>

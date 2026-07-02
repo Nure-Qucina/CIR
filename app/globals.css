@@ -151,6 +151,23 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* Font per script (§8 brief i18n): Montserrat/Source Serif non coprono
+     arabo e bengalese. `--font-arabic`/`--font-bengali` esistono solo sulla
+     pagina del locale corrispondente (vedi app/[locale]/layout.tsx). Si
+     ridefiniscono `--font-sans`/`--font-serif` così ogni utility Tailwind
+     che li usa (incl. `font-serif` del corpo articoli, vedi Prose) eredita
+     automaticamente il font giusto. */
+  :lang(ar) {
+    --font-sans: var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+    --font-serif: var(--font-arabic), ui-serif, Georgia, serif;
+  }
+  :lang(bn) {
+    --font-sans: var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+    --font-serif: var(--font-bengali), ui-serif, Georgia, serif;
+    /* Segni diacritici sopra/sotto: line-height più generoso del default. */
+    line-height: 1.85;
+  }
+
   /* Focus state visibile e on-brand su tutti gli elementi interattivi */
   :focus-visible {
     outline: 2px solid var(--color-teal);
@@ -199,10 +216,26 @@
   }
 }
 
+/* Banner cookie: entrata dal basso (reduced-motion gestito dalla regola
+   globale che azzera animation-duration). */
+@keyframes cookie-banner-in {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.cookie-banner {
+  animation: cookie-banner-in 0.3s ease-out;
+}
+
 /* Skip-link "Vai al contenuto" */
 .skip-link {
   position: absolute;
-  left: 0.5rem;
+  inset-inline-start: 0.5rem;
   top: -3rem;
   z-index: 100;
   background: var(--color-ink);

@@ -2,16 +2,21 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Link2, Check } from "lucide-react";
 import { FacebookIcon } from "@/components/ui/SocialIcons";
 
 /**
  * Pulsanti di condivisione: Facebook, WhatsApp e copia link.
- * L'URL è costruito da NEXT_PUBLIC_SITE_URL + pathname → stabile tra server e
- * client (niente hydration mismatch) e funzionante anche senza JavaScript.
+ * L'URL è costruito da NEXT_PUBLIC_SITE_URL + pathname (usePathname "grezzo"
+ * di next/navigation, NON quello locale-aware di next-intl: qui serve il
+ * percorso completo con prefisso lingua, non quello ripulito) → stabile tra
+ * server e client (niente hydration mismatch) e funzionante anche senza
+ * JavaScript.
  */
 export function ShareButtons({ titolo }: { titolo: string }) {
   const pathname = usePathname();
+  const t = useTranslations("news");
   const [copied, setCopied] = useState(false);
 
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "";
@@ -34,10 +39,12 @@ export function ShareButtons({ titolo }: { titolo: string }) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="mr-1 text-sm font-semibold text-ink-soft">Condividi</span>
+      <span className="me-1 text-sm font-semibold text-ink-soft">
+        {t("condividi")}
+      </span>
       <a
         className={btn}
-        aria-label="Condividi su Facebook"
+        aria-label={t("condividiSuFacebook")}
         target="_blank"
         rel="noopener noreferrer"
         href={fbHref}
@@ -46,7 +53,7 @@ export function ShareButtons({ titolo }: { titolo: string }) {
       </a>
       <a
         className={btn}
-        aria-label="Condividi su WhatsApp"
+        aria-label={t("condividiSuWhatsapp")}
         target="_blank"
         rel="noopener noreferrer"
         href={waHref}
@@ -65,7 +72,7 @@ export function ShareButtons({ titolo }: { titolo: string }) {
         type="button"
         className={btn}
         onClick={copy}
-        aria-label="Copia link"
+        aria-label={t("copiaLink")}
       >
         {copied ? (
           <Check size={18} className="text-teal" />

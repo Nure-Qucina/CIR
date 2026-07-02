@@ -1,6 +1,7 @@
 {
   "nome": "Comunità Islamica di Roma",
   "sigla": "CIR",
+  "codiceFiscale": "9664566058",
   "payoff": "Uniti per una comunità forte e consapevole",
   "descrizione": "La Comunità Islamica di Roma (CIR) dà voce ai musulmani della capitale: 22 associazioni unite per diritti, dialogo e una città più giusta.",
   "labelNews": "News",
@@ -16,8 +17,8 @@
     }
   ],
   "contatti": {
-    "email": "",
-    "telefono": "",
-    "indirizzo": ""
+    "email": "comunitaislamicadiroma@gmail.com",
+    "telefono": "+39 344 667 5389",
+    "indirizzo": "Via dei Frassini 4, Roma"
   }
 }

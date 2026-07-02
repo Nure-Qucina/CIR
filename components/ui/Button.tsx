@@ -1,5 +1,5 @@
-import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils/cn";
 
 /**
@@ -8,7 +8,9 @@ import { cn } from "@/lib/utils/cn";
  *  - secondary: sfondo teal + testo bianco → ~5:1
  *  - ghost:     trasparente, bordo teal, testo ink
  *
- * Rende <Link> se passi `href`, altrimenti <button>.
+ * Rende <Link> locale-aware se passi un `href` interno, un `<a>` nativo per
+ * URL esterni (LaunchGood, mailto, ecc. — non vanno prefissati di lingua),
+ * altrimenti <button>.
  */
 
 type Variant = "primary" | "secondary" | "ghost";
@@ -39,7 +41,11 @@ type ButtonAsButton = StyleProps &
   ComponentProps<"button"> & { href?: undefined };
 
 type ButtonAsLink = StyleProps &
-  ComponentProps<typeof Link> & { href: string };
+  ComponentProps<"a"> & { href: string };
+
+function isExternalHref(href: string): boolean {
+  return /^(https?:)?\/\//.test(href) || href.startsWith("mailto:") || href.startsWith("tel:");
+}
 
 export function Button({
   variant = "primary",
@@ -54,8 +60,18 @@ export function Button({
   const classes = cn(base, variants[variant], sizes[size], className);
 
   if ("href" in rest && rest.href !== undefined) {
+    const { href, ...anchorRest } = rest as ComponentProps<"a"> & {
+      href: string;
+    };
+    if (isExternalHref(href)) {
+      return (
+        <a href={href} className={classes} {...anchorRest}>
+          {children}
+        </a>
+      );
+    }
     return (
-      <Link className={classes} {...(rest as ComponentProps<typeof Link>)}>
+      <Link href={href} className={classes} {...anchorRest}>
         {children}
       </Link>
     );

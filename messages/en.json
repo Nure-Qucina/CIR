@@ -1,0 +1,254 @@
+{
+  "common": {
+    "dona": "Donate",
+    "dettagli": "Details",
+    "home": "Home",
+    "contattaci": "Contact Us",
+    "apriMenu": "Open menu",
+    "chiudiMenu": "Close menu",
+    "navigazionePrincipale": "Main navigation",
+    "linkRapidi": "Quick links",
+    "informazioniLegali": "Legal information",
+    "naviga": "Navigate",
+    "legale": "Legal",
+    "tuttiIDirittiRiservati": "© {anno} {nome}. All rights reserved.",
+    "roma": "Rome"
+  },
+  "hero": {
+    "occhiello": "Islamic Community of Rome",
+    "scopriChiSiamo": "Discover who we are",
+    "iProssimiEventi": "Upcoming events",
+    "associazioniRappresentate": "associations represented"
+  },
+  "nav": {
+    "home": "Home",
+    "chiSiamo": "About us",
+    "eventi": "Events",
+    "contatti": "Contact"
+  },
+  "home": {
+    "valoriOcchiello": "What drives us",
+    "valoriTitolo": "The values that unite us",
+    "valoriSottotitolo": "We come from different backgrounds, but we are moving in the same direction. Here are the principles that guide our work.",
+    "storiaOcchiello": "Our roots",
+    "storiaTitolo": "Our story",
+    "storiaSottotitolo": "A grassroots network born from the meeting of young people, families, and associations in Rome.",
+    "scopriChiSiamo": "Discover who we are",
+    "eventoOcchiello": "Community life",
+    "prossimoEvento": "Upcoming event",
+    "ultimoEvento": "Latest event",
+    "tuttiGliEventi": "All events",
+    "dettagliEvento": "Event details",
+    "nessunEventoInProgramma": "No events scheduled at the moment — follow us on social media to stay updated on upcoming events.",
+    "newsOcchiello": "Community voices",
+    "dalleNostre": "From our {labelNews}",
+    "tuttiGliArticoli": "All articles",
+    "sostieniIlCir": "Support CIR",
+    "donaTitolo": "Your contribution helps the community grow",
+    "donaSottotitolo": "Every donation helps us give a voice to Muslims in Rome, organize events, and build dialogue. Even the smallest gesture matters.",
+    "donaOra": "Donate now",
+    "mediaOcchiello": "Media & communication",
+    "mediaTitolo": "A trustworthy partner, moving beyond stereotypes",
+    "mediaSottotitolo": "We highlight faces, stories, and projects — not labels — and we are available to journalists and newsrooms to ensure accurate reporting.",
+    "percheComunichiamo": "Why we communicate",
+    "cosaFacciamo": "What we do"
+  },
+  "chiSiamo": {
+    "occhiello": "Our identity",
+    "titolo": "One network, one voice, a shared responsibility",
+    "associazioniRappresentate": "Islamic associations represented",
+    "associazioniSottotitolo": "active in Rome, continuously growing.",
+    "valoriTitolo": "Our values",
+    "storiaTitolo": "Our story",
+    "ctaTitolo": "Want to get to know us or collaborate?",
+    "ctaSottotitolo": "We are open to dialogue with citizens, institutions, and the media."
+  },
+  "eventi": {
+    "occhiello": "Community life",
+    "titolo": "Events",
+    "sottotitolo": "Gatherings, holidays, and initiatives open to the entire city. Add the dates to your calendar and join us.",
+    "filtroProssimi": "Upcoming",
+    "filtroPassati": "Past",
+    "filtroTutti": "All",
+    "filtraEventi": "Filter events",
+    "tuttiGliEventi": "All events",
+    "emptyTitolo": "No events scheduled at the moment",
+    "emptyBody": "Follow us on Instagram to stay updated on the community's next events.",
+    "seguiciSuInstagram": "Follow us on Instagram",
+    "concluso": "Concluded",
+    "inProgramma": "Scheduled",
+    "eventoConcluso": "Event concluded",
+    "eventoNonTrovato": "Event not found",
+    "data": "Date",
+    "orario": "Time",
+    "luogo": "Location",
+    "apriInGoogleMaps": "Open in Google Maps",
+    "partecipa": "Join",
+    "aggiungiAlCalendario": "Add to calendar",
+    "aggiungiAGoogleCalendar": "Add to Google Calendar",
+    "scaricaIcs": "Download .ics",
+    "ogOcchiello": "Event"
+  },
+  "news": {
+    "occhiello": "Community voices",
+    "sottotitolo": "Editorials, insights, and press releases: we highlight faces, stories, and projects — not labels.",
+    "comunicato": "Statement",
+    "comunicatoStampa": "Press release",
+    "articoloNonTrovato": "Article not found",
+    "categoriaNonTrovata": "Category not found",
+    "articoliCorrelati": "Related articles",
+    "tornaA": "Back to {labelNews}",
+    "filtraPerCategoria": "Filter by category",
+    "tutti": "All",
+    "minutiDiLettura": "{minuti} min read",
+    "min": "min",
+    "condividi": "Share",
+    "condividiSuFacebook": "Share on Facebook",
+    "condividiSuWhatsapp": "Share on WhatsApp",
+    "copiaLink": "Copy link",
+    "nessunContenuto": "No content in this section for now. Check back soon.",
+    "ogArticolo": "Article"
+  },
+  "contatti": {
+    "occhiello": "Get in touch",
+    "titolo": "Contact",
+    "sottotitolo": "For journalists, institutions, and citizens: we are a partner open to dialogue. Write to us, we will reply.",
+    "scriviciUnMessaggio": "Send us a message",
+    "compilaIlModulo": "Fill out the form: all fields are required.",
+    "recapiti": "Contact info",
+    "recapitiPlaceholder": "Email, phone number, and headquarters address will be published soon. In the meantime, you can reach us via the form or our social media channels.",
+    "seguici": "Follow us",
+    "seiGiornalista": "Are you a journalist?",
+    "giornalistaBody": "CIR offers itself as a reliable source to contextualize news, provide spokesperson contacts, data, and materials, and participate in debates.",
+    "form": {
+      "nomeLabel": "Full name",
+      "emailLabel": "Email",
+      "messaggioLabel": "Message",
+      "erroreNome": "Please enter your name.",
+      "erroreEmail": "Please enter a valid email address.",
+      "erroreMessaggio": "Please write a message of at least 10 characters.",
+      "erroreGenerico": "Please check the highlighted fields.",
+      "invioInCorso": "Sending…",
+      "inviaMessaggio": "Send message",
+      "grazie": "Thank you!",
+      "messaggioInviato": "Message sent. We will get back to you as soon as possible.",
+      "messaggioInviatoBreve": "Message sent. Thank you!",
+      "providerNonConfigurato": "Sending not active yet: the email provider needs to be configured (RESEND_API_KEY, CONTACT_FORM_TO).",
+      "erroreInvio": "An error occurred while sending. Please try again later or contact us on social media.",
+      "aziendaLabel": "Company (leave blank)"
+    }
+  },
+  "legal": {
+    "privacyCookie": "Privacy & Cookies"
+  },
+  "cookieBanner": {
+    "titolo": "We respect your privacy",
+    "descrizione": "We use technical cookies necessary for the site to work and, only with your consent, statistics and marketing cookies. Details in the <link>Privacy & Cookies notice</link>.",
+    "accettaTutti": "Accept all",
+    "rifiutaTutti": "Reject all",
+    "personalizza": "Customize",
+    "salvaPreferenze": "Save preferences",
+    "necessariTitolo": "Necessary",
+    "necessariDesc": "Essential for the site to work. Always active.",
+    "statisticheTitolo": "Statistics",
+    "statisticheDesc": "Help us understand how the site is used, anonymously.",
+    "marketingTitolo": "Marketing",
+    "marketingDesc": "For any third-party content."
+  },
+  "notFound": {
+    "errore404": "404 Error",
+    "titolo": "Page not found",
+    "body": "The page you are looking for does not exist or has been moved. Go back to the home page or explore the site sections.",
+    "tornaAllaHome": "Back to home",
+    "vaiAlleNews": "Go to news"
+  },
+  "error": {
+    "errore": "Error",
+    "titolo": "Something went wrong",
+    "body": "An unexpected problem occurred. You can try again or return to the home page.",
+    "riprova": "Try again",
+    "tornaAllaHome": "Back to home"
+  },
+  "a11y": {
+    "vaiAlContenuto": "Skip to content",
+    "percorso": "Path"
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "it": "Italiano",
+    "en": "English",
+    "ar": "العربية",
+    "bn": "বাংলা"
+  },
+  "langBadge": {
+    "disponibileIn": "Available in Italian"
+  },
+  "istituzionale": {
+    "payoff": "United for a strong and conscious community",
+    "mission": "The Islamic Community of Rome (CIR) was born from the meeting of young people, families, and leaders of centers and associations. We join forces to give a voice to Muslims in the capital, defend their rights, and build, together with the entire city, a more just, peaceful, and respectful coexistence.",
+    "chiSiamoIntro": "Today, we represent 22 Islamic associations active throughout Rome—a number that is constantly growing. We are neither a temporary project nor a symbolic initiative: we are an organized structure, a solid network, and a unified voice.",
+    "chiSiamoPunti": [
+      "A network of associations pooling experiences, energy, and expertise.",
+      "A coordination body that transforms collaboration into shared responsibility.",
+      "A representation that gives Muslims in Rome a credible and recognizable voice.",
+      "A commitment to countering Islamophobia with intelligence and firmness.",
+      "A conscious Islam, in open dialogue with institutions, schools, and citizens.",
+      "Events and social projects at the service of the community and the entire city."
+    ],
+    "valori": [
+      {
+        "titolo": "Faith that becomes action",
+        "icona": "heart",
+        "testo": "For us, Islam is light and responsibility. Prayer, the Quran, and spirituality drive us to care for the people and places we live in. Our faith must leave tangible signs of goodness, not just words."
+      },
+      {
+        "titolo": "Unity without erasing differences",
+        "icona": "users",
+        "testo": "We come from different backgrounds, cultures, and life paths. We do not want to erase this plurality; we want to coordinate it. Within CIR, everyone brings their own contribution, but we are all rowing in the same direction."
+      },
+      {
+        "titolo": "Service to the community and the city",
+        "icona": "hand-helping",
+        "testo": "We were born from the Muslim community, but our vision is broader. We want to be of service to our Muslim brothers and sisters while simultaneously being a positive presence for all of Rome."
+      },
+      {
+        "titolo": "Clear dialogue and standing tall",
+        "icona": "messages-square",
+        "testo": "We speak with institutions, media, schools, and associations with respect, but also with dignity. We do not seek privileges: we demand justice, recognition, and genuine spaces for dialogue, without hiding who we are."
+      }
+    ],
+    "storia": [
+      {
+        "periodo": "Spring 2025",
+        "testo": "A clear demand grows within the Muslim community of Rome: there is a need for greater unity, coordination, and representation. The organizations exist and the work is being done, but a shared voice is missing."
+      },
+      {
+        "periodo": "Summer 2025",
+        "testo": "Determined young people and leaders of centers and associations begin to meet regularly: how to build a coordination body that represents shared responsibility, rather than just a name?"
+      },
+      {
+        "periodo": "Summer 2025",
+        "testo": "The community joins forces to organize a major demonstration for Palestine. Previously separate entities choose to stand shoulder to shoulder: proof that the Islamic community of Rome can work in unity."
+      },
+      {
+        "periodo": "September 29, 2025",
+        "testo": "Following numerous meetings and courageous choices, the decision is made to launch the CIR project. On January 8, CIR is officially established."
+      }
+    ],
+    "media": {
+      "perche": [
+        "Countering distorted and Islamophobic narratives.",
+        "Highlighting faces, stories, and projects—not labels.",
+        "Serving as a reliable partner for journalists and institutions.",
+        "Building trust, not fear."
+      ],
+      "cosa": [
+        "Press releases and official statements.",
+        "Interviews and public remarks.",
+        "Support for journalists.",
+        "Awareness campaigns.",
+        "Coverage of CIR initiatives."
+      ]
+    }
+  }
+}

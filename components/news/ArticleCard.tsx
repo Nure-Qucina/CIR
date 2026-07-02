@@ -1,20 +1,27 @@
-import Link from "next/link";
 import { Clock } from "lucide-react";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import type { Articolo, Categoria } from "@/lib/content/types";
 import { Card } from "@/components/ui/Card";
 import { CoverImage } from "@/components/ui/CoverImage";
 import { CategoryPill } from "@/components/ui/CategoryPill";
 import { formatDateIt, isoDate } from "@/lib/utils/date";
+import { LangBadge } from "@/components/ui/LangBadge";
+import type { Locale } from "@/i18n/routing";
 
-export function ArticleCard({
+export async function ArticleCard({
   articolo,
   categoria,
   priority = false,
+  locale,
 }: {
   articolo: Articolo;
   categoria?: Categoria;
   priority?: boolean;
+  locale: Locale;
 }) {
+  const t = await getTranslations({ locale, namespace: "news" });
+
   return (
     <Card as="article" className="flex h-full flex-col overflow-hidden">
       <Link
@@ -29,8 +36,8 @@ export function ArticleCard({
           priority={priority}
         />
         {articolo.tipo === "comunicato" && (
-          <span className="absolute top-3 left-3 inline-flex items-center rounded-full bg-ink px-3 py-1 text-xs font-semibold text-cream">
-            Comunicato
+          <span className="absolute top-3 start-3 inline-flex items-center rounded-full bg-ink px-3 py-1 text-xs font-semibold text-cream">
+            {t("comunicato")}
           </span>
         )}
       </Link>
@@ -45,6 +52,7 @@ export function ArticleCard({
               {categoria.nome}
             </CategoryPill>
           )}
+          {articolo.isFallback && <LangBadge />}
         </div>
 
         <h3 className="mt-3 text-lg leading-snug font-bold text-ink">
@@ -69,7 +77,7 @@ export function ArticleCard({
           {articolo.tempoLettura ? (
             <span className="flex items-center gap-1">
               <Clock size={13} aria-hidden />
-              {articolo.tempoLettura} min
+              {articolo.tempoLettura} {t("min")}
             </span>
           ) : null}
         </div>

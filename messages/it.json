@@ -1,0 +1,254 @@
+{
+  "common": {
+    "dona": "Dona",
+    "dettagli": "Dettagli",
+    "home": "Home",
+    "contattaci": "Contattaci",
+    "apriMenu": "Apri menu",
+    "chiudiMenu": "Chiudi menu",
+    "navigazionePrincipale": "Navigazione principale",
+    "linkRapidi": "Link rapidi",
+    "informazioniLegali": "Informazioni legali",
+    "naviga": "Naviga",
+    "legale": "Legale",
+    "tuttiIDirittiRiservati": "© {anno} {nome}. Tutti i diritti riservati.",
+    "roma": "Roma"
+  },
+  "hero": {
+    "occhiello": "Comunità Islamica di Roma",
+    "scopriChiSiamo": "Scopri chi siamo",
+    "iProssimiEventi": "I prossimi eventi",
+    "associazioniRappresentate": "associazioni rappresentate"
+  },
+  "nav": {
+    "home": "Home",
+    "chiSiamo": "Chi siamo",
+    "eventi": "Eventi",
+    "contatti": "Contatti"
+  },
+  "home": {
+    "valoriOcchiello": "Cosa ci muove",
+    "valoriTitolo": "I valori che ci tengono uniti",
+    "valoriSottotitolo": "Veniamo da storie diverse, ma remiamo nella stessa direzione. Ecco i principi che guidano il nostro lavoro.",
+    "storiaOcchiello": "Da dove veniamo",
+    "storiaTitolo": "La nostra storia",
+    "storiaSottotitolo": "Una rete nata dal basso, dall'incontro tra giovani, famiglie e associazioni di Roma.",
+    "scopriChiSiamo": "Scopri chi siamo",
+    "eventoOcchiello": "Vita della comunità",
+    "prossimoEvento": "Prossimo evento",
+    "ultimoEvento": "Ultimo evento",
+    "tuttiGliEventi": "Tutti gli eventi",
+    "dettagliEvento": "Dettagli evento",
+    "nessunEventoInProgramma": "Nessun evento in programma al momento — seguici sui social per restare aggiornato sui prossimi appuntamenti.",
+    "newsOcchiello": "Voci della comunità",
+    "dalleNostre": "Dalle nostre {labelNews}",
+    "tuttiGliArticoli": "Tutti gli articoli",
+    "sostieniIlCir": "Sostieni il CIR",
+    "donaTitolo": "Il tuo contributo fa crescere la comunità",
+    "donaSottotitolo": "Ogni donazione ci aiuta a dare voce ai musulmani di Roma, a organizzare eventi e a costruire dialogo. Anche un piccolo gesto conta.",
+    "donaOra": "Dona ora",
+    "mediaOcchiello": "Media e comunicazione",
+    "mediaTitolo": "Interlocutori seri, oltre gli stereotipi",
+    "mediaSottotitolo": "Raccontiamo volti, storie e progetti — non etichette — e siamo a disposizione di giornalisti e redazioni per un'informazione corretta.",
+    "percheComunichiamo": "Perché comunichiamo",
+    "cosaFacciamo": "Cosa facciamo"
+  },
+  "chiSiamo": {
+    "occhiello": "La nostra identità",
+    "titolo": "Una rete, una voce, una responsabilità condivisa",
+    "associazioniRappresentate": "associazioni islamiche rappresentate",
+    "associazioniSottotitolo": "attive a Roma, in continua crescita.",
+    "valoriTitolo": "I nostri valori",
+    "storiaTitolo": "La nostra storia",
+    "ctaTitolo": "Vuoi conoscerci o collaborare?",
+    "ctaSottotitolo": "Siamo aperti al dialogo con cittadini, istituzioni e media."
+  },
+  "eventi": {
+    "occhiello": "Vita della comunità",
+    "titolo": "Eventi",
+    "sottotitolo": "Incontri, festività e iniziative aperte a tutta la città. Aggiungi gli appuntamenti al tuo calendario e partecipa.",
+    "filtroProssimi": "Prossimi",
+    "filtroPassati": "Passati",
+    "filtroTutti": "Tutti",
+    "filtraEventi": "Filtra eventi",
+    "tuttiGliEventi": "Tutti gli eventi",
+    "emptyTitolo": "Nessun evento in programma al momento",
+    "emptyBody": "Seguici su Instagram per restare aggiornato sui prossimi appuntamenti della comunità.",
+    "seguiciSuInstagram": "Seguici su Instagram",
+    "concluso": "Concluso",
+    "inProgramma": "In programma",
+    "eventoConcluso": "Evento concluso",
+    "eventoNonTrovato": "Evento non trovato",
+    "data": "Data",
+    "orario": "Orario",
+    "luogo": "Luogo",
+    "apriInGoogleMaps": "Apri in Google Maps",
+    "partecipa": "Partecipa",
+    "aggiungiAlCalendario": "Aggiungi al calendario",
+    "aggiungiAGoogleCalendar": "Aggiungi a Google Calendar",
+    "scaricaIcs": "Scarica .ics",
+    "ogOcchiello": "Evento"
+  },
+  "news": {
+    "occhiello": "Voci della comunità",
+    "sottotitolo": "Editoriali, approfondimenti e comunicati stampa: raccontiamo volti, storie e progetti, non etichette.",
+    "comunicato": "Comunicato",
+    "comunicatoStampa": "Comunicato stampa",
+    "articoloNonTrovato": "Articolo non trovato",
+    "categoriaNonTrovata": "Categoria non trovata",
+    "articoliCorrelati": "Articoli correlati",
+    "tornaA": "Torna a {labelNews}",
+    "filtraPerCategoria": "Filtra per categoria",
+    "tutti": "Tutti",
+    "minutiDiLettura": "{minuti} min di lettura",
+    "min": "min",
+    "condividi": "Condividi",
+    "condividiSuFacebook": "Condividi su Facebook",
+    "condividiSuWhatsapp": "Condividi su WhatsApp",
+    "copiaLink": "Copia link",
+    "nessunContenuto": "Nessun contenuto in questa sezione, per ora. Torna presto.",
+    "ogArticolo": "Articolo"
+  },
+  "contatti": {
+    "occhiello": "Parliamone",
+    "titolo": "Contatti",
+    "sottotitolo": "Per giornalisti, istituzioni e cittadini: siamo un interlocutore aperto al dialogo. Scrivici, ti risponderemo.",
+    "scriviciUnMessaggio": "Scrivici un messaggio",
+    "compilaIlModulo": "Compila il modulo: i campi sono tutti obbligatori.",
+    "recapiti": "Recapiti",
+    "recapitiPlaceholder": "Email, telefono e indirizzo della sede saranno pubblicati a breve. Nel frattempo puoi raggiungerci tramite il modulo o sui canali social.",
+    "seguici": "Seguici",
+    "seiGiornalista": "Sei un* giornalista?",
+    "giornalistaBody": "Il CIR si offre come interlocutore per contestualizzare notizie, contatti con i portavoce, dati e materiali, e partecipazione a dibattiti.",
+    "form": {
+      "nomeLabel": "Nome e cognome",
+      "emailLabel": "Email",
+      "messaggioLabel": "Messaggio",
+      "erroreNome": "Inserisci il tuo nome.",
+      "erroreEmail": "Inserisci un'email valida.",
+      "erroreMessaggio": "Scrivi un messaggio di almeno 10 caratteri.",
+      "erroreGenerico": "Controlla i campi evidenziati.",
+      "invioInCorso": "Invio in corso…",
+      "inviaMessaggio": "Invia messaggio",
+      "grazie": "Grazie!",
+      "messaggioInviato": "Messaggio inviato. Ti risponderemo al più presto.",
+      "messaggioInviatoBreve": "Messaggio inviato. Grazie!",
+      "providerNonConfigurato": "Invio non ancora attivo: il provider email va configurato (RESEND_API_KEY, CONTACT_FORM_TO).",
+      "erroreInvio": "Si è verificato un errore nell'invio. Riprova più tardi o scrivici sui social.",
+      "aziendaLabel": "Azienda (non compilare)"
+    }
+  },
+  "legal": {
+    "privacyCookie": "Privacy e Cookie"
+  },
+  "cookieBanner": {
+    "titolo": "Rispettiamo la tua privacy",
+    "descrizione": "Usiamo cookie tecnici necessari al funzionamento del sito e, solo con il tuo consenso, cookie di statistica e marketing. Dettagli nella <link>informativa Privacy e Cookie</link>.",
+    "accettaTutti": "Accetta tutti",
+    "rifiutaTutti": "Rifiuta tutti",
+    "personalizza": "Personalizza",
+    "salvaPreferenze": "Salva preferenze",
+    "necessariTitolo": "Necessari",
+    "necessariDesc": "Indispensabili per il funzionamento del sito. Sempre attivi.",
+    "statisticheTitolo": "Statistiche",
+    "statisticheDesc": "Ci aiutano a capire come viene usato il sito, in forma anonima.",
+    "marketingTitolo": "Marketing",
+    "marketingDesc": "Per eventuali contenuti di terze parti."
+  },
+  "notFound": {
+    "errore404": "Errore 404",
+    "titolo": "Pagina non trovata",
+    "body": "La pagina che cerchi non esiste o è stata spostata. Torna alla home o esplora le sezioni del sito.",
+    "tornaAllaHome": "Torna alla home",
+    "vaiAlleNews": "Vai alle news"
+  },
+  "error": {
+    "errore": "Errore",
+    "titolo": "Qualcosa è andato storto",
+    "body": "Si è verificato un problema imprevisto. Puoi riprovare o tornare alla home.",
+    "riprova": "Riprova",
+    "tornaAllaHome": "Torna alla home"
+  },
+  "a11y": {
+    "vaiAlContenuto": "Vai al contenuto",
+    "percorso": "Percorso"
+  },
+  "languageSwitcher": {
+    "label": "Lingua",
+    "it": "Italiano",
+    "en": "English",
+    "ar": "العربية",
+    "bn": "বাংলা"
+  },
+  "langBadge": {
+    "disponibileIn": "Disponibile in italiano"
+  },
+  "istituzionale": {
+    "payoff": "Uniti per una comunità forte e consapevole",
+    "mission": "La Comunità Islamica di Roma (CIR) nasce dall'incontro tra giovani, famiglie, responsabili di centri e associazioni. Uniamo le forze per dare voce ai musulmani della capitale, difendere i loro diritti e costruire, insieme a tutta la città, una convivenza più giusta, serena e rispettosa.",
+    "chiSiamoIntro": "Siamo una realtà che oggi rappresenta 22 associazioni islamiche attive sul territorio romano, un numero in continua crescita. Non siamo un progetto temporaneo né un'iniziativa simbolica: siamo una struttura organizzata, una rete solida e una voce unitaria.",
+    "chiSiamoPunti": [
+      "Una rete di associazioni che mette in comune esperienze, energie e competenze.",
+      "Un coordinamento che trasforma la collaborazione in responsabilità condivisa.",
+      "Una rappresentanza che dà ai musulmani di Roma una voce credibile e riconoscibile.",
+      "Un impegno a contrastare l'islamofobia con intelligenza e fermezza.",
+      "Un Islam consapevole, in dialogo aperto con istituzioni, scuole e cittadini.",
+      "Eventi e progetti sociali al servizio della comunità e dell'intera città."
+    ],
+    "valori": [
+      {
+        "titolo": "Fede che diventa azione",
+        "icona": "heart",
+        "testo": "L'Islam, per noi, è luce e responsabilità. La preghiera, il Corano, la spiritualità ci spingono a prenderci cura delle persone e dei luoghi in cui viviamo. La nostra fede deve lasciare segni di bene, non solo parole."
+      },
+      {
+        "titolo": "Unità senza annullare le differenze",
+        "icona": "users",
+        "testo": "Veniamo da storie, culture e percorsi diversi. Non vogliamo cancellare questa pluralità: vogliamo coordinarla. Nel CIR ognuno porta il proprio contributo, ma tutti remiamo nella stessa direzione."
+      },
+      {
+        "titolo": "Servizio alla comunità e alla città",
+        "icona": "hand-helping",
+        "testo": "Siamo nati dalla comunità musulmana, ma il nostro sguardo è più ampio. Vogliamo essere utili ai nostri fratelli e sorelle musulmani e, allo stesso tempo, essere una presenza positiva per tutta Roma."
+      },
+      {
+        "titolo": "Dialogo chiaro e schiena dritta",
+        "icona": "messages-square",
+        "testo": "Parliamo con istituzioni, media, scuole e associazioni con rispetto, ma anche con dignità. Non cerchiamo privilegi: chiediamo giustizia, riconoscimento e spazi di dialogo veri, senza nascondere chi siamo."
+      }
+    ],
+    "storia": [
+      {
+        "periodo": "Primavera 2025",
+        "testo": "Nella comunità musulmana di Roma cresce una domanda chiara: serve più unità, più coordinamento, più rappresentanza. Le realtà esistono, il lavoro c'è, ma manca una voce comune."
+      },
+      {
+        "periodo": "Estate 2025",
+        "testo": "Giovani determinati e responsabili di centri e associazioni iniziano a incontrarsi con continuità: come costruire un coordinamento che sia una responsabilità condivisa, non solo un nome?"
+      },
+      {
+        "periodo": "Estate 2025",
+        "testo": "La comunità organizza insieme una grande manifestazione per la Palestina. Realtà prima separate scelgono di stare fianco a fianco: la prova che la comunità islamica di Roma può lavorare unita."
+      },
+      {
+        "periodo": "29 settembre 2025",
+        "testo": "Dopo incontri e scelte coraggiose si decide di dare vita al progetto del CIR. L'8 gennaio il CIR nasce ufficialmente."
+      }
+    ],
+    "media": {
+      "perche": [
+        "Contrastare narrazioni distorte e islamofobe.",
+        "Mostrare volti, storie e progetti, non etichette.",
+        "Essere interlocutori seri per giornalisti e istituzioni.",
+        "Costruire fiducia, non paura."
+      ],
+      "cosa": [
+        "Comunicati e prese di posizione.",
+        "Interviste e interventi pubblici.",
+        "Supporto ai giornalisti.",
+        "Campagne di sensibilizzazione.",
+        "Racconto delle iniziative del CIR."
+      ]
+    }
+  }
+}

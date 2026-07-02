@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { CalendarPlus, Download } from "lucide-react";
 
 /**
@@ -16,6 +17,7 @@ export function AddToCalendar({
   googleUrl: string;
   fileName: string;
 }) {
+  const t = useTranslations("eventi");
   function downloadIcs() {
     const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -37,7 +39,7 @@ export function AddToCalendar({
         className="inline-flex items-center gap-2 rounded-xl bg-teal px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-dark"
       >
         <CalendarPlus size={16} aria-hidden />
-        Aggiungi a Google Calendar
+        {t("aggiungiAGoogleCalendar")}
       </a>
       <button
         type="button"
@@ -45,7 +47,7 @@ export function AddToCalendar({
         className="inline-flex items-center gap-2 rounded-xl bg-transparent px-4 py-2.5 text-sm font-semibold text-ink ring-1 ring-inset ring-teal transition-colors hover:bg-teal-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
       >
         <Download size={16} aria-hidden />
-        Scarica .ics
+        {t("scaricaIcs")}
       </button>
     </div>
   );

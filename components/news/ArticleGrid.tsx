@@ -1,18 +1,23 @@
+import { getTranslations } from "next-intl/server";
 import type { Articolo, Categoria } from "@/lib/content/types";
 import { ArticleCard } from "./ArticleCard";
+import type { Locale } from "@/i18n/routing";
 
 /** Griglia responsive di articoli; risolve la categoria per ogni card. */
-export function ArticleGrid({
+export async function ArticleGrid({
   articoli,
   categorieMap,
+  locale,
 }: {
   articoli: Articolo[];
   categorieMap: Map<string, Categoria>;
+  locale: Locale;
 }) {
   if (articoli.length === 0) {
+    const t = await getTranslations({ locale, namespace: "news" });
     return (
       <div className="rounded-2xl border border-border bg-cream-50 p-10 text-center text-ink-soft">
-        Nessun contenuto in questa sezione, per ora. Torna presto.
+        {t("nessunContenuto")}
       </div>
     );
   }
@@ -25,6 +30,7 @@ export function ArticleGrid({
           articolo={a}
           categoria={categorieMap.get(a.categoria)}
           priority={i < 3}
+          locale={locale}
         />
       ))}
     </div>

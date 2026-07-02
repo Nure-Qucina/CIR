@@ -1,5 +1,8 @@
-import Link from "next/link";
+"use client";
+
+import { useTranslations } from "next-intl";
 import { ChevronRight } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils/cn";
 
 export type Crumb = { label: string; href?: string };
@@ -12,8 +15,9 @@ export function Breadcrumbs({
   crumbs: Crumb[];
   className?: string;
 }) {
+  const t = useTranslations("a11y");
   return (
-    <nav aria-label="Percorso" className={className}>
+    <nav aria-label={t("percorso")} className={className}>
       <ol className="flex flex-wrap items-center gap-1.5 text-sm text-ink-soft">
         {crumbs.map((c, i) => {
           const last = i === crumbs.length - 1;
@@ -35,7 +39,11 @@ export function Breadcrumbs({
                 </span>
               )}
               {!last && (
-                <ChevronRight size={14} className="text-ink-200" aria-hidden />
+                <ChevronRight
+                  size={14}
+                  className="text-ink-200 rtl:rotate-180"
+                  aria-hidden
+                />
               )}
             </li>
           );

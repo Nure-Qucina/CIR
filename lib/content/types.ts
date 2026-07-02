@@ -4,9 +4,22 @@
  * questi tipi, non dalla forma fisica dei file. Cambiare CMS non rompe le pagine.
  */
 
+import type { Locale } from "@/i18n/routing";
+
 export type CategoriaColore = "teal" | "orange";
 
-export type Categoria = {
+/**
+ * Flag di localizzazione (§5-6 del brief i18n): un contenuto risolto per una
+ * lingua può essere una traduzione reale o un fallback all'italiano quando
+ * la traduzione manca. Le pagine mostrano il badge "Disponibile in italiano"
+ * quando `isFallback` è true.
+ */
+export type Localizzato = {
+  isFallback: boolean;
+  originalLocale: Locale;
+};
+
+export type Categoria = Localizzato & {
   slug: string;
   nome: string;
   descrizione: string;
@@ -29,7 +42,7 @@ export type Seo = {
 
 export type EventoStato = "programmato" | "passato";
 
-export type Evento = {
+export type Evento = Localizzato & {
   slug: string;
   titolo: string;
   stato: EventoStato;
@@ -48,7 +61,7 @@ export type Evento = {
 
 export type TipoArticolo = "articolo" | "comunicato";
 
-export type Articolo = {
+export type Articolo = Localizzato & {
   slug: string;
   titolo: string;
   estratto: string;
@@ -71,8 +84,6 @@ export type SocialLink = {
   url: string;
 };
 
-export type NavItem = { label: string; href: string };
-
 export type Contatti = {
   email: string | null;
   telefono: string | null;
@@ -84,6 +95,8 @@ export type Contatti = {
 export type SiteConfig = {
   nome: string;
   sigla: string;
+  /** Codice fiscale dell'associazione (footer + informativa privacy). */
+  codiceFiscale: string | null;
   payoff: string;
   descrizione: string;
   /** Etichetta configurabile per la sezione news (News/Articoli/Approfondimenti). */
@@ -91,6 +104,4 @@ export type SiteConfig = {
   social: SocialLink[];
   donazioniUrl: string;
   contatti: Contatti;
-  nav: NavItem[];
-  navLegale: NavItem[];
 };

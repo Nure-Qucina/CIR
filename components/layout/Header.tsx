@@ -1,16 +1,31 @@
+import { getTranslations } from "next-intl/server";
 import { getSiteConfig } from "@/lib/content/site";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "./Logo";
 import { MobileMenu } from "./MobileMenu";
 import { NavLink } from "./NavLink";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import type { Locale } from "@/i18n/routing";
 
 /**
  * Header sticky con navigazione principale + CTA "Dona" in evidenza (arancione).
- * Server Component: legge la config dal content layer; l'unica parte client è
- * il menu mobile.
+ * Server Component: legge la config dal content layer; le uniche parti client
+ * sono il menu mobile e il selettore lingua.
  */
-export async function Header() {
-  const { nav, donazioniUrl } = await getSiteConfig();
+export async function Header({ locale }: { locale: Locale }) {
+  const [t, tc, { labelNews, donazioniUrl }] = await Promise.all([
+    getTranslations({ locale, namespace: "nav" }),
+    getTranslations({ locale, namespace: "common" }),
+    getSiteConfig(),
+  ]);
+
+  const nav = [
+    { href: "/", label: t("home") },
+    { href: "/chi-siamo", label: t("chiSiamo") },
+    { href: "/eventi", label: t("eventi") },
+    { href: "/news", label: labelNews },
+    { href: "/contatti", label: t("contatti") },
+  ];
 
   // Sfondo solido (niente backdrop-filter: creerebbe un containing block che
   // rompe il pannello fixed del menu mobile).
@@ -25,7 +40,7 @@ export async function Header() {
           <Logo />
         </div>
 
-        <nav aria-label="Navigazione principale" className="hidden md:block">
+        <nav aria-label={tc("navigazionePrincipale")} className="hidden md:block">
           <ul className="flex items-center gap-1">
             {nav.map((item) => (
               <li key={item.href}>
@@ -36,6 +51,7 @@ export async function Header() {
         </nav>
 
         <div className="flex flex-1 items-center justify-end gap-2">
+          <LanguageSwitcher compact className="hidden md:block" />
           <Button
             href={donazioniUrl}
             target="_blank"
@@ -43,7 +59,7 @@ export async function Header() {
             size="sm"
             className="hidden md:inline-flex"
           >
-            Dona
+            {tc("dona")}
           </Button>
           <MobileMenu nav={nav} donazioniUrl={donazioniUrl} />
         </div>

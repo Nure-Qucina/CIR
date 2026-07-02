@@ -1,4 +1,6 @@
 import { ImageResponse } from "next/og";
+import { loadGoogleFont } from "./loadGoogleFont";
+import type { Locale } from "@/i18n/routing";
 
 // Dimensioni standard Open Graph.
 export const OG_SIZE = { width: 1200, height: 630 };
@@ -10,19 +12,46 @@ const TEAL = "#5F746E";
 const INK = "#2A1F0E";
 const INK_SOFT = "#5A4F3E";
 
+const SCRIPT_FONT: Partial<Record<Locale, string>> = {
+  ar: "Noto Naskh Arabic",
+  bn: "Noto Sans Bengali",
+};
+
 /**
  * Template OG on-brand (crema + barra teal + accento arancione).
  * `occhiello` = categoria/contesto, `titolo` = headline, `meta` = data/luogo.
+ * `locale`: per ar/bn scarica il font dello script (Satori/next-og non legge
+ * i font caricati via next/font — servono i bytes TTF, vedi loadGoogleFont)
+ * limitato ai soli caratteri usati nell'immagine (§9 brief i18n).
  */
-export function renderOg({
+export async function renderOg({
   occhiello,
   titolo,
   meta,
+  footer = "Comunità Islamica di Roma",
+  locale = "it",
 }: {
   occhiello?: string;
   titolo: string;
   meta?: string;
+  footer?: string;
+  locale?: Locale;
 }) {
+  const googleFontName = SCRIPT_FONT[locale];
+  const fonts = googleFontName
+    ? await (async () => {
+        const text = [occhiello, titolo, meta, footer]
+          .filter(Boolean)
+          .join(" ");
+        const data = await loadGoogleFont(googleFontName, text);
+        return [
+          { name: googleFontName, data, style: "normal" as const, weight: 400 as const },
+          { name: googleFontName, data, style: "normal" as const, weight: 700 as const },
+        ];
+      })()
+    : [];
+  const fontFamily = googleFontName ?? "sans-serif";
+
   return new ImageResponse(
     (
       <div
@@ -31,7 +60,7 @@ export function renderOg({
           height: "100%",
           display: "flex",
           background: CREAM,
-          fontFamily: "sans-serif",
+          fontFamily,
         }}
       >
         {/* Barra laterale teal con sigla */}
@@ -122,11 +151,11 @@ export function renderOg({
               marginTop: 28,
             }}
           >
-            Comunità Islamica di Roma
+            {footer}
           </div>
         </div>
       </div>
     ),
-    { ...OG_SIZE },
+    { ...OG_SIZE, fonts },
   );
 }

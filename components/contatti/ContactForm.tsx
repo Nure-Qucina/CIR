@@ -2,24 +2,26 @@
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
+import { useTranslations } from "next-intl";
 import { CheckCircle2, AlertCircle, Send } from "lucide-react";
 import {
   sendContactMessage,
   type ContactState,
-} from "@/app/(site)/contatti/actions";
+} from "@/app/[locale]/(site)/contatti/actions";
 import { cn } from "@/lib/utils/cn";
 
 const initial: ContactState = { status: "idle", message: "" };
 
 function SubmitButton() {
   const { pending } = useFormStatus();
+  const t = useTranslations("contatti.form");
   return (
     <button
       type="submit"
       disabled={pending}
       className="inline-flex items-center justify-center gap-2 rounded-xl bg-orange px-6 py-3 font-semibold text-ink transition-colors hover:bg-orange-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:pointer-events-none disabled:opacity-60"
     >
-      {pending ? "Invio in corso…" : "Invia messaggio"}
+      {pending ? t("invioInCorso") : t("inviaMessaggio")}
       <Send size={16} aria-hidden />
     </button>
   );
@@ -30,6 +32,7 @@ const fieldBase =
 
 export function ContactForm() {
   const [state, formAction] = useActionState(sendContactMessage, initial);
+  const t = useTranslations("contatti.form");
 
   if (state.status === "success") {
     return (
@@ -39,7 +42,7 @@ export function ContactForm() {
       >
         <CheckCircle2 className="mt-0.5 shrink-0 text-teal" aria-hidden />
         <div>
-          <p className="font-semibold text-ink">Grazie!</p>
+          <p className="font-semibold text-ink">{t("grazie")}</p>
           <p className="mt-1 text-ink-soft">{state.message}</p>
         </div>
       </div>
@@ -60,7 +63,7 @@ export function ContactForm() {
 
       <div>
         <label htmlFor="nome" className="text-sm font-semibold text-ink">
-          Nome e cognome
+          {t("nomeLabel")}
         </label>
         <input
           id="nome"
@@ -83,7 +86,7 @@ export function ContactForm() {
 
       <div>
         <label htmlFor="email" className="text-sm font-semibold text-ink">
-          Email
+          {t("emailLabel")}
         </label>
         <input
           id="email"
@@ -106,7 +109,7 @@ export function ContactForm() {
 
       <div>
         <label htmlFor="messaggio" className="text-sm font-semibold text-ink">
-          Messaggio
+          {t("messaggioLabel")}
         </label>
         <textarea
           id="messaggio"
@@ -130,8 +133,8 @@ export function ContactForm() {
       </div>
 
       {/* Honeypot anti-spam: nascosto agli utenti, visibile ai bot. */}
-      <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
-        <label htmlFor="azienda">Azienda (non compilare)</label>
+      <div aria-hidden className="absolute -start-[9999px] h-0 w-0 overflow-hidden">
+        <label htmlFor="azienda">{t("aziendaLabel")}</label>
         <input id="azienda" name="azienda" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
