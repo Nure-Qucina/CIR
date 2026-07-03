@@ -108,7 +108,56 @@ function enrich(e: Evento): EventoView {
  */
 export const getEventi = cache(
   async (locale: Locale = routing.defaultLocale): Promise<EventoView[]> => {
-    const entries = await reader.collections.eventi.all();
+    // [DIAG-TEMP] Logging diagnostico temporaneo — incident response runtime ISR.
+    // Vedi REPORT-FORENSE-FRONTEND-DATA-PIPELINE.md. Da rimuovere a diagnosi conclusa.
+    console.log(
+      "[DIAG-TEMP][getEventi][pre]",
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        route: "getEventi",
+        cwd: process.cwd(),
+        pid: process.pid,
+        VERCEL: process.env.VERCEL,
+        VERCEL_ENV: process.env.VERCEL_ENV,
+        NODE_ENV: process.env.NODE_ENV,
+      }),
+    );
+    console.log("[DIAG-TEMP][getEventi] START reader.collections.eventi.all()");
+    let entries: Awaited<ReturnType<typeof reader.collections.eventi.all>>;
+    try {
+      entries = await reader.collections.eventi.all();
+    } catch (err) {
+      const e = err as NodeJS.ErrnoException;
+      console.error(
+        "[DIAG-TEMP][getEventi][EXCEPTION]",
+        JSON.stringify({
+          message: e?.message,
+          stack: e?.stack,
+          code: e?.code,
+          errno: e?.errno,
+          path: e?.path,
+          syscall: e?.syscall,
+        }),
+      );
+      throw err;
+    }
+    console.log(
+      "[DIAG-TEMP][getEventi] END reader",
+      JSON.stringify({
+        numeroElementi: entries.length,
+        slug: entries.map((e) => e.slug),
+      }),
+    );
+    if (entries.length === 0) {
+      console.warn(
+        "[DIAG-TEMP][getEventi][ATTENZIONE] reader ha restituito array vuoto",
+        JSON.stringify({
+          cwd: process.cwd(),
+          directory: "content/eventi",
+          timestamp: new Date().toISOString(),
+        }),
+      );
+    }
     const eventi = entries.map((e) =>
       enrich(toEvento(e.slug, e.entry as Record<string, unknown>, locale)),
     );

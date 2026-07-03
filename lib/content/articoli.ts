@@ -67,7 +67,58 @@ type Filtri = {
 export const getArticoli = cache(
   async (filtri: Filtri = {}): Promise<Articolo[]> => {
     const locale = filtri.locale ?? routing.defaultLocale;
-    const entries = await reader.collections.articoli.all();
+    // [DIAG-TEMP] Logging diagnostico temporaneo — incident response runtime ISR.
+    // Vedi REPORT-FORENSE-FRONTEND-DATA-PIPELINE.md. Da rimuovere a diagnosi conclusa.
+    console.log(
+      "[DIAG-TEMP][getArticoli][pre]",
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        route: "getArticoli",
+        cwd: process.cwd(),
+        pid: process.pid,
+        VERCEL: process.env.VERCEL,
+        VERCEL_ENV: process.env.VERCEL_ENV,
+        NODE_ENV: process.env.NODE_ENV,
+      }),
+    );
+    console.log(
+      "[DIAG-TEMP][getArticoli] START reader.collections.articoli.all()",
+    );
+    let entries: Awaited<ReturnType<typeof reader.collections.articoli.all>>;
+    try {
+      entries = await reader.collections.articoli.all();
+    } catch (err) {
+      const e = err as NodeJS.ErrnoException;
+      console.error(
+        "[DIAG-TEMP][getArticoli][EXCEPTION]",
+        JSON.stringify({
+          message: e?.message,
+          stack: e?.stack,
+          code: e?.code,
+          errno: e?.errno,
+          path: e?.path,
+          syscall: e?.syscall,
+        }),
+      );
+      throw err;
+    }
+    console.log(
+      "[DIAG-TEMP][getArticoli] END reader",
+      JSON.stringify({
+        numeroElementi: entries.length,
+        slug: entries.map((e) => e.slug),
+      }),
+    );
+    if (entries.length === 0) {
+      console.warn(
+        "[DIAG-TEMP][getArticoli][ATTENZIONE] reader ha restituito array vuoto",
+        JSON.stringify({
+          cwd: process.cwd(),
+          directory: "content/articoli",
+          timestamp: new Date().toISOString(),
+        }),
+      );
+    }
     let articoli = entries.map((e) =>
       toArticolo(e.slug, e.entry as Record<string, unknown>, locale),
     );
