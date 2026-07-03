@@ -78,7 +78,28 @@ L'area di amministrazione è su **`/keystatic`** (in locale: <http://localhost:3
 - **Categorie**: `/keystatic` → Categorie (nome, descrizione, colore teal/arancione).
 - **Configurazione sito**: `/keystatic` → Configurazione sito — qui inserirai **email, telefono e indirizzo** quando disponibili (vedi `DA-FORNIRE.md`), oltre a social, link donazioni ed etichetta della sezione News.
 
-> In locale le modifiche salvano direttamente i file in `content/`. Per dare accesso ai redattori senza farli lavorare in locale si configura Keystatic in **GitHub mode** (vedi `.env.example`).
+> In locale le modifiche salvano direttamente i file in `content/`. In produzione i redattori editano online (GitHub mode) — vedi sotto.
+
+### 🔐 Editing online dei redattori (Keystatic GitHub mode)
+
+In produzione su Vercel il filesystem è di sola lettura, quindi la "local mode" non permette di salvare. Per far editare i redattori online si usa la **GitHub mode**: ogni salvataggio diventa un commit sul repo, che fa ri-deployare il sito.
+
+Lo storage si sceglie in automatico in base ai segreti: **senza `KEYSTATIC_GITHUB_CLIENT_ID` → local mode** (sviluppo); **con i segreti impostati → github mode** (produzione). Il codice non va toccato — solo le env var.
+
+**Setup una tantum (prima del deploy):**
+
+1. Avvia il progetto puntando a github mode e apri **`/keystatic`** (in locale con i segreti, o sul deploy): parte il wizard **`/keystatic/setup`** che crea la **GitHub App** per te (pre-compila il form su GitHub, tu clicchi "Create app"). L'app va **installata sul repo** `Nure-Qucina/CIR`.
+2. Il wizard restituisce i valori da mettere nelle env di Vercel:
+   - `KEYSTATIC_GITHUB_CLIENT_ID`
+   - `KEYSTATIC_GITHUB_CLIENT_SECRET`
+   - `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`
+   - `KEYSTATIC_SECRET` — genera una stringa casuale, es. `openssl rand -hex 32`
+3. Aggiungi **ogni redattore come collaboratore** del repo con permesso di scrittura (in github mode ogni redattore accede con il **proprio account GitHub**).
+4. Imposta le 4 env su Vercel (Production) e fai il deploy. ⚠️ In github mode il build **fallisce** se mancano `CLIENT_ID`/`CLIENT_SECRET`/`KEYSTATIC_SECRET`: vanno impostate **prima** del primo build.
+
+> Se il repo si sposta (es. nell'organizzazione del CIR), aggiornare `KEYSTATIC_REPO` in `keystatic.config.ts` e reinstallare la GitHub App sul nuovo repo.
+>
+> **Alternativa senza GitHub per i redattori:** se i redattori non hanno (o non vogliono) un account GitHub, si può usare **Keystatic Cloud** (`storage: { kind: "cloud" }` + progetto su keystatic.cloud): invito via email, nessun account GitHub per-persona. Richiede un progetto Keystatic Cloud.
 
 ### 🌍 Pubblicare in più lingue (IT / EN / AR / BN)
 

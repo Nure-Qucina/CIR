@@ -5,9 +5,27 @@ import { config, collection, singleton, fields } from "@keystatic/core";
  * I contenuti vivono come file nel repo (JSON per dati, MDX per i corpi articolo),
  * editabili dall'admin `/keystatic` senza toccare codice.
  *
- * In locale: storage `local` (nessun segreto). Per i redattori non tecnici si
- * passa a `github` mode con le env in .env.local (vedi .env.example).
+ * Storage (scelto in base alla presenza dei segreti GitHub, NON a NODE_ENV:
+ * così il build non si rompe mai dove i segreti non ci sono — es. build
+ * locale/CI — e github mode si attiva da solo appena le env sono impostate
+ * su Vercel):
+ *  - senza `KEYSTATIC_GITHUB_CLIENT_ID` → "local": scrive i file su disco,
+ *    nessun segreto richiesto (sviluppo con `pnpm dev`).
+ *  - con i segreti GitHub presenti → "github": i redattori accedono a
+ *    /keystatic col proprio account GitHub e i salvataggi diventano commit
+ *    sul repo, che fanno ri-deployare automaticamente il sito. Richiede una
+ *    GitHub App + le 4 env `KEYSTATIC_GITHUB_*` / `KEYSTATIC_SECRET` /
+ *    `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` (vedi .env.example e README).
+ *    ⚠️ In github mode il build FALLISCE se mancano CLIENT_ID/SECRET/SECRET:
+ *    impostare tutte e 4 le env su Vercel PRIMA del primo deploy.
+ *
+ * NB: il sito pubblico legge sempre i file locali del bundle (createReader),
+ * quindi lo storage mode non incide su build/SSG/ISR — solo sull'editing.
+ *
+ * ⚠️ Se il repo cambia (es. si sposta nell'org del CIR), aggiornare `repo`.
  */
+const KEYSTATIC_REPO = { owner: "Nure-Qucina", name: "CIR" } as const;
+const USE_GITHUB_STORAGE = Boolean(process.env.KEYSTATIC_GITHUB_CLIENT_ID);
 
 const colore = fields.select({
   label: "Colore",
@@ -42,7 +60,9 @@ function traduzioni<T extends Record<string, ReturnType<typeof fields.text>>>(
 }
 
 export default config({
-  storage: { kind: "local" },
+  storage: USE_GITHUB_STORAGE
+    ? { kind: "github", repo: KEYSTATIC_REPO }
+    : { kind: "local" },
   ui: {
     brand: { name: "CIR — Redazione" },
   },
