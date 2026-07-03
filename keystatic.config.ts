@@ -25,7 +25,7 @@ import { config, collection, singleton, fields } from "@keystatic/core";
  * ⚠️ Se il repo cambia (es. si sposta nell'org del CIR), aggiornare `repo`.
  */
 const KEYSTATIC_REPO = { owner: "Nure-Qucina", name: "CIR" } as const;
-const USE_GITHUB_STORAGE = Boolean(process.env.KEYSTATIC_GITHUB_CLIENT_ID);
+const USE_GITHUB_STORAGE = Boolean(process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG);
 
 const colore = fields.select({
   label: "Colore",
