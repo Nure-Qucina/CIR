@@ -5,7 +5,7 @@
   "dataFine": "2026-05-31T20:00",
   "tuttoIlGiorno": false,
   "luogo": {
-    "nome": "Villa Gordiani",
+    "nome": "Villa Gordiani musa",
     "indirizzo": "Via Prenestina, 325",
     "citta": "Roma",
     "lat": 41.897,
@@ -16,5 +16,10 @@
   "ctaEsterna": {},
   "inEvidenza": true,
   "descrizione": "Una giornata di festa, preghiera e comunità per celebrare insieme l'Eid Al-Adha a Villa Gordiani.",
-  "seo": {}
+  "seo": {},
+  "traduzioni": {
+    "en": {},
+    "ar": {},
+    "bn": {}
+  }
 }
