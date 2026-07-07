@@ -39,9 +39,12 @@ export async function Footer({ locale }: { locale: Locale }) {
       </div>
 
       <div className="relative mx-auto max-w-6xl px-4 py-14 sm:px-6">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Brand a sinistra; Naviga+Contatti raggruppate e spinte a destra.
+            Le due colonne restano sempre affiancate tra loro (mai una riga
+            orfana con cella vuota, com'era con la griglia a 2/4 colonne). */}
+        <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
           {/* Brand + payoff */}
-          <div className="lg:col-span-2">
+          <div className="max-w-sm">
             {/* Icona bianca (senza wordmark, coerente con l'header) ricolorata
                 in crema via CSS mask — stesso colore del testo del footer.
                 Sorgente monocromatica: la mask ne applica il colore esatto. */}
@@ -82,60 +85,65 @@ export async function Footer({ locale }: { locale: Locale }) {
             </div>
           </div>
 
-          {/* Contatti */}
-          <div>
-            <p className="text-xs font-semibold tracking-wider text-cream/60 uppercase">
-              {tNav("contatti")}
-            </p>
-            <ul className="mt-4 flex flex-col gap-3 text-sm">
-              {site.contatti.email && (
-                <li>
-                  <a
-                    href={`mailto:${site.contatti.email}`}
-                    className="flex items-start gap-2.5 text-cream/85 underline-offset-4 hover:text-cream hover:underline"
-                  >
-                    <Mail size={16} className="mt-0.5 shrink-0" aria-hidden />
-                    {/* <wbr/> dopo la @: se l'email deve andare a capo, si
-                        spezza lì (punto naturale) invece che a metà parola. */}
-                    <span>
-                      {site.contatti.email.split("@")[0]}
-                      <wbr />@{site.contatti.email.split("@")[1]}
-                    </span>
-                  </a>
-                </li>
-              )}
-              {site.contatti.telefono && (
-                <li>
-                  <a
-                    href={`tel:${site.contatti.telefono.replace(/\s/g, "")}`}
-                    className="flex items-center gap-2.5 text-cream/85 underline-offset-4 hover:text-cream hover:underline"
-                  >
-                    <Phone size={16} className="shrink-0" aria-hidden />
-                    {site.contatti.telefono}
-                  </a>
-                </li>
-              )}
-            </ul>
-          </div>
+          {/* Naviga + Contatti: gruppo unico, colonne sempre in coppia.
+              Ordine convenzionale: prima la navigazione, i contatti chiudono
+              sul bordo destro del footer. */}
+          <div className="grid gap-10 sm:grid-cols-2 sm:gap-16 lg:shrink-0 lg:gap-20">
+            {/* Link rapidi */}
+            <nav aria-label={t("linkRapidi")}>
+              <p className="text-xs font-semibold tracking-wider text-cream/60 uppercase">
+                {t("naviga")}
+              </p>
+              <ul className="mt-4 flex flex-col gap-2 text-sm">
+                {navRapidi.map((n) => (
+                  <li key={n.href}>
+                    <Link
+                      href={n.href}
+                      className="text-cream/85 underline-offset-4 hover:text-cream hover:underline"
+                    >
+                      {n.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
-          {/* Link rapidi */}
-          <nav aria-label={t("linkRapidi")}>
-            <p className="text-xs font-semibold tracking-wider text-cream/60 uppercase">
-              {t("naviga")}
-            </p>
-            <ul className="mt-4 flex flex-col gap-2 text-sm">
-              {navRapidi.map((n) => (
-                <li key={n.href}>
-                  <Link
-                    href={n.href}
-                    className="text-cream/85 underline-offset-4 hover:text-cream hover:underline"
-                  >
-                    {n.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+            {/* Contatti */}
+            <div>
+              <p className="text-xs font-semibold tracking-wider text-cream/60 uppercase">
+                {tNav("contatti")}
+              </p>
+              <ul className="mt-4 flex flex-col gap-3 text-sm">
+                {site.contatti.email && (
+                  <li>
+                    <a
+                      href={`mailto:${site.contatti.email}`}
+                      className="flex items-start gap-2.5 text-cream/85 underline-offset-4 hover:text-cream hover:underline"
+                    >
+                      <Mail size={16} className="mt-0.5 shrink-0" aria-hidden />
+                      {/* <wbr/> dopo la @: se l'email deve andare a capo, si
+                          spezza lì (punto naturale) invece che a metà parola. */}
+                      <span>
+                        {site.contatti.email.split("@")[0]}
+                        <wbr />@{site.contatti.email.split("@")[1]}
+                      </span>
+                    </a>
+                  </li>
+                )}
+                {site.contatti.telefono && (
+                  <li>
+                    <a
+                      href={`tel:${site.contatti.telefono.replace(/\s/g, "")}`}
+                      className="flex items-center gap-2.5 text-cream/85 underline-offset-4 hover:text-cream hover:underline"
+                    >
+                      <Phone size={16} className="shrink-0" aria-hidden />
+                      {site.contatti.telefono}
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </div>
+          </div>
         </div>
 
         <div className="mt-12 flex flex-col gap-3 border-t border-cream/15 pt-6 text-xs text-cream/70 sm:flex-row sm:items-center sm:justify-between">
