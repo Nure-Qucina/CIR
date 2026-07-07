@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
       // Aree non pubbliche / tecniche fuori dall'indice.
-      disallow: ["/keystatic", "/api/", "/styleguide"],
+      disallow: ["/keystatic", "/api/", "/styleguide", "/admin"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,

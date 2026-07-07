@@ -82,6 +82,8 @@ Ogni **evento** e ogni **articolo** ha una casella **"Bozza (nascosto dal sito)"
 
 Usala per gli articoli **in attesa di approvazione**, per i lavori in corso, o per **ritirare temporaneamente** un contenuto senza perderlo. Per pubblicare basta togliere la spunta e salvare. La colonna "bozza" nell'elenco mostra a colpo d'occhio lo stato di ogni scheda.
 
+**Più bozze in una volta:** su **`/admin/bozze`** trovi l'elenco completo di articoli ed eventi con una casella ciascuno — spunti/togli quello che vuoi e premi **Salva**: tutte le modifiche diventano **un solo commit → un solo deploy** (invece di entrare e salvare scheda per scheda). Serve lo stesso login GitHub di Keystatic: se la pagina te lo chiede, apri prima `/keystatic`, accedi, e torna su `/admin/bozze`.
+
 ### Modificare categorie e configurazione
 
 - **Categorie**: `/keystatic` → Categorie (nome, descrizione, colore teal/arancione).
