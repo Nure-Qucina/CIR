@@ -143,12 +143,31 @@ export async function Footer({ locale }: { locale: Locale }) {
             <p>{t("tuttiIDirittiRiservati", { anno, nome: site.nome })}</p>
             {site.codiceFiscale && <p>C.F. {site.codiceFiscale}</p>}
           </div>
-          <Link
-            href="/privacy"
-            className="text-cream/85 underline-offset-4 hover:text-cream hover:underline"
-          >
-            {tLegal("privacyCookie")}
-          </Link>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <Link
+              href="/privacy"
+              className="text-cream/85 underline-offset-4 hover:text-cream hover:underline"
+            >
+              {tLegal("privacyCookie")}
+            </Link>
+            <span aria-hidden="true" className="text-cream/40">
+              ·
+            </span>
+            {/* Firma dell'agenzia: una riga sola, discreta — il racconto
+                completo vive su qucina.io. Il punto finale fa parte del
+                wordmark "Qucina." e chiude anche la frase. */}
+            <p>
+              {t("sitoRealizzatoDa")}{" "}
+              <a
+                href="https://www.qucina.io"
+                target="_blank"
+                rel="noopener"
+                className="font-medium text-cream/85 underline-offset-4 hover:text-cream hover:underline"
+              >
+                Qucina.
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
