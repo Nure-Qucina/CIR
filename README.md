@@ -73,6 +73,15 @@ L'area di amministrazione è su **`/keystatic`** (in locale: <http://localhost:3
 4. **Autore** e **Tempo di lettura** hanno valori sensati di default (il tempo si calcola dal testo).
 5. Spunta **In evidenza** per mostrarlo in home. **Save**.
 
+### Bozze — nascondere senza eliminare
+
+Ogni **evento** e ogni **articolo** ha una casella **"Bozza (nascosto dal sito)"** in cima alla scheda:
+
+- **Spuntata** → il contenuto è invisibile sul sito pubblico: non appare negli elenchi, non è raggiungibile via link diretto (la pagina risponde 404) e non è in sitemap. Resta però visibile e modificabile in Keystatic.
+- **Deselezionata** (default) → il contenuto è pubblicato normalmente.
+
+Usala per gli articoli **in attesa di approvazione**, per i lavori in corso, o per **ritirare temporaneamente** un contenuto senza perderlo. Per pubblicare basta togliere la spunta e salvare. La colonna "bozza" nell'elenco mostra a colpo d'occhio lo stato di ogni scheda.
+
 ### Modificare categorie e configurazione
 
 - **Categorie**: `/keystatic` → Categorie (nome, descrizione, colore teal/arancione).

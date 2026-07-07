@@ -105,11 +105,21 @@ export default config({
       slugField: "titolo",
       path: "content/eventi/*",
       format: { data: "json" },
-      columns: ["titolo", "dataInizio"],
+      columns: ["titolo", "dataInizio", "bozza"],
       schema: {
         titolo: fields.slug({
           name: { label: "Titolo" },
           slug: { label: "Slug (URL)" },
+        }),
+        // Sistema bozze: un evento in bozza NON è visibile sul sito pubblico
+        // (né in elenco, né via link diretto, né in sitemap) ma resta
+        // modificabile da Keystatic. I contenuti esistenti senza il campo
+        // risultano automaticamente pubblicati (default false).
+        bozza: fields.checkbox({
+          label: "Bozza (nascosto dal sito)",
+          description:
+            "Se attivo, l'evento non appare sul sito pubblico — né in elenco né via link diretto. Usalo per lavori in corso o per nascondere senza eliminare.",
+          defaultValue: false,
         }),
         stato: fields.select({
           label: "Stato",
@@ -218,11 +228,18 @@ export default config({
       slugField: "titolo",
       path: "content/articoli/*",
       format: { contentField: "corpo" },
-      columns: ["titolo", "dataPubblicazione"],
+      columns: ["titolo", "dataPubblicazione", "bozza"],
       schema: {
         titolo: fields.slug({
           name: { label: "Titolo" },
           slug: { label: "Slug (URL)" },
+        }),
+        // Sistema bozze — vedi commento sulla collection eventi.
+        bozza: fields.checkbox({
+          label: "Bozza (nascosto dal sito)",
+          description:
+            "Se attivo, l'articolo non appare sul sito pubblico — né in elenco né via link diretto. Usalo per gli articoli in attesa di approvazione o per nascondere senza eliminare.",
+          defaultValue: false,
         }),
         estratto: fields.text({ label: "Estratto (IT)", multiline: true }),
         tipo: fields.select({

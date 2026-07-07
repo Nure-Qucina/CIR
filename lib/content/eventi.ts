@@ -158,9 +158,13 @@ export const getEventi = cache(
         }),
       );
     }
-    const eventi = entries.map((e) =>
-      enrich(toEvento(e.slug, e.entry as Record<string, unknown>, locale)),
-    );
+    // Le bozze non entrano mai nel modello pubblico: filtrate qui, alla
+    // fonte, così ogni consumatore (liste, home, ICS…) le esclude gratis.
+    const eventi = entries
+      .filter((e) => !(e.entry as Record<string, unknown>).bozza)
+      .map((e) =>
+        enrich(toEvento(e.slug, e.entry as Record<string, unknown>, locale)),
+      );
 
     const upcoming = eventi
       .filter((e) => !e.isPast)
@@ -195,6 +199,8 @@ export const getEventoBySlug = cache(
       resolveLinkedFiles: true,
     });
     if (!entry) return null;
+    // Bozza = invisibile anche via link diretto: la pagina fa notFound().
+    if ((entry as unknown as Record<string, unknown>).bozza) return null;
     const base = toEvento(
       slug,
       entry as unknown as Record<string, unknown>,
@@ -206,7 +212,10 @@ export const getEventoBySlug = cache(
 
 export const getEventiSlugs = cache(async (): Promise<string[]> => {
   const entries = await reader.collections.eventi.all();
-  return entries.map((e) => e.slug);
+  // Niente bozze: qui passano generateStaticParams e sitemap.
+  return entries
+    .filter((e) => !(e.entry as Record<string, unknown>).bozza)
+    .map((e) => e.slug);
 });
 
 /** Lingue in cui l'evento è realmente tradotto (IT sempre incluso) — per hreflang (§9 brief i18n). */

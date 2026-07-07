@@ -119,9 +119,11 @@ export const getArticoli = cache(
         }),
       );
     }
-    let articoli = entries.map((e) =>
-      toArticolo(e.slug, e.entry as Record<string, unknown>, locale),
-    );
+    // Le bozze non entrano mai nel modello pubblico: filtrate qui, alla
+    // fonte, così ogni consumatore (liste, home, correlati…) le esclude.
+    let articoli = entries
+      .filter((e) => !(e.entry as Record<string, unknown>).bozza)
+      .map((e) => toArticolo(e.slug, e.entry as Record<string, unknown>, locale));
 
     if (filtri.categoria)
       articoli = articoli.filter((a) => a.categoria === filtri.categoria);
@@ -145,6 +147,8 @@ export const getArticoloBySlug = cache(
   ): Promise<Articolo | null> => {
     const entry = await reader.collections.articoli.read(slug);
     if (!entry) return null;
+    // Bozza = invisibile anche via link diretto: la pagina fa notFound().
+    if ((entry as unknown as Record<string, unknown>).bozza) return null;
     const base = toArticolo(
       slug,
       entry as unknown as Record<string, unknown>,
@@ -199,7 +203,10 @@ export const getArticoliCorrelati = cache(
 
 export const getArticoliSlugs = cache(async (): Promise<string[]> => {
   const entries = await reader.collections.articoli.all();
-  return entries.map((e) => e.slug);
+  // Niente bozze: qui passano generateStaticParams e sitemap.
+  return entries
+    .filter((e) => !(e.entry as Record<string, unknown>).bozza)
+    .map((e) => e.slug);
 });
 
 /** Lingue in cui l'articolo è realmente tradotto (IT sempre incluso) — per hreflang (§9 brief i18n). */
