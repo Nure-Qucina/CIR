@@ -9,6 +9,7 @@ import {
   Noto_Sans_Bengali,
 } from "next/font/google";
 import { routing, isRtl, type Locale } from "@/i18n/routing";
+import { Analytics } from "@vercel/analytics/next";
 import "../globals.css";
 
 /**
@@ -130,6 +131,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider locale={locale as Locale} messages={messages}>
           {children}
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
