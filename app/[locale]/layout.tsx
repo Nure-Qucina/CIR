@@ -10,6 +10,7 @@ import {
 } from "next/font/google";
 import { routing, isRtl, type Locale } from "@/i18n/routing";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "../globals.css";
 
 /**
@@ -132,6 +133,7 @@ export default async function LocaleLayout({
           {children}
         </NextIntlClientProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
