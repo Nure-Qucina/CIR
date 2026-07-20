@@ -1,0 +1,19 @@
+{
+  "titolo": "PULIAMO ROMA – PLASTIC RACE",
+  "bozza": false,
+  "stato": "passato",
+  "dataInizio": "2026-04-10T09:30",
+  "tuttoIlGiorno": false,
+  "luogo": {
+    "nome": "Ottavia",
+    "citta": "Roma"
+  },
+  "ctaEsterna": {},
+  "inEvidenza": false,
+  "seo": {},
+  "traduzioni": {
+    "en": {},
+    "ar": {},
+    "bn": {}
+  }
+}
