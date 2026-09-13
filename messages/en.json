@@ -25,8 +25,16 @@
     "confirming": "Confirming your payment…",
     "paymentError": "We could not confirm the payment. Check your details and try again.",
     "stripeLanguage": "Stripe payment fields are displayed in English.",
-    "resultTitle": "Donation result awaiting verification",
-    "resultPending": "Your payment result is awaiting verification. Automatic verification will be available in the next update. This page does not confirm that payment succeeded. Please check your payment status before donating again.",
+    "resultTitle": "Donation result",
+    "resultVerifying": "Verifying your payment…",
+    "resultPaid": "Thank you. Your donation is confirmed.",
+    "resultPaidAmount": "Verified amount: {amount}",
+    "resultPaidNote": "This confirmation comes from Stripe’s verification of the payment session, not from simply arriving on this page.",
+    "resultProcessing": "Your payment is still processing. Please do not donate again. The status will update when Stripe confirms the result.",
+    "resultUnpaid": "The payment was not completed. You can return to the donation page and try again.",
+    "resultInvalid": "This page could not be verified. If you just donated, check your Stripe receipt or email before trying again.",
+    "resultError": "We could not verify the payment result. Please try again shortly. Do not donate again unless you are sure the payment failed.",
+    "backDonate": "Back to donations",
     "backHome": "Back to home"
   },
   "common": {

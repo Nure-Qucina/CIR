@@ -3,9 +3,9 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
 import { routing, type Locale } from "@/i18n/routing";
 import { DONATION_ROUTE } from "@/lib/donazioni/config";
+import { DonationStatus } from "@/components/donazioni/DonationStatus";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -42,10 +42,7 @@ export default async function DonationResultPage({
       />
       <Container className="py-12 sm:py-16">
         <Card className="mx-auto max-w-2xl space-y-6 p-6 sm:p-8">
-          <p>{t("resultPending")}</p>
-          <Button href="/" variant="ghost">
-            {t("backHome")}
-          </Button>
+          <DonationStatus />
         </Card>
       </Container>
     </main>
