@@ -173,6 +173,26 @@ npx lighthouse http://localhost:3100/bn --view
 Vedi **`DA-FORNIRE.md`**: contatti reali, logo ufficiale, foto, date/autori reali degli articoli.
 Finché non arrivano, il sito mostra placeholder evidenti (mai dati finti).
 
+## Donazioni (Stripe)
+
+Flusso interno `/donazioni` con Checkout Sessions (`ui_mode: "elements"`). La sessione è esplicita: `payment_method_types: ["card", "link", "paypal"]`. La carta è il fallback universale. Apple Pay, Google Pay, PayPal e Link compaiono in Express Checkout solo se Stripe, il browser, l’account e il dominio li ammettono. Klarna, Amazon Pay, Bancontact, EPS, Satispay e altri metodi BNPL/ecommerce locali non fanno parte del flusso.
+
+Variabili:
+
+- `DONATIONS_ENABLED=true` per abilitare
+- `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
+- `NEXT_PUBLIC_SITE_URL` (origine del sito, senza path)
+
+**Test carta:** `localhost` (es. `http://localhost:3100`) va bene per donazioni con carta.
+
+**Test Apple Pay / Google Pay:** non usare `always` in sviluppo. I wallet compaiono solo con `auto` su browser/dispositivo compatibili e su un dominio HTTPS registrato. In Stripe Dashboard → **Settings → Payment methods → Payment method domains**: registra il dominio di test (es. Vercel Preview) nel **Sandbox** e il dominio di produzione CIR in **live**. `localhost` non è adatto a un test wallet completo.
+
+**Test Link:** dipende da eleggibilità Stripe (browser, account). L’email resta sul `ContactDetailsElement` nativo; non c’è un login Link custom.
+
+**Test PayPal:** richiede PayPal attivo sull’account Stripe (Dashboard → **Settings → Payment methods → PayPal → Turn on**). Stripe può chiedere di collegare o creare un account PayPal: le credenziali PayPal non vanno in env né nel repo. Dopo l’autorizzazione PayPal, il donatore torna su `/donazioni/esito`; l’esito è verificato server-side sulla Checkout Session, non inferito dall’URL.
+
+Il supporto wallet/Link/PayPal non si considera verificato finché non è stato provato su un dispositivo/browser/dominio eleggibile.
+
 ## Deploy
 
 Si lavora **in locale**. Il deploy su Vercel va lanciato esplicitamente:

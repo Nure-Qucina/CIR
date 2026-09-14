@@ -38,12 +38,13 @@ export default async function DonationPage({
   return (
     <main id="contenuto">
       <PageHeader
+        compact
         occhiello={t("eyebrow")}
         titolo={t("title")}
         sottotitolo={t("intro")}
         crumbs={[{ label: common("home"), href: "/" }, { label: t("title") }]}
       />
-      <Container className="py-12 sm:py-16">
+      <Container className="py-6 sm:py-8">
         <div className="mx-auto max-w-2xl">
           <DonationForm key={locale} locale={locale as Locale} />
         </div>

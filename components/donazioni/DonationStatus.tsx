@@ -5,6 +5,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { AlertCircle, CheckCircle2, Clock } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { DONATION_CURRENCY, DONATION_ROUTE } from "@/lib/donazioni/config";
+import { DonationProgress } from "./DonationProgress";
 
 type DonationState = "paid" | "pending" | "unpaid";
 type View = "loading" | DonationState | "invalid" | "error";
@@ -96,7 +97,8 @@ export function DonationStatus() {
 
   if (!sessionId) {
     return (
-      <div className="space-y-6" role="alert" aria-live="assertive">
+      <div className="space-y-5" role="alert" aria-live="assertive">
+        <DonationProgress current="confirm" />
         <div className="flex items-start gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-5">
           <AlertCircle
             className="mt-0.5 shrink-0 text-orange-800"
@@ -105,9 +107,9 @@ export function DonationStatus() {
           <p className="text-ink">{t("resultInvalid")}</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Button href={DONATION_ROUTE}>{t("backDonate")}</Button>
-          <Button href="/" variant="ghost">
-            {t("backHome")}
+          <Button href="/">{t("backHome")}</Button>
+          <Button href={DONATION_ROUTE} variant="ghost">
+            {t("backDonate")}
           </Button>
         </div>
       </div>
@@ -116,35 +118,46 @@ export function DonationStatus() {
 
   if (view === "loading") {
     return (
-      <p role="status" aria-live="polite">
-        {t("resultVerifying")}
-      </p>
+      <div className="space-y-5">
+        <DonationProgress current="confirm" />
+        <p role="status" aria-live="polite">
+          {t("resultVerifying")}
+        </p>
+      </div>
     );
   }
 
   if (view === "paid") {
     return (
-      <div className="space-y-6" role="status" aria-live="polite">
+      <div className="space-y-5" role="status" aria-live="polite">
+        <DonationProgress current="confirm" />
         <div className="flex items-start gap-3 rounded-2xl border border-teal-200 bg-teal-50 p-5">
           <CheckCircle2 className="text-teal mt-0.5 shrink-0" aria-hidden />
           <div className="space-y-2">
-            <p className="text-ink font-semibold">{t("resultPaid")}</p>
+            <p className="text-ink text-[length:var(--text-h3)] font-bold">
+              {t("resultPaid")}
+            </p>
             <p className="text-ink">
               {t("resultPaidAmount", { amount: money })}
             </p>
+            <p className="text-ink-soft">{t("resultPaidThanks")}</p>
             <p className="text-ink-soft text-sm">{t("resultPaidNote")}</p>
           </div>
         </div>
-        <Button href="/" variant="ghost">
-          {t("backHome")}
-        </Button>
+        <div className="flex flex-wrap gap-3">
+          <Button href="/">{t("backHome")}</Button>
+          <Button href={DONATION_ROUTE} variant="ghost">
+            {t("backDonate")}
+          </Button>
+        </div>
       </div>
     );
   }
 
   if (view === "pending") {
     return (
-      <div className="space-y-6" role="status" aria-live="polite">
+      <div className="space-y-5" role="status" aria-live="polite">
+        <DonationProgress current="confirm" />
         <div className="flex items-start gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-5">
           <Clock className="mt-0.5 shrink-0 text-orange-800" aria-hidden />
           <p className="text-ink">{t("resultProcessing")}</p>
@@ -158,7 +171,8 @@ export function DonationStatus() {
 
   if (view === "unpaid") {
     return (
-      <div className="space-y-6" role="status" aria-live="polite">
+      <div className="space-y-5" role="status" aria-live="polite">
+        <DonationProgress current="confirm" />
         <div className="flex items-start gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-5">
           <AlertCircle
             className="mt-0.5 shrink-0 text-orange-800"
@@ -166,13 +180,19 @@ export function DonationStatus() {
           />
           <p className="text-ink">{t("resultUnpaid")}</p>
         </div>
-        <Button href={DONATION_ROUTE}>{t("backDonate")}</Button>
+        <div className="flex flex-wrap gap-3">
+          <Button href={DONATION_ROUTE}>{t("backDonate")}</Button>
+          <Button href="/" variant="ghost">
+            {t("backHome")}
+          </Button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6" role="alert" aria-live="assertive">
+    <div className="space-y-5" role="alert" aria-live="assertive">
+      <DonationProgress current="confirm" />
       <div className="flex items-start gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-5">
         <AlertCircle className="mt-0.5 shrink-0 text-orange-800" aria-hidden />
         <p className="text-ink">

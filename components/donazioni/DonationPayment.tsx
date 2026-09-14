@@ -5,14 +5,23 @@ import { useTranslations } from "next-intl";
 import {
   CheckoutElementsProvider,
   ContactDetailsElement,
+  ExpressCheckoutElement,
   PaymentElement,
   useCheckoutElements,
 } from "@stripe/react-stripe-js/checkout";
-import type { Stripe, Appearance } from "@stripe/stripe-js";
+import type {
+  Appearance,
+  Stripe,
+  StripeCheckoutExpressCheckoutElementOptions,
+  StripeExpressCheckoutElementAvailablePaymentMethodsChangeEvent,
+  StripeExpressCheckoutElementConfirmEvent,
+  StripeExpressCheckoutElementReadyEvent,
+} from "@stripe/stripe-js";
 import type { Locale } from "@/i18n/routing";
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "@/i18n/navigation";
 import { DONATION_ROUTE } from "@/lib/donazioni/config";
+import { DonationTrust } from "./DonationTrust";
 
 const appearance: Appearance = {
   theme: "stripe",
@@ -28,6 +37,50 @@ const appearance: Appearance = {
   },
 };
 
+const expressCheckoutOptions: StripeCheckoutExpressCheckoutElementOptions = {
+  buttonHeight: 48,
+  buttonTheme: undefined,
+  buttonType: {
+    applePay: "donate",
+    googlePay: "donate",
+    paypal: "paypal",
+  },
+  layout: { maxColumns: 2, overflow: "auto" },
+  paymentMethodOrder: ["applePay", "googlePay", "paypal", "link"],
+  paymentMethods: {
+    applePay: "auto",
+    googlePay: "auto",
+    paypal: "auto",
+    link: "auto",
+    amazonPay: "never",
+    klarna: "never",
+  },
+};
+
+function preferredWalletsAvailable(
+  methods:
+    | StripeExpressCheckoutElementReadyEvent["availablePaymentMethods"]
+    | StripeExpressCheckoutElementAvailablePaymentMethodsChangeEvent["paymentMethods"],
+): boolean {
+  if (!methods) return false;
+  return (
+    isWalletFlagOn(methods.applePay) ||
+    isWalletFlagOn(methods.googlePay) ||
+    isWalletFlagOn(methods.paypal) ||
+    isWalletFlagOn(methods.link)
+  );
+}
+
+function isWalletFlagOn(value: unknown): boolean {
+  if (value === true) return true;
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "available" in value &&
+    (value as { available?: unknown }).available === true
+  );
+}
+
 function PaymentFields({ onBack }: { onBack: () => void }) {
   const state = useCheckoutElements();
   const t = useTranslations("donazioni");
@@ -35,29 +88,30 @@ function PaymentFields({ onBack }: { onBack: () => void }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [loadFailed, setLoadFailed] = useState(false);
+  const [walletCheck, setWalletCheck] = useState<
+    "checking" | "available" | "none"
+  >("checking");
   const lock = useRef(false);
 
-  async function confirm(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (
-      lock.current ||
-      state.type !== "success" ||
-      !state.checkout.canConfirm ||
-      loadFailed
-    )
-      return;
+  async function confirmPayment(
+    expressCheckoutConfirmEvent?: StripeExpressCheckoutElementConfirmEvent,
+  ) {
+    if (lock.current || state.type !== "success" || loadFailed) return;
+    if (!expressCheckoutConfirmEvent && !state.checkout.canConfirm) return;
     lock.current = true;
     setBusy(true);
     setError("");
     try {
-      const result = await state.checkout.confirm();
+      const result = await state.checkout.confirm(
+        expressCheckoutConfirmEvent
+          ? { expressCheckoutConfirmEvent }
+          : undefined,
+      );
       if (result.type === "error") {
-        // Messaggio Stripe destinato al donatore, reso come testo React.
         setError(result.error.message || t("paymentError"));
         lock.current = false;
         setBusy(false);
       } else {
-        // Nessuna deduzione sul pagamento: il risultato resta da verificare.
         router.replace(`${DONATION_ROUTE}/esito`);
       }
     } catch {
@@ -65,6 +119,11 @@ function PaymentFields({ onBack }: { onBack: () => void }) {
       lock.current = false;
       setBusy(false);
     }
+  }
+
+  async function confirmCard(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await confirmPayment();
   }
 
   if (state.type !== "success")
@@ -86,11 +145,54 @@ function PaymentFields({ onBack }: { onBack: () => void }) {
     ? t("genericError")
     : error || state.checkout.lastPaymentError?.message || "";
 
+  const walletsVisible = walletCheck === "available";
+
   return (
-    <form onSubmit={confirm} className="mt-6 space-y-6" aria-busy={busy}>
+    <form onSubmit={confirmCard} className="mt-6 space-y-6" aria-busy={busy}>
       <p className="bg-cream-50 rounded-xl p-4 font-semibold">
         {t("total", { amount: state.checkout.total.total.amount })}
       </p>
+      <div
+        className={
+          walletCheck === "none"
+            ? "hidden"
+            : walletsVisible
+              ? "space-y-4"
+              : "h-0 overflow-hidden"
+        }
+        aria-hidden={!walletsVisible}
+      >
+        <ExpressCheckoutElement
+          options={expressCheckoutOptions}
+          onConfirm={(event) => {
+            void confirmPayment(event);
+          }}
+          onReady={(event) => {
+            setWalletCheck(
+              preferredWalletsAvailable(event.availablePaymentMethods)
+                ? "available"
+                : "none",
+            );
+          }}
+          onAvailablePaymentMethodsChange={(event) => {
+            setWalletCheck(
+              preferredWalletsAvailable(event.paymentMethods)
+                ? "available"
+                : "none",
+            );
+          }}
+          onLoadError={() => setWalletCheck("none")}
+        />
+        {walletsVisible ? (
+          <p className="text-ink-soft relative text-center text-sm">
+            <span
+              className="bg-border absolute inset-x-0 top-1/2 h-px"
+              aria-hidden
+            />
+            <span className="bg-surface relative px-3">{t("orPay")}</span>
+          </p>
+        ) : null}
+      </div>
       <div className="space-y-2">
         <h3 className="text-sm font-semibold">{t("contactTitle")}</h3>
         <ContactDetailsElement onLoadError={() => setLoadFailed(true)} />
@@ -98,7 +200,15 @@ function PaymentFields({ onBack }: { onBack: () => void }) {
       <div className="space-y-2">
         <h3 className="text-sm font-semibold">{t("paymentMethod")}</h3>
         <PaymentElement
-          options={{ layout: "accordion" }}
+          options={{
+            layout: "tabs",
+            paymentMethodOrder: ["card"],
+            wallets: {
+              applePay: "never",
+              googlePay: "never",
+              link: "never",
+            },
+          }}
           onLoadError={() => setLoadFailed(true)}
         />
       </div>
@@ -125,6 +235,7 @@ function PaymentFields({ onBack }: { onBack: () => void }) {
       <p role="status" aria-live="polite" className="sr-only">
         {busy ? t("confirming") : ""}
       </p>
+      <DonationTrust />
       <Button
         type="button"
         variant="ghost"
@@ -134,7 +245,6 @@ function PaymentFields({ onBack }: { onBack: () => void }) {
       >
         {t("changeAmount")}
       </Button>
-      <p className="text-ink-soft text-center text-sm">{t("secure")}</p>
     </form>
   );
 }

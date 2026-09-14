@@ -33,6 +33,7 @@ export default async function DonationResultPage({
   return (
     <main id="contenuto">
       <PageHeader
+        compact
         titolo={t("resultTitle")}
         crumbs={[
           { label: common("home"), href: "/" },
@@ -40,8 +41,8 @@ export default async function DonationResultPage({
           { label: t("resultTitle") },
         ]}
       />
-      <Container className="py-12 sm:py-16">
-        <Card className="mx-auto max-w-2xl space-y-6 p-6 sm:p-8">
+      <Container className="py-6 sm:py-8">
+        <Card className="mx-auto max-w-2xl p-6 sm:p-8">
           <DonationStatus />
         </Card>
       </Container>

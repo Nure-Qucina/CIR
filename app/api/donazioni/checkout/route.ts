@@ -79,6 +79,10 @@ export async function POST(request: Request): Promise<Response> {
       ui_mode: "elements",
       currency: DONATION_CURRENCY,
       adaptive_pricing: { enabled: false },
+      // Carta sempre; Link e PayPal solo se Stripe li ammette sulla sessione.
+      // Apple Pay / Google Pay restano wallet sulla carta, in base a
+      // dispositivo, browser e dominio. Nessun BNPL o metodo ecommerce locale.
+      payment_method_types: ["card", "link", "paypal"],
       line_items: [
         {
           quantity: 1,
@@ -91,9 +95,7 @@ export async function POST(request: Request): Promise<Response> {
       ],
       return_url: returnUrl,
       metadata: { purpose: "cir_donation", locale },
-      // Email: il futuro ContactDetailsElement la raccoglie e valida prima
-      // della conferma. Nessun customer_email fittizio o Customer obbligatorio.
-      // payment_method_types omesso: metodi dinamici configurati su Stripe.
+      // Email: ContactDetailsElement la raccoglie e valida prima della conferma.
     });
 
     if (!session.client_secret) return json({ error: "checkout_failed" }, 500);
