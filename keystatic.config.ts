@@ -26,7 +26,9 @@ import { config, collection, singleton, fields } from "@keystatic/core";
  */
 // Esportato: usato anche da /admin/bozze per committare via API GitHub.
 export const KEYSTATIC_REPO = { owner: "Nure-Qucina", name: "CIR" } as const;
-const USE_GITHUB_STORAGE = Boolean(process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG);
+const USE_GITHUB_STORAGE = Boolean(
+  process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG,
+);
 
 const colore = fields.select({
   label: "Colore",
@@ -146,8 +148,14 @@ export default config({
             nome: fields.text({ label: "Nome luogo" }),
             indirizzo: fields.text({ label: "Indirizzo" }),
             citta: fields.text({ label: "Città", defaultValue: "Roma" }),
-            lat: fields.number({ label: "Latitudine", validation: { isRequired: false } }),
-            lng: fields.number({ label: "Longitudine", validation: { isRequired: false } }),
+            lat: fields.number({
+              label: "Latitudine",
+              validation: { isRequired: false },
+            }),
+            lng: fields.number({
+              label: "Longitudine",
+              validation: { isRequired: false },
+            }),
           },
           { label: "Luogo" },
         ),
@@ -166,7 +174,10 @@ export default config({
         ctaEsterna: fields.object(
           {
             label: fields.text({ label: "Etichetta CTA (IT)" }),
-            url: fields.url({ label: "URL", validation: { isRequired: false } }),
+            url: fields.url({
+              label: "URL",
+              validation: { isRequired: false },
+            }),
           },
           { label: "CTA esterna (opzionale)" },
         ),
@@ -182,7 +193,10 @@ export default config({
         seo: fields.object(
           {
             title: fields.text({ label: "SEO title (IT)" }),
-            description: fields.text({ label: "SEO description (IT)", multiline: true }),
+            description: fields.text({
+              label: "SEO description (IT)",
+              multiline: true,
+            }),
             ogImage: fields.image({
               label: "OG image",
               directory: "public/images/eventi/og",
@@ -284,7 +298,10 @@ export default config({
         seo: fields.object(
           {
             title: fields.text({ label: "SEO title (IT)" }),
-            description: fields.text({ label: "SEO description (IT)", multiline: true }),
+            description: fields.text({
+              label: "SEO description (IT)",
+              multiline: true,
+            }),
             ogImage: fields.image({
               label: "OG image",
               directory: "public/images/articoli/og",
@@ -296,36 +313,83 @@ export default config({
         ),
         corpo: fields.mdx({
           label: "Corpo articolo (IT)",
-          options: { image: { directory: "public/images/articoli/corpo", publicPath: "/images/articoli/corpo" } },
+          options: {
+            image: {
+              directory: "public/images/articoli/corpo",
+              publicPath: "/images/articoli/corpo",
+            },
+          },
         }),
         traduzioni: fields.object(
           {
             en: fields.object(
               {
-                titolo: fields.text({ label: "Titolo", validation: { isRequired: false } }),
-                estratto: fields.text({ label: "Estratto", multiline: true, validation: { isRequired: false } }),
-                seoTitle: fields.text({ label: "SEO title", validation: { isRequired: false } }),
-                seoDescription: fields.text({ label: "SEO description", multiline: true, validation: { isRequired: false } }),
+                titolo: fields.text({
+                  label: "Titolo",
+                  validation: { isRequired: false },
+                }),
+                estratto: fields.text({
+                  label: "Estratto",
+                  multiline: true,
+                  validation: { isRequired: false },
+                }),
+                seoTitle: fields.text({
+                  label: "SEO title",
+                  validation: { isRequired: false },
+                }),
+                seoDescription: fields.text({
+                  label: "SEO description",
+                  multiline: true,
+                  validation: { isRequired: false },
+                }),
                 corpo: fields.mdx.inline({ label: "Corpo articolo" }),
               },
               { label: "English" },
             ),
             ar: fields.object(
               {
-                titolo: fields.text({ label: "Titolo", validation: { isRequired: false } }),
-                estratto: fields.text({ label: "Estratto", multiline: true, validation: { isRequired: false } }),
-                seoTitle: fields.text({ label: "SEO title", validation: { isRequired: false } }),
-                seoDescription: fields.text({ label: "SEO description", multiline: true, validation: { isRequired: false } }),
+                titolo: fields.text({
+                  label: "Titolo",
+                  validation: { isRequired: false },
+                }),
+                estratto: fields.text({
+                  label: "Estratto",
+                  multiline: true,
+                  validation: { isRequired: false },
+                }),
+                seoTitle: fields.text({
+                  label: "SEO title",
+                  validation: { isRequired: false },
+                }),
+                seoDescription: fields.text({
+                  label: "SEO description",
+                  multiline: true,
+                  validation: { isRequired: false },
+                }),
                 corpo: fields.mdx.inline({ label: "Corpo articolo" }),
               },
               { label: "العربية" },
             ),
             bn: fields.object(
               {
-                titolo: fields.text({ label: "Titolo", validation: { isRequired: false } }),
-                estratto: fields.text({ label: "Estratto", multiline: true, validation: { isRequired: false } }),
-                seoTitle: fields.text({ label: "SEO title", validation: { isRequired: false } }),
-                seoDescription: fields.text({ label: "SEO description", multiline: true, validation: { isRequired: false } }),
+                titolo: fields.text({
+                  label: "Titolo",
+                  validation: { isRequired: false },
+                }),
+                estratto: fields.text({
+                  label: "Estratto",
+                  multiline: true,
+                  validation: { isRequired: false },
+                }),
+                seoTitle: fields.text({
+                  label: "SEO title",
+                  validation: { isRequired: false },
+                }),
+                seoDescription: fields.text({
+                  label: "SEO description",
+                  multiline: true,
+                  validation: { isRequired: false },
+                }),
                 corpo: fields.mdx.inline({ label: "Corpo articolo" }),
               },
               { label: "বাংলা" },
@@ -343,11 +407,15 @@ export default config({
       path: "content/site",
       format: { data: "json" },
       schema: {
-        nome: fields.text({ label: "Nome", defaultValue: "Comunità Islamica di Roma" }),
+        nome: fields.text({
+          label: "Nome",
+          defaultValue: "Comunità Islamica di Roma",
+        }),
         sigla: fields.text({ label: "Sigla", defaultValue: "CIR" }),
         codiceFiscale: fields.text({
           label: "Codice Fiscale",
-          description: "CF dell'associazione (mostrato nel footer e nell'informativa privacy).",
+          description:
+            "CF dell'associazione (mostrato nel footer e nell'informativa privacy).",
           validation: { isRequired: false },
         }),
         payoff: fields.text({ label: "Payoff" }),
@@ -357,7 +425,11 @@ export default config({
           description: "Es. News / Articoli / Approfondimenti",
           defaultValue: "News",
         }),
-        donazioniUrl: fields.url({ label: "URL donazioni (LaunchGood)" }),
+        donazioniUrl: fields.url({
+          label: "URL campagna donazioni esterna (legacy)",
+          description:
+            "URL legacy della campagna esterna. Non controlla i pulsanti Dona del sito, che puntano alla pagina interna /donazioni.",
+        }),
         social: fields.array(
           fields.object({
             piattaforma: fields.select({
@@ -370,12 +442,21 @@ export default config({
             }),
             url: fields.url({ label: "URL" }),
           }),
-          { label: "Social", itemLabel: (props) => props.fields.piattaforma.value },
+          {
+            label: "Social",
+            itemLabel: (props) => props.fields.piattaforma.value,
+          },
         ),
         contatti: fields.object(
           {
-            email: fields.text({ label: "Email", validation: { isRequired: false } }),
-            telefono: fields.text({ label: "Telefono", validation: { isRequired: false } }),
+            email: fields.text({
+              label: "Email",
+              validation: { isRequired: false },
+            }),
+            telefono: fields.text({
+              label: "Telefono",
+              validation: { isRequired: false },
+            }),
             indirizzo: fields.text({
               label: "Indirizzo sede",
               multiline: true,
