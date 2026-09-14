@@ -18,7 +18,10 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale: locale as Locale, namespace: "legal" });
+  const t = await getTranslations({
+    locale: locale as Locale,
+    namespace: "legal",
+  });
   return {
     title: t("privacyCookie"),
     description:
@@ -65,7 +68,7 @@ export default async function PrivacyCookiePage({
       />
       <Container className="py-12 sm:py-16">
         <div className="mx-auto max-w-3xl">
-          <p className="mb-8 text-sm text-ink-soft">
+          <p className="text-ink-soft mb-8 text-sm">
             Ultimo aggiornamento: luglio 2026. Informativa resa ai sensi degli
             artt. 13-14 del Regolamento UE 2016/679 (GDPR). Si consiglia una
             revisione da parte di un consulente legale prima della pubblicazione
@@ -89,11 +92,16 @@ export default async function PrivacyCookiePage({
 
             <h2>2. Dati raccolti</h2>
             <p>
-              Trattiamo i dati personali che ci fornisci volontariamente —
-              ad esempio tramite il modulo di contatto, moduli di iscrizione,
+              Trattiamo i dati personali che ci fornisci volontariamente — ad
+              esempio tramite il modulo di contatto, moduli di iscrizione,
               newsletter o eventuali donazioni — quali nome, indirizzo email,
               telefono e il contenuto del messaggio. Trattiamo inoltre i dati
               tecnici di navigazione raccolti tramite cookie (vedi punto 5).
+            </p>
+            <p>
+              Le donazioni online sono elaborate tramite Stripe. Il CIR non
+              riceve né conserva i dati completi della carta di pagamento;
+              l&apos;elaborazione del pagamento avviene tramite Stripe.
             </p>
 
             <h2>3. Finalità e base giuridica</h2>

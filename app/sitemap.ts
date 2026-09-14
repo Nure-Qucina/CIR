@@ -54,10 +54,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const statiche: MetadataRoute.Sitemap = [
     ...localizedEntries("/", ALL, { lastModified: now, priority: 1 }),
-    ...localizedEntries("/chi-siamo", ALL, { lastModified: now, priority: 0.8 }),
+    ...localizedEntries("/chi-siamo", ALL, {
+      lastModified: now,
+      priority: 0.8,
+    }),
     ...localizedEntries("/eventi", ALL, { lastModified: now, priority: 0.8 }),
     ...localizedEntries("/news", ALL, { lastModified: now, priority: 0.8 }),
     ...localizedEntries("/contatti", ALL, { lastModified: now, priority: 0.6 }),
+    ...localizedEntries("/donazioni", ALL, {
+      lastModified: now,
+      priority: 0.7,
+    }),
     ...localizedEntries("/privacy", ALL, { lastModified: now, priority: 0.3 }),
   ];
 
