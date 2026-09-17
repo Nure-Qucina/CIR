@@ -8,8 +8,9 @@
     "start": "next start --port 3100",
     "lint": "eslint",
     "format": "prettier --write .",
-    "test": "tsx --test lib/donazioni/hardening.test.ts",
-    "donation:env:check": "node scripts/check-donation-env.mjs"
+    "test": "tsx --test lib/donazioni/hardening.test.ts lib/donazioni/email-render.test.ts lib/donazioni/result-copy.test.ts",
+    "donation:env:check": "node scripts/check-donation-env.mjs",
+    "donation:email:preview": "tsx scripts/preview-donation-email.ts"
   },
   "dependencies": {
     "@keystatic/core": "^0.5.50",

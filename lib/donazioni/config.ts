@@ -113,11 +113,11 @@ export function getPublicSiteUrl(): URL | null {
  * URL della pagina di login hosted del Customer Portal Stripe (no-code).
  * Deve essere `https://billing.stripe.com/p/login/...`, senza ID customer.
  */
-export function getCustomerPortalLoginUrl(): URL | null {
+export function parseCustomerPortalLoginUrl(
+  value: string | null | undefined,
+): URL | null {
   try {
-    const portalUrl = new URL(
-      process.env.STRIPE_CUSTOMER_PORTAL_LOGIN_URL?.trim() ?? "",
-    );
+    const portalUrl = new URL(value?.trim() ?? "");
     if (
       portalUrl.protocol !== "https:" ||
       portalUrl.hostname !== "billing.stripe.com" ||
@@ -133,6 +133,12 @@ export function getCustomerPortalLoginUrl(): URL | null {
   } catch {
     return null;
   }
+}
+
+export function getCustomerPortalLoginUrl(): URL | null {
+  return parseCustomerPortalLoginUrl(
+    process.env.STRIPE_CUSTOMER_PORTAL_LOGIN_URL,
+  );
 }
 
 export function donationSessionSecret(): string | null {

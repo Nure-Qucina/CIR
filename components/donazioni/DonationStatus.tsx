@@ -135,6 +135,9 @@ export function DonationStatus() {
       style: "currency",
       currency: DONATION_CURRENCY,
     });
+  const monthly = frequency === "monthly";
+  const labeled = (cents: number) =>
+    monthly ? `${money(cents)} ${t("resultPerMonth")}` : money(cents);
 
   if (!mounted) {
     return (
@@ -187,33 +190,30 @@ export function DonationStatus() {
               {t("resultPaid")}
             </p>
             <p className="text-ink">
-              {frequency === "monthly"
+              {monthly
                 ? t("resultPaidMonthlyAmount", {
-                    amount: money(amount ?? 0),
+                    amount: labeled(amount ?? 0),
                   })
-                : t("resultPaidAmount", { amount: money(amount ?? 0) })}
+                : t("resultPaidAmount", { amount: labeled(amount ?? 0) })}
             </p>
             {donationAmount !== null ? (
               <p className="text-ink-soft text-sm">
-                {t("resultPaidDonation", { amount: money(donationAmount) })}
+                {t("resultPaidDonation", { amount: labeled(donationAmount) })}
               </p>
             ) : null}
             {contributionAmount > 0 ? (
               <p className="text-ink-soft text-sm">
                 {t("resultPaidContribution", {
-                  amount: money(contributionAmount),
+                  amount: labeled(contributionAmount),
                 })}
               </p>
             ) : null}
             <p className="text-ink-soft text-sm">
-              {t("resultPaidTotal", { amount: money(amount ?? 0) })}
+              {t("resultPaidTotal", { amount: labeled(amount ?? 0) })}
             </p>
-            <p className="text-ink-soft">{t("resultPaidThanks")}</p>
-            {frequency === "monthly" ? (
-              <p className="text-ink-soft text-sm">
-                {t("resultPaidMonthlyManage")}
-              </p>
-            ) : null}
+            <p className="text-ink-soft">
+              {monthly ? t("resultPaidThanksMonthly") : t("resultPaidThanks")}
+            </p>
             <p className="text-ink-soft text-sm">{t("resultPaidNote")}</p>
           </div>
         </div>
@@ -238,6 +238,7 @@ export function DonationStatus() {
               {t("resultPendingTitle")}
             </p>
             <p className="text-ink">{t("resultPendingBody")}</p>
+            <p className="text-ink-soft">{t("resultPendingDelay")}</p>
           </div>
         </div>
         <Button href="/" variant="ghost">
@@ -256,7 +257,12 @@ export function DonationStatus() {
             className="mt-0.5 shrink-0 text-orange-800"
             aria-hidden
           />
-          <p className="text-ink">{t("resultUnpaid")}</p>
+          <div className="space-y-2">
+            <p className="text-ink text-[length:var(--text-h3)] font-bold">
+              {t("resultUnpaidTitle")}
+            </p>
+            <p className="text-ink">{t("resultUnpaidBody")}</p>
+          </div>
         </div>
         <div className="flex flex-wrap gap-3">
           <Button href={DONATION_ROUTE}>{t("backDonate")}</Button>

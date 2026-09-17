@@ -219,7 +219,7 @@ Variabili:
 - `TURNSTILE_ALLOWED_HOSTNAMES` (CSV, niente wildcard) in aggiunta all’hostname di `NEXT_PUBLIC_SITE_URL`. Locale/test-key: `localhost,127.0.0.1,example.com` (le dummy key Cloudflare possono riportare `example.com`). Preview: l’hostname del Preview. Produzione: l’hostname CIR. Siteverify richiede `success === true`, `action === donation_checkout` e hostname in questa allow-list. Solo in non-produzione, e solo con la dummy secret always-pass documentata, un `action` vuoto della risposta di test Cloudflare è accettato. Hostname/action dal body client sono ignorati.
 - `DONATION_FEE_REFERENCE_BPS` e `DONATION_FEE_REFERENCE_FIXED_CENTS`: stima del contributo costi. I default `150` + `25` sono **riferimenti di sviluppo**, non la commissione Stripe reale del CIR. In produzione vanno impostati esplicitamente. Il calcolo non dipende dal metodo di pagamento scelto dal client.
 - `RESEND_API_KEY` (opzionale) per l’email di ringraziamento transazionale
-- `DONATION_EMAIL_FROM` (opzionale; default di sviluppo: `Sito CIR <onboarding@resend.dev>`)
+- `DONATION_EMAIL_FROM` (opzionale). L’indirizzo verified viene usato come From; il display name è sempre `Comunità Islamica di Roma`. Default di sviluppo: `Comunità Islamica di Roma <onboarding@resend.dev>`
 - Override opzionali: `DONATION_RATE_LIMIT_SESSION_MAX` / `_WINDOW_SEC`, `DONATION_RATE_LIMIT_IP_MAX` / `_WINDOW_SEC`, `DONATION_RATE_LIMIT_EMAIL_MAX` / `_WINDOW_SEC`, `DONATION_RATE_LIMIT_MINT_MAX` / `_WINDOW_SEC`
 
 Con `DONATIONS_ENABLED=true`, checkout e sessione donazione **falliscono chiusi** se manca la configurazione di sicurezza (niente bypass locale).
@@ -301,9 +301,12 @@ Imposta `STRIPE_CUSTOMER_PORTAL_LOGIN_URL` con quell’URL. L’email mensile in
 
 Solo dopo verifica Stripe lato webhook. Non parte dalla pagina esito. Nessun contenuto marketing/newsletter.
 
-- Una tantum: nome, importo, ringraziamento, indica che è una donazione unica.
-- Mensile: nome, importo al mese, conferma che la donazione ricorrente è attiva, link al portale se configurato.
+- HTML + testo semplice, localizzati (`it` / `en` / `ar` / `bn`; locale non valido → italiano).
+- Una tantum: nome, importo, ringraziamento inclusivo, riepilogo (donazione / eventuale contributo costi / totale), tipo e stato.
+- Mensile: stesso schema con importi «/ mese» (o equivalente); CTA al Customer Portal solo se `STRIPE_CUSTOMER_PORTAL_LOGIN_URL` è un URL hosted `/p/login/` valido.
+- Il contributo costi è una **stima**, non «commissione Stripe».
 - Nessuna email custom su ogni `invoice.paid` di rinnovo.
+- Anteprima locale senza invio: `pnpm donation:email:preview` scrive HTML in `tmp/donation-email-preview/`.
 
 CIR **non** invia una seconda ricevuta di pagamento. Abilita in Stripe Dashboard → **Settings → Customer emails** (o Billing email settings) le ricevute automatiche / invoice emails: è il canale di ricevuta fiscale/contabile. L’email Resend CIR resta il ringraziamento di marca e, per il mensile, il link di gestione.
 
