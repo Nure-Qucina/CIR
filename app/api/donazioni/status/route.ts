@@ -1,5 +1,17 @@
 import Stripe from "stripe";
-import { DONATION_CURRENCY } from "@/lib/donazioni/config";
+import {
+  DONATION_CURRENCY,
+  type DonationFrequency,
+} from "@/lib/donazioni/config";
+import {
+  donationFrequencyFromMetadata,
+  isCirDonationPurpose,
+} from "@/lib/donazioni/metadata";
+import {
+  donationState,
+  publicDonationAmounts,
+} from "@/lib/donazioni/status-state";
+import type { SessionLike } from "@/lib/donazioni/status-state";
 import { getStripeServer, StripeConfigurationError } from "@/lib/stripe/server";
 
 export const runtime = "nodejs";
@@ -11,7 +23,14 @@ type DonationState = "paid" | "pending" | "unpaid";
 function json(
   body:
     | { error: string }
-    | { state: DonationState; amount: number; currency: string },
+    | {
+        state: DonationState;
+        amount: number;
+        donationAmount: number;
+        contributionAmount: number;
+        currency: string;
+        frequency: DonationFrequency;
+      },
   status: number,
 ) {
   return Response.json(body, {
@@ -29,20 +48,13 @@ function parseSessionId(request: Request): string | null {
 
 function isCirDonationSession(session: Stripe.Checkout.Session): boolean {
   return (
-    session.mode === "payment" &&
-    session.metadata?.purpose === "cir_donation" &&
+    (session.mode === "payment" || session.mode === "subscription") &&
+    isCirDonationPurpose(session.metadata) &&
     session.currency === DONATION_CURRENCY &&
     typeof session.amount_total === "number" &&
     Number.isInteger(session.amount_total) &&
     session.amount_total >= 0
   );
-}
-
-function donationState(session: Stripe.Checkout.Session): DonationState {
-  if (session.payment_status === "paid") return "paid";
-  // Sessione chiusa ma non ancora pagata: metodi asincroni / in elaborazione.
-  if (session.status === "complete") return "pending";
-  return "unpaid";
 }
 
 function isUnknownSession(error: unknown): boolean {
@@ -57,16 +69,38 @@ export async function GET(request: Request): Promise<Response> {
   if (!sessionId) return json({ error: "invalid_session" }, 400);
 
   try {
-    const session =
-      await getStripeServer().checkout.sessions.retrieve(sessionId);
+    const session = await getStripeServer().checkout.sessions.retrieve(
+      sessionId,
+      {
+        expand: [
+          "payment_intent",
+          "subscription",
+          "subscription.latest_invoice",
+        ],
+      },
+    );
     if (!isCirDonationSession(session))
       return json({ error: "not_found" }, 404);
 
+    const frequency = donationFrequencyFromMetadata(
+      session.metadata,
+      session.mode,
+    );
+    if (!frequency) return json({ error: "not_found" }, 404);
+
+    const amounts = publicDonationAmounts({
+      amountTotal: session.amount_total as number,
+      metadata: session.metadata,
+    });
+
     return json(
       {
-        state: donationState(session),
-        amount: session.amount_total as number,
+        state: donationState(session as SessionLike),
+        amount: amounts.amount,
+        donationAmount: amounts.donationAmount,
+        contributionAmount: amounts.contributionAmount,
         currency: DONATION_CURRENCY,
+        frequency,
       },
       200,
     );

@@ -69,10 +69,10 @@ export default async function PrivacyCookiePage({
       <Container className="py-12 sm:py-16">
         <div className="mx-auto max-w-3xl">
           <p className="text-ink-soft mb-8 text-sm">
-            Ultimo aggiornamento: luglio 2026. Informativa resa ai sensi degli
-            artt. 13-14 del Regolamento UE 2016/679 (GDPR). Si consiglia una
-            revisione da parte di un consulente legale prima della pubblicazione
-            definitiva.
+            Ultimo aggiornamento: settembre 2026. Informativa resa ai sensi
+            degli artt. 13-14 del Regolamento UE 2016/679 (GDPR). Si consiglia
+            una revisione da parte di un consulente legale prima della
+            pubblicazione definitiva.
           </p>
 
           <Prose>
@@ -93,15 +93,38 @@ export default async function PrivacyCookiePage({
             <h2>2. Dati raccolti</h2>
             <p>
               Trattiamo i dati personali che ci fornisci volontariamente — ad
-              esempio tramite il modulo di contatto, moduli di iscrizione,
-              newsletter o eventuali donazioni — quali nome, indirizzo email,
-              telefono e il contenuto del messaggio. Trattiamo inoltre i dati
-              tecnici di navigazione raccolti tramite cookie (vedi punto 5).
+              esempio tramite il modulo di contatto, moduli di iscrizione o
+              newsletter — quali nome, indirizzo email, telefono e il contenuto
+              del messaggio. Trattiamo inoltre i dati tecnici di navigazione
+              raccolti tramite cookie (vedi punto 5).
+            </p>
+            <h3>Donazioni online</h3>
+            <p>
+              Se utilizzi il modulo di donazione del sito, raccogliamo i dati
+              che inserisci per elaborare la donazione: nome, cognome, indirizzo
+              email, importo, frequenza (donazione unica o mensile) e la scelta
+              di visibilità del nome (pubblica o anonima). L’email è usata per
+              comunicazioni transazionali relative alla donazione, non per
+              newsletter o attività di marketing.
             </p>
             <p>
-              Le donazioni online sono elaborate tramite Stripe. Il CIR non
-              riceve né conserva i dati completi della carta di pagamento;
-              l&apos;elaborazione del pagamento avviene tramite Stripe.
+              La scelta «anonima» riguarda solo l’eventuale visualizzazione
+              pubblica del nome. Non significa che la donazione sia anonima per
+              il CIR o per i fornitori che elaborano il pagamento: i dati
+              necessari restano trattati per ricevere, confermare e gestire la
+              donazione.
+            </p>
+            <p>
+              I pagamenti sono elaborati da Stripe (carta, Link, PayPal,
+              addebito SEPA). Il CIR non riceve né conserva i dati completi
+              della carta, l’IBAN o gli identificativi di mandato. Un eventuale
+              contributo facoltativo ai costi di transazione è calcolato dal
+              server come stima, non come commissione Stripe esatta. Le email di
+              ringraziamento transazionali sulla donazione, quando inviate, sono
+              spedite tramite Resend solo dopo conferma di pagamento da Stripe.
+              Stripe, Resend e Cloudflare Turnstile (protezione da abusi sul
+              modulo) trattano i dati secondo le proprie informative, nei limiti
+              necessari a fornire il servizio.
             </p>
 
             <h2>3. Finalità e base giuridica</h2>
@@ -127,7 +150,9 @@ export default async function PrivacyCookiePage({
             <ul>
               <li>
                 <strong>Necessari:</strong> indispensabili al funzionamento del
-                sito. Sempre attivi.
+                sito (incluso un cookie HttpOnly di breve durata usato solo
+                durante la donazione per proteggere la creazione della sessione
+                di pagamento). Sempre attivi.
               </li>
               <li>
                 <strong>Statistiche:</strong> raccolgono informazioni anonime

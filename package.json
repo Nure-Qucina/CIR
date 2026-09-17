@@ -7,13 +7,17 @@
     "build": "next build",
     "start": "next start --port 3100",
     "lint": "eslint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "tsx --test lib/donazioni/hardening.test.ts",
+    "donation:env:check": "node scripts/check-donation-env.mjs"
   },
   "dependencies": {
     "@keystatic/core": "^0.5.50",
     "@keystatic/next": "^5.0.4",
     "@stripe/react-stripe-js": "^6.10.0",
     "@stripe/stripe-js": "^9.16.0",
+    "@upstash/ratelimit": "^2.0.7",
+    "@upstash/redis": "^1.35.6",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "clsx": "^2.1.1",
@@ -38,6 +42,7 @@
     "prettier": "^3.9.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

@@ -8,19 +8,49 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/lib/utils/cn";
 import {
+  DONATION_CSRF_HEADER,
   DONATION_CURRENCY,
   DONATION_DEFAULT_CENTS,
   DONATION_MIN_CENTS,
   DONATION_MAX_CENTS,
+  DONATION_NAME_MAX,
+  DONATION_EMAIL_MAX,
   DONATION_PRESETS_CENTS,
+  type DonationFrequency,
+  type DonationVisibility,
 } from "@/lib/donazioni/config";
-import { parseDonationAmount } from "@/lib/donazioni/validation";
+import {
+  DEFAULT_FEE_REFERENCE_BPS,
+  DEFAULT_FEE_REFERENCE_FIXED_CENTS,
+  processingContributionCents,
+} from "@/lib/donazioni/fees";
+import {
+  parseCheckoutRequest,
+  parseDonationAmount,
+} from "@/lib/donazioni/validation";
+import {
+  applyTurnstileCallback,
+  beginTurnstileReset,
+  canSubmitDonationCheckout,
+  emptyTurnstileClientState,
+  prepareDonationCheckout,
+  type TurnstileClientState,
+} from "@/lib/donazioni/turnstile-client";
+import { shouldResetTurnstileAfterCheckout } from "@/lib/donazioni/turnstile-reset";
 import { getStripeClient } from "@/lib/stripe/client";
 import { DonationPayment } from "./DonationPayment";
 import { DonationProgress } from "./DonationProgress";
 import { DonationTrust } from "./DonationTrust";
+import { TurnstileField } from "./TurnstileField";
 
-type Checkout = { clientSecret: string; stripe: Stripe };
+type Checkout = {
+  clientSecret: string;
+  stripe: Stripe;
+  frequency: DonationFrequency;
+  donationCents: number;
+  contributionCents: number;
+  totalCents: number;
+};
 
 function amountPayload(selected: number | "custom", custom: string): string {
   if (selected === "custom") return custom;
@@ -32,6 +62,9 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+const fieldClass =
+  "bg-surface text-ink focus-visible:outline-teal w-full rounded-xl border py-3 px-4 focus-visible:outline-2 focus-visible:outline-offset-2";
+
 export function DonationForm({ locale }: { locale: Locale }) {
   const t = useTranslations("donazioni");
   const format = useFormatter();
@@ -40,18 +73,69 @@ export function DonationForm({ locale }: { locale: Locale }) {
       style: "currency",
       currency: DONATION_CURRENCY,
     });
+  const [frequency, setFrequency] = useState<DonationFrequency>("one_time");
+  const [visibility, setVisibility] = useState<DonationVisibility>("anonymous");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [coverCosts, setCoverCosts] = useState(false);
+  const [csrfToken, setCsrfToken] = useState("");
+  const [turnstileSiteKey, setTurnstileSiteKey] = useState("");
+  const [turnstile, setTurnstile] = useState<TurnstileClientState>(
+    emptyTurnstileClientState,
+  );
+  const [turnstileReset, setTurnstileReset] = useState(0);
+  const [feeBps, setFeeBps] = useState(DEFAULT_FEE_REFERENCE_BPS);
+  const [feeFixed, setFeeFixed] = useState(DEFAULT_FEE_REFERENCE_FIXED_CENTS);
   const [selected, setSelected] = useState<number | "custom">(
     DONATION_DEFAULT_CENTS,
   );
   const [custom, setCustom] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [invalidField, setInvalidField] = useState<
+    "amount" | "firstName" | "lastName" | "email" | ""
+  >("");
   const [checkout, setCheckout] = useState<Checkout | null>(null);
   const lock = useRef(false);
   const controller = useRef<AbortController | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const customInput = useRef<HTMLInputElement>(null);
+  const firstNameInput = useRef<HTMLInputElement>(null);
+  const lastNameInput = useRef<HTMLInputElement>(null);
+  const emailInput = useRef<HTMLInputElement>(null);
+  const pendingSecurityNotice = useRef(false);
   useEffect(() => () => controller.current?.abort(), []);
+  useEffect(() => {
+    const abort = new AbortController();
+    fetch("/api/donazioni/session", {
+      method: "POST",
+      credentials: "same-origin",
+      cache: "no-store",
+      signal: abort.signal,
+    })
+      .then(async (response) => {
+        const data: unknown = await response.json().catch(() => null);
+        if (!response.ok || !data || typeof data !== "object") return;
+        const record = data as Record<string, unknown>;
+        if (typeof record.csrfToken === "string")
+          setCsrfToken(record.csrfToken);
+        if (typeof record.turnstileSiteKey === "string") {
+          setTurnstileSiteKey(record.turnstileSiteKey);
+        }
+        const fee = record.feeReference;
+        if (fee && typeof fee === "object") {
+          const bps = (fee as { bps?: unknown }).bps;
+          const fixed = (fee as { fixedCents?: unknown }).fixedCents;
+          if (typeof bps === "number" && Number.isInteger(bps)) setFeeBps(bps);
+          if (typeof fixed === "number" && Number.isInteger(fixed)) {
+            setFeeFixed(fixed);
+          }
+        }
+      })
+      .catch(() => undefined);
+    return () => abort.abort();
+  }, []);
   useEffect(() => {
     if (!checkout) return;
     heading.current?.focus();
@@ -64,51 +148,151 @@ export function DonationForm({ locale }: { locale: Locale }) {
     if (selected === "custom") customInput.current?.focus();
   }, [selected]);
 
+  const turnstileReady = canSubmitDonationCheckout({
+    busy: false,
+    turnstile,
+  });
+  const submitDisabled = busy || !turnstileReady;
+
+  useEffect(() => {
+    if (!turnstileReady || !pendingSecurityNotice.current) return;
+    pendingSecurityNotice.current = false;
+    setError("");
+  }, [turnstileReady]);
+
+  function amountLabel(cents: number) {
+    return frequency === "monthly"
+      ? t("perMonth", { amount: money(cents) })
+      : money(cents);
+  }
+
+  function resetTurnstileWidget() {
+    setTurnstile(beginTurnstileReset());
+    setTurnstileReset((value) => value + 1);
+  }
+
+  function mapCheckoutError(status: number, code: string): string {
+    if (status === 503) return t("unavailable");
+    if (status === 429) return t("tooManyRequests");
+    if (
+      code === "invalid_amount" ||
+      code === "below_minimum" ||
+      code === "above_maximum"
+    ) {
+      return t("invalidAmount", {
+        min: money(DONATION_MIN_CENTS),
+        max: money(DONATION_MAX_CENTS),
+      });
+    }
+    if (code === "invalid_first_name") return t("invalidFirstName");
+    if (code === "invalid_last_name") return t("invalidLastName");
+    if (code === "invalid_email") return t("invalidEmail");
+    if (status === 400) return t("invalidRequest");
+    return t("genericError");
+  }
+
+  function focusInvalid(field: typeof invalidField) {
+    setInvalidField(field);
+    if (field === "amount") customInput.current?.focus();
+    if (field === "firstName") firstNameInput.current?.focus();
+    if (field === "lastName") lastNameInput.current?.focus();
+    if (field === "email") emailInput.current?.focus();
+  }
+
   async function startCheckout(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (lock.current) return;
+    if (lock.current || busy) return;
     const amount = amountPayload(selected, custom);
-    const parsed = parseDonationAmount(amount);
+    const parsed = parseCheckoutRequest({
+      amount,
+      locale,
+      frequency,
+      firstName,
+      lastName,
+      email,
+      visibility,
+      coverProcessingCosts: coverCosts,
+    });
     if (!parsed.ok) {
-      setError(
-        t("invalidAmount", {
-          min: money(DONATION_MIN_CENTS),
-          max: money(DONATION_MAX_CENTS),
-        }),
-      );
-      if (selected === "custom") customInput.current?.focus();
+      const message = mapCheckoutError(400, parsed.error);
+      setError(message);
+      if (parsed.error === "invalid_first_name") focusInvalid("firstName");
+      else if (parsed.error === "invalid_last_name") focusInvalid("lastName");
+      else if (parsed.error === "invalid_email") focusInvalid("email");
+      else if (
+        parsed.error === "invalid_amount" ||
+        parsed.error === "below_minimum" ||
+        parsed.error === "above_maximum"
+      ) {
+        focusInvalid(selected === "custom" ? "amount" : "");
+      }
+      return;
+    }
+    const prepared = prepareDonationCheckout({
+      busy,
+      turnstile,
+    });
+    if (!prepared.ok) {
+      if (prepared.reason === "turnstile_not_ready") {
+        pendingSecurityNotice.current = true;
+        setError(t("securityCheckPending"));
+      }
       return;
     }
     lock.current = true;
     setBusy(true);
+    setTurnstile(prepared.turnstile);
     setError("");
+    setInvalidField("");
     const abort = new AbortController();
     controller.current = abort;
     try {
       const stripe = await getStripeClient(locale);
       if (abort.signal.aborted) return;
       if (!stripe) {
+        resetTurnstileWidget();
         setError(t("unavailable"));
         return;
       }
       const response = await fetch("/api/donazioni/checkout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount, locale }),
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          [DONATION_CSRF_HEADER]: csrfToken,
+        },
+        body: JSON.stringify({
+          amount,
+          locale,
+          frequency,
+          firstName: parsed.value.firstName,
+          lastName: parsed.value.lastName,
+          email: parsed.value.email,
+          visibility,
+          coverProcessingCosts: coverCosts,
+          turnstileToken: prepared.token,
+        }),
         cache: "no-store",
         signal: abort.signal,
       });
-      if (!response.ok) {
-        setError(
-          response.status === 503
-            ? t("unavailable")
-            : response.status === 400
-              ? t("invalidRequest")
-              : t("genericError"),
-        );
+      const data: unknown = await response.json().catch(() => null);
+      const code =
+        data &&
+        typeof data === "object" &&
+        "error" in data &&
+        typeof data.error === "string"
+          ? data.error
+          : "";
+      if (
+        shouldResetTurnstileAfterCheckout({
+          aborted: abort.signal.aborted,
+          failed: !response.ok,
+        })
+      ) {
+        resetTurnstileWidget();
+        setError(mapCheckoutError(response.status, code));
         return;
       }
-      const data: unknown = await response.json();
       if (
         !data ||
         typeof data !== "object" ||
@@ -116,13 +300,42 @@ export function DonationForm({ locale }: { locale: Locale }) {
         typeof data.clientSecret !== "string" ||
         !data.clientSecret
       ) {
+        resetTurnstileWidget();
         setError(t("genericError"));
         return;
       }
+      const donationAmount =
+        "donationAmount" in data && typeof data.donationAmount === "number"
+          ? data.donationAmount
+          : parsed.value.amountCents;
+      const contributionAmount =
+        "contributionAmount" in data &&
+        typeof data.contributionAmount === "number"
+          ? data.contributionAmount
+          : 0;
+      const totalAmount =
+        "totalAmount" in data && typeof data.totalAmount === "number"
+          ? data.totalAmount
+          : donationAmount + contributionAmount;
       if (!abort.signal.aborted)
-        setCheckout({ clientSecret: data.clientSecret, stripe });
+        setCheckout({
+          clientSecret: data.clientSecret,
+          stripe,
+          frequency: parsed.value.frequency,
+          donationCents: donationAmount,
+          contributionCents: contributionAmount,
+          totalCents: totalAmount,
+        });
     } catch {
-      if (!abort.signal.aborted) setError(t("genericError"));
+      if (
+        shouldResetTurnstileAfterCheckout({
+          aborted: abort.signal.aborted,
+          failed: true,
+        })
+      ) {
+        resetTurnstileWidget();
+        setError(t("genericError"));
+      }
     } finally {
       lock.current = false;
       setBusy(false);
@@ -131,10 +344,18 @@ export function DonationForm({ locale }: { locale: Locale }) {
 
   function goBack() {
     controller.current?.abort();
+    pendingSecurityNotice.current = false;
     setCheckout(null);
     setError("");
+    setInvalidField("");
+    resetTurnstileWidget();
     requestAnimationFrame(() => heading.current?.focus());
   }
+
+  const amountError = invalidField === "amount";
+  const parsedClientAmount = parseDonationAmount(
+    amountPayload(selected, custom),
+  );
 
   return (
     <Card className="p-6 sm:p-8">
@@ -147,7 +368,11 @@ export function DonationForm({ locale }: { locale: Locale }) {
         {checkout ? t("paymentTitle") : t("chooseAmount")}
       </h2>
       <p className="text-ink-soft mt-2 text-sm">
-        {checkout ? t("oneTime") : t("chooseHint")}
+        {checkout
+          ? checkout.frequency === "monthly"
+            ? t("monthly")
+            : t("oneTime")
+          : t("chooseHint")}
       </p>
       {!checkout ? (
         <p className="text-ink-soft mt-2 text-sm">{t("purpose")}</p>
@@ -158,6 +383,10 @@ export function DonationForm({ locale }: { locale: Locale }) {
           clientSecret={checkout.clientSecret}
           stripe={checkout.stripe}
           locale={locale}
+          frequency={checkout.frequency}
+          donationCents={checkout.donationCents}
+          contributionCents={checkout.contributionCents}
+          totalCents={checkout.totalCents}
           onBack={goBack}
         />
       ) : (
@@ -167,6 +396,42 @@ export function DonationForm({ locale }: { locale: Locale }) {
           className="mt-6 space-y-6"
           aria-busy={busy}
         >
+          <fieldset disabled={busy}>
+            <legend className="text-sm font-semibold">
+              {t("frequencyLabel")}
+            </legend>
+            <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {(
+                [
+                  ["one_time", "oneTime"],
+                  ["monthly", "monthly"],
+                ] as const
+              ).map(([value, labelKey]) => (
+                <label
+                  key={value}
+                  className={cn(
+                    "flex cursor-pointer items-center gap-3 rounded-xl border p-4 text-sm font-semibold",
+                    frequency === value
+                      ? "border-orange bg-orange-50"
+                      : "border-border bg-surface",
+                  )}
+                >
+                  <input
+                    type="radio"
+                    name="donation-frequency"
+                    value={value}
+                    checked={frequency === value}
+                    onChange={() => {
+                      setFrequency(value);
+                      setError("");
+                    }}
+                    className="accent-orange size-4 shrink-0"
+                  />
+                  <span>{t(labelKey)}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
           <fieldset disabled={busy}>
             <legend className="sr-only">{t("chooseAmount")}</legend>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -179,9 +444,11 @@ export function DonationForm({ locale }: { locale: Locale }) {
                   onClick={() => {
                     setSelected(cents);
                     setError("");
+                    setInvalidField("");
                   }}
+                  className="whitespace-normal"
                 >
-                  {money(cents)}
+                  {amountLabel(cents)}
                 </Button>
               ))}
             </div>
@@ -206,24 +473,33 @@ export function DonationForm({ locale }: { locale: Locale }) {
                     type="text"
                     inputMode="decimal"
                     autoComplete="off"
-                    enterKeyHint="done"
+                    enterKeyHint="next"
                     value={custom}
                     onChange={(event) => {
                       setCustom(event.target.value);
                       setError("");
+                      setInvalidField("");
                     }}
-                    aria-invalid={Boolean(error)}
+                    aria-invalid={amountError}
                     aria-describedby={
                       error
                         ? "donation-limits donation-error"
                         : "donation-limits"
                     }
                     className={cn(
-                      "bg-surface text-ink focus-visible:outline-teal w-full rounded-xl border py-3 ps-10 pe-4 focus-visible:outline-2 focus-visible:outline-offset-2",
-                      error ? "border-orange-400" : "border-orange",
+                      fieldClass,
+                      "ps-10",
+                      amountError ? "border-orange-400" : "border-orange",
                     )}
                   />
                 </div>
+                {frequency === "monthly" && parsedClientAmount.ok ? (
+                  <p className="text-ink-soft mt-2 text-sm">
+                    {t("perMonth", {
+                      amount: money(parsedClientAmount.amountCents),
+                    })}
+                  </p>
+                ) : null}
               </div>
             ) : (
               <button
@@ -232,6 +508,7 @@ export function DonationForm({ locale }: { locale: Locale }) {
                 onClick={() => {
                   setSelected("custom");
                   setError("");
+                  setInvalidField("");
                 }}
               >
                 {t("customAmount")}
@@ -244,6 +521,221 @@ export function DonationForm({ locale }: { locale: Locale }) {
               })}
             </p>
           </fieldset>
+          <fieldset disabled={busy} className="space-y-4">
+            <legend className="text-sm font-semibold">
+              {t("donorDetails")}
+            </legend>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label
+                  htmlFor="donation-first-name"
+                  className="text-sm font-semibold"
+                >
+                  {t("firstName")}
+                </label>
+                <input
+                  ref={firstNameInput}
+                  id="donation-first-name"
+                  name="firstName"
+                  type="text"
+                  autoComplete="given-name"
+                  autoCapitalize="words"
+                  maxLength={DONATION_NAME_MAX}
+                  required
+                  value={firstName}
+                  onChange={(event) => {
+                    setFirstName(event.target.value);
+                    setError("");
+                    setInvalidField("");
+                  }}
+                  aria-invalid={invalidField === "firstName"}
+                  aria-describedby={
+                    invalidField === "firstName" ? "donation-error" : undefined
+                  }
+                  className={cn(
+                    fieldClass,
+                    "mt-2",
+                    invalidField === "firstName"
+                      ? "border-orange-400"
+                      : "border-orange",
+                  )}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="donation-last-name"
+                  className="text-sm font-semibold"
+                >
+                  {t("lastName")}
+                </label>
+                <input
+                  ref={lastNameInput}
+                  id="donation-last-name"
+                  name="lastName"
+                  type="text"
+                  autoComplete="family-name"
+                  autoCapitalize="words"
+                  maxLength={DONATION_NAME_MAX}
+                  required
+                  value={lastName}
+                  onChange={(event) => {
+                    setLastName(event.target.value);
+                    setError("");
+                    setInvalidField("");
+                  }}
+                  aria-invalid={invalidField === "lastName"}
+                  aria-describedby={
+                    invalidField === "lastName" ? "donation-error" : undefined
+                  }
+                  className={cn(
+                    fieldClass,
+                    "mt-2",
+                    invalidField === "lastName"
+                      ? "border-orange-400"
+                      : "border-orange",
+                  )}
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="donation-email" className="text-sm font-semibold">
+                {t("email")}
+              </label>
+              <input
+                ref={emailInput}
+                id="donation-email"
+                name="email"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                maxLength={DONATION_EMAIL_MAX}
+                required
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  setError("");
+                  setInvalidField("");
+                }}
+                aria-invalid={invalidField === "email"}
+                aria-describedby={
+                  invalidField === "email"
+                    ? "donation-email-hint donation-error"
+                    : "donation-email-hint"
+                }
+                className={cn(
+                  fieldClass,
+                  "mt-2",
+                  invalidField === "email"
+                    ? "border-orange-400"
+                    : "border-orange",
+                )}
+              />
+              <p
+                id="donation-email-hint"
+                className="text-ink-soft mt-2 text-sm"
+              >
+                {t("emailHint")}
+              </p>
+            </div>
+          </fieldset>
+          <fieldset disabled={busy}>
+            <legend className="text-sm font-semibold">
+              {t("visibilityLabel")}
+            </legend>
+            <div className="mt-2 space-y-2">
+              {(
+                [
+                  ["anonymous", "visibilityAnonymous"],
+                  ["public", "visibilityPublic"],
+                ] as const
+              ).map(([value, labelKey]) => (
+                <label
+                  key={value}
+                  className={cn(
+                    "flex cursor-pointer items-start gap-3 rounded-xl border p-4 text-sm",
+                    visibility === value
+                      ? "border-orange bg-orange-50"
+                      : "border-border bg-surface",
+                  )}
+                >
+                  <input
+                    type="radio"
+                    name="donation-visibility"
+                    value={value}
+                    checked={visibility === value}
+                    onChange={() => {
+                      setVisibility(value);
+                      setError("");
+                    }}
+                    className="accent-orange mt-0.5 size-4 shrink-0"
+                  />
+                  <span className="font-semibold">{t(labelKey)}</span>
+                </label>
+              ))}
+            </div>
+            <p className="text-ink-soft mt-3 text-sm">{t("visibilityHint")}</p>
+          </fieldset>
+          <label
+            className={cn(
+              "flex cursor-pointer items-start gap-3 rounded-xl border p-4 text-sm",
+              coverCosts
+                ? "border-orange bg-orange-50"
+                : "border-border bg-surface",
+            )}
+          >
+            <input
+              type="checkbox"
+              name="cover-processing-costs"
+              checked={coverCosts}
+              disabled={busy}
+              onChange={(event) => {
+                setCoverCosts(event.target.checked);
+                setError("");
+              }}
+              className="accent-orange mt-0.5 size-4 shrink-0"
+            />
+            <span>
+              <span className="font-semibold">{t("coverCosts")}</span>
+              <span className="text-ink-soft mt-1 block text-sm font-normal">
+                {t("coverCostsHint")}
+              </span>
+            </span>
+          </label>
+          {coverCosts && parsedClientAmount.ok
+            ? (() => {
+                const estimate = processingContributionCents(
+                  parsedClientAmount.amountCents,
+                  { bps: feeBps, fixedCents: feeFixed },
+                );
+                if (!estimate.ok) return null;
+                return (
+                  <p className="text-ink-soft text-sm">
+                    {frequency === "monthly"
+                      ? t("estimateMonthly", {
+                          donation: money(estimate.donationCents),
+                          contribution: money(estimate.contributionCents),
+                          total: money(estimate.totalCents),
+                        })
+                      : t("estimateOneTime", {
+                          donation: money(estimate.donationCents),
+                          contribution: money(estimate.contributionCents),
+                          total: money(estimate.totalCents),
+                        })}
+                  </p>
+                );
+              })()
+            : null}
+          {turnstileSiteKey ? (
+            <TurnstileField
+              siteKey={turnstileSiteKey}
+              resetSignal={turnstileReset}
+              onToken={(token) =>
+                setTurnstile((current) =>
+                  applyTurnstileCallback(current, token),
+                )
+              }
+            />
+          ) : null}
           <div aria-live="assertive" aria-atomic="true">
             {error ? (
               <p
@@ -257,14 +749,22 @@ export function DonationForm({ locale }: { locale: Locale }) {
           </div>
           <Button
             type="submit"
-            disabled={busy}
+            disabled={submitDisabled}
             className="w-full whitespace-normal"
             size="lg"
           >
-            {busy ? t("loading") : t("continue")}
+            {busy
+              ? t("loading")
+              : frequency === "monthly"
+                ? t("continueMonthly")
+                : t("continue")}
           </Button>
           <p role="status" aria-live="polite" className="sr-only">
-            {busy ? t("loading") : ""}
+            {busy
+              ? t("loading")
+              : turnstileReady
+                ? ""
+                : t("securityCheckPending")}
           </p>
           <DonationTrust />
         </form>

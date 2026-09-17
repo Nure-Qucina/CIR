@@ -4,13 +4,24 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 import { AlertCircle, CheckCircle2, Clock } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { DONATION_CURRENCY, DONATION_ROUTE } from "@/lib/donazioni/config";
+import {
+  DONATION_CURRENCY,
+  DONATION_ROUTE,
+  type DonationFrequency,
+} from "@/lib/donazioni/config";
 import { DonationProgress } from "./DonationProgress";
 
 type DonationState = "paid" | "pending" | "unpaid";
 type View = "loading" | DonationState | "invalid" | "error";
 
-type StatusOk = { state: DonationState; amount: number; currency: string };
+type StatusOk = {
+  state: DonationState;
+  amount: number;
+  donationAmount: number;
+  contributionAmount: number;
+  currency: string;
+  frequency: DonationFrequency;
+};
 
 function readSessionId(): string | null {
   const ids = new URLSearchParams(window.location.search).getAll("session_id");
@@ -21,13 +32,27 @@ function readSessionId(): string | null {
 
 function isStatusOk(data: unknown): data is StatusOk {
   if (!data || typeof data !== "object") return false;
-  const { state, amount, currency } = data as Record<string, unknown>;
+  const {
+    state,
+    amount,
+    donationAmount,
+    contributionAmount,
+    currency,
+    frequency,
+  } = data as Record<string, unknown>;
   return (
     (state === "paid" || state === "pending" || state === "unpaid") &&
     typeof amount === "number" &&
     Number.isInteger(amount) &&
     amount >= 0 &&
-    currency === DONATION_CURRENCY
+    typeof donationAmount === "number" &&
+    Number.isInteger(donationAmount) &&
+    donationAmount >= 0 &&
+    typeof contributionAmount === "number" &&
+    Number.isInteger(contributionAmount) &&
+    contributionAmount >= 0 &&
+    currency === DONATION_CURRENCY &&
+    (frequency === "one_time" || frequency === "monthly")
   );
 }
 
@@ -44,48 +69,72 @@ export function DonationStatus() {
   const sessionId = mounted ? readSessionId() : null;
   const [view, setView] = useState<View>("loading");
   const [amount, setAmount] = useState<number | null>(null);
+  const [donationAmount, setDonationAmount] = useState<number | null>(null);
+  const [contributionAmount, setContributionAmount] = useState(0);
+  const [frequency, setFrequency] = useState<DonationFrequency>("one_time");
 
   useEffect(() => {
     if (!sessionId) return;
 
+    let cancelled = false;
     const abort = new AbortController();
     const params = new URLSearchParams({ session_id: sessionId });
-    fetch(`/api/donazioni/status?${params}`, {
-      method: "GET",
-      cache: "no-store",
-      signal: abort.signal,
-    })
-      .then(async (response) => {
+
+    async function load(initial: boolean) {
+      try {
+        const response = await fetch(`/api/donazioni/status?${params}`, {
+          method: "GET",
+          cache: "no-store",
+          signal: abort.signal,
+        });
+        if (cancelled) return "stop";
         if (response.status === 400 || response.status === 404) {
           setView("invalid");
-          return;
+          return "stop";
         }
         if (!response.ok) {
-          setView("error");
-          return;
+          if (initial) setView("error");
+          return "retry";
         }
         const data: unknown = await response.json();
         if (!isStatusOk(data)) {
-          setView("error");
-          return;
+          if (initial) setView("error");
+          return "stop";
         }
         setAmount(data.amount);
+        setDonationAmount(data.donationAmount);
+        setContributionAmount(data.contributionAmount);
+        setFrequency(data.frequency);
         setView(data.state);
-      })
-      .catch(() => {
-        if (!abort.signal.aborted) setView("error");
-      });
+        return data.state === "pending" ? "retry" : "stop";
+      } catch {
+        if (!cancelled && !abort.signal.aborted && initial) setView("error");
+        return "retry";
+      }
+    }
 
-    return () => abort.abort();
+    let timer: number | undefined;
+    void load(true).then((next) => {
+      if (next !== "retry" || cancelled) return;
+      timer = window.setInterval(() => {
+        void load(false).then((status) => {
+          if (status === "stop" && timer) window.clearInterval(timer);
+        });
+      }, 15000);
+    });
+
+    return () => {
+      cancelled = true;
+      abort.abort();
+      if (timer) window.clearInterval(timer);
+    };
   }, [sessionId]);
 
-  const money =
-    amount !== null
-      ? format.number(amount / 100, {
-          style: "currency",
-          currency: DONATION_CURRENCY,
-        })
-      : "";
+  const money = (cents: number) =>
+    format.number(cents / 100, {
+      style: "currency",
+      currency: DONATION_CURRENCY,
+    });
 
   if (!mounted) {
     return (
@@ -138,9 +187,33 @@ export function DonationStatus() {
               {t("resultPaid")}
             </p>
             <p className="text-ink">
-              {t("resultPaidAmount", { amount: money })}
+              {frequency === "monthly"
+                ? t("resultPaidMonthlyAmount", {
+                    amount: money(amount ?? 0),
+                  })
+                : t("resultPaidAmount", { amount: money(amount ?? 0) })}
+            </p>
+            {donationAmount !== null ? (
+              <p className="text-ink-soft text-sm">
+                {t("resultPaidDonation", { amount: money(donationAmount) })}
+              </p>
+            ) : null}
+            {contributionAmount > 0 ? (
+              <p className="text-ink-soft text-sm">
+                {t("resultPaidContribution", {
+                  amount: money(contributionAmount),
+                })}
+              </p>
+            ) : null}
+            <p className="text-ink-soft text-sm">
+              {t("resultPaidTotal", { amount: money(amount ?? 0) })}
             </p>
             <p className="text-ink-soft">{t("resultPaidThanks")}</p>
+            {frequency === "monthly" ? (
+              <p className="text-ink-soft text-sm">
+                {t("resultPaidMonthlyManage")}
+              </p>
+            ) : null}
             <p className="text-ink-soft text-sm">{t("resultPaidNote")}</p>
           </div>
         </div>
@@ -160,7 +233,12 @@ export function DonationStatus() {
         <DonationProgress current="confirm" />
         <div className="flex items-start gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-5">
           <Clock className="mt-0.5 shrink-0 text-orange-800" aria-hidden />
-          <p className="text-ink">{t("resultProcessing")}</p>
+          <div className="space-y-2">
+            <p className="text-ink text-[length:var(--text-h3)] font-bold">
+              {t("resultPendingTitle")}
+            </p>
+            <p className="text-ink">{t("resultPendingBody")}</p>
+          </div>
         </div>
         <Button href="/" variant="ghost">
           {t("backHome")}

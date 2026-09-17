@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import {
   CheckoutElementsProvider,
   ContactDetailsElement,
@@ -20,7 +20,12 @@ import type {
 import type { Locale } from "@/i18n/routing";
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "@/i18n/navigation";
-import { DONATION_ROUTE } from "@/lib/donazioni/config";
+import {
+  DONATION_CURRENCY,
+  DONATION_ROUTE,
+  type DonationFrequency,
+} from "@/lib/donazioni/config";
+import { donorPaymentMessage } from "@/lib/donazioni/payment-message";
 import { DonationTrust } from "./DonationTrust";
 
 const appearance: Appearance = {
@@ -81,9 +86,28 @@ function isWalletFlagOn(value: unknown): boolean {
   );
 }
 
-function PaymentFields({ onBack }: { onBack: () => void }) {
+function PaymentFields({
+  onBack,
+  frequency,
+  donationCents,
+  contributionCents,
+  totalCents,
+}: {
+  onBack: () => void;
+  frequency: DonationFrequency;
+  donationCents: number;
+  contributionCents: number;
+  totalCents: number;
+}) {
   const state = useCheckoutElements();
   const t = useTranslations("donazioni");
+  const format = useFormatter();
+  const money = (cents: number) =>
+    format.number(cents / 100, {
+      style: "currency",
+      currency: DONATION_CURRENCY,
+    });
+  const totalLabel = money(totalCents);
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -101,6 +125,7 @@ function PaymentFields({ onBack }: { onBack: () => void }) {
     lock.current = true;
     setBusy(true);
     setError("");
+    let stayOnForm = true;
     try {
       const result = await state.checkout.confirm(
         expressCheckoutConfirmEvent
@@ -108,16 +133,18 @@ function PaymentFields({ onBack }: { onBack: () => void }) {
           : undefined,
       );
       if (result.type === "error") {
-        setError(result.error.message || t("paymentError"));
-        lock.current = false;
-        setBusy(false);
-      } else {
-        router.replace(`${DONATION_ROUTE}/esito`);
+        setError(donorPaymentMessage(result.error, t("paymentError")));
+        return;
       }
+      stayOnForm = false;
+      router.replace(`${DONATION_ROUTE}/esito`);
     } catch {
       setError(t("paymentError"));
-      lock.current = false;
-      setBusy(false);
+    } finally {
+      if (stayOnForm) {
+        lock.current = false;
+        setBusy(false);
+      }
     }
   }
 
@@ -143,15 +170,39 @@ function PaymentFields({ onBack }: { onBack: () => void }) {
 
   const displayError = loadFailed
     ? t("genericError")
-    : error || state.checkout.lastPaymentError?.message || "";
+    : error ||
+      (state.checkout.lastPaymentError
+        ? donorPaymentMessage(
+            state.checkout.lastPaymentError,
+            t("paymentError"),
+          )
+        : "");
 
   const walletsVisible = walletCheck === "available";
 
   return (
     <form onSubmit={confirmCard} className="mt-6 space-y-6" aria-busy={busy}>
-      <p className="bg-cream-50 rounded-xl p-4 font-semibold">
-        {t("total", { amount: state.checkout.total.total.amount })}
-      </p>
+      <div className="bg-cream-50 space-y-1 rounded-xl p-4">
+        <p className="font-semibold">
+          {frequency === "monthly"
+            ? t("donationLineMonthly", { amount: money(donationCents) })
+            : t("donationLine", { amount: money(donationCents) })}
+        </p>
+        {contributionCents > 0 ? (
+          <p className="text-ink-soft text-sm">
+            {frequency === "monthly"
+              ? t("contributionLineMonthly", {
+                  amount: money(contributionCents),
+                })
+              : t("contributionLine", { amount: money(contributionCents) })}
+          </p>
+        ) : null}
+        <p className="font-semibold">
+          {frequency === "monthly"
+            ? t("totalLineMonthly", { amount: totalLabel })
+            : t("totalLine", { amount: totalLabel })}
+        </p>
+      </div>
       <div
         className={
           walletCheck === "none"
@@ -202,7 +253,7 @@ function PaymentFields({ onBack }: { onBack: () => void }) {
         <PaymentElement
           options={{
             layout: "tabs",
-            paymentMethodOrder: ["card"],
+            paymentMethodOrder: ["card", "sepa_debit"],
             wallets: {
               applePay: "never",
               googlePay: "never",
@@ -230,7 +281,9 @@ function PaymentFields({ onBack }: { onBack: () => void }) {
       >
         {busy
           ? t("confirming")
-          : t("pay", { amount: state.checkout.total.total.amount })}
+          : frequency === "monthly"
+            ? t("payMonthly", { amount: totalLabel })
+            : t("pay", { amount: totalLabel })}
       </Button>
       <p role="status" aria-live="polite" className="sr-only">
         {busy ? t("confirming") : ""}
@@ -253,11 +306,19 @@ export function DonationPayment({
   clientSecret,
   stripe,
   locale,
+  frequency,
+  donationCents,
+  contributionCents,
+  totalCents,
   onBack,
 }: {
   clientSecret: string;
   stripe: Stripe;
   locale: Locale;
+  frequency: DonationFrequency;
+  donationCents: number;
+  contributionCents: number;
+  totalCents: number;
   onBack: () => void;
 }) {
   const t = useTranslations("donazioni");
@@ -270,7 +331,13 @@ export function DonationPayment({
         stripe={stripe}
         options={{ clientSecret, elementsOptions: { appearance } }}
       >
-        <PaymentFields onBack={onBack} />
+        <PaymentFields
+          onBack={onBack}
+          frequency={frequency}
+          donationCents={donationCents}
+          contributionCents={contributionCents}
+          totalCents={totalCents}
+        />
       </CheckoutElementsProvider>
     </>
   );
