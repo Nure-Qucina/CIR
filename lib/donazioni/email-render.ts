@@ -157,6 +157,8 @@ export function renderDonationThankYouEmail(
   const monthly = input.frequency === "monthly";
   const showContribution =
     Number.isInteger(input.contributionCents) && input.contributionCents > 0;
+  const showSeparateTotal =
+    showContribution || input.totalCents !== input.donationCents;
   const period = monthly ? copy.perMonth : "";
   const firstNamePlain = sanitizePlainText(input.firstName);
   const firstNameHtml = escapeHtml(firstNamePlain);
@@ -215,7 +217,11 @@ export function renderDonationThankYouEmail(
         .join("");
 
   const summaryRows = [
-    summaryRow(escapeHtml(copy.summaryDonation), escapeHtml(donationLabeled)),
+    summaryRow(
+      escapeHtml(copy.summaryDonation),
+      escapeHtml(donationLabeled),
+      showSeparateTotal ? "normal" : "total",
+    ),
     ...(showContribution
       ? [
           summaryRow(
@@ -224,11 +230,15 @@ export function renderDonationThankYouEmail(
           ),
         ]
       : []),
-    summaryRow(
-      escapeHtml(copy.summaryTotal),
-      escapeHtml(totalLabeled),
-      "total",
-    ),
+    ...(showSeparateTotal
+      ? [
+          summaryRow(
+            escapeHtml(copy.summaryTotal),
+            escapeHtml(totalLabeled),
+            "total",
+          ),
+        ]
+      : []),
     summaryRow(
       escapeHtml(copy.summaryType),
       escapeHtml(monthly ? copy.typeMonthly : copy.typeOneTime),
@@ -245,7 +255,7 @@ export function renderDonationThankYouEmail(
     ...(showContribution
       ? [`${copy.summaryContribution}: ${contributionLabeled}`]
       : []),
-    `${copy.summaryTotal}: ${totalLabeled}`,
+    ...(showSeparateTotal ? [`${copy.summaryTotal}: ${totalLabeled}`] : []),
     `${copy.summaryType}: ${monthly ? copy.typeMonthly : copy.typeOneTime}`,
     `${copy.summaryStatus}: ${monthly ? copy.statusActive : copy.statusReceived}`,
   ].join("\n");

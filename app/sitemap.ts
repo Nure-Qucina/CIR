@@ -66,6 +66,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }),
     ...localizedEntries("/privacy", ALL, { lastModified: now, priority: 0.3 }),
+    ...localizedEntries("/newsletter/confermata", ALL, {
+      lastModified: now,
+      priority: 0.2,
+    }),
   ];
 
   const eventiUrls = (

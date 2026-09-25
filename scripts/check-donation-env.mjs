@@ -137,22 +137,6 @@ const optional = [
     },
   },
   {
-    key: "DONATION_FEE_REFERENCE_BPS",
-    check: (value) => {
-      if (!value) return "MISSING";
-      return /^\d{1,6}$/.test(value) && Number(value) < 10000
-        ? "PRESENT"
-        : "INVALID";
-    },
-  },
-  {
-    key: "DONATION_FEE_REFERENCE_FIXED_CENTS",
-    check: (value) => {
-      if (!value) return "MISSING";
-      return /^\d{1,6}$/.test(value) ? "PRESENT" : "INVALID";
-    },
-  },
-  {
     key: "TURNSTILE_ALLOWED_HOSTNAMES",
     check: (value) => (value ? "PRESENT" : "MISSING"),
   },
@@ -187,6 +171,48 @@ const optional = [
   {
     key: "DONATION_RATE_LIMIT_MINT_WINDOW_SEC",
     check: (value) => (value ? "PRESENT" : "MISSING"),
+  },
+  {
+    key: "DONATION_NEWSLETTER_ENABLED",
+    check: (value) =>
+      value === "true" ? "PRESENT" : value ? "INVALID" : "MISSING",
+  },
+  {
+    key: "BREVO_API_KEY",
+    check: (value) => (value ? "PRESENT" : "MISSING"),
+  },
+  {
+    key: "BREVO_NEWSLETTER_LIST_ID",
+    check: (value) => {
+      if (!value) return "MISSING";
+      return /^\d{1,9}$/.test(value) && Number(value) > 0
+        ? "PRESENT"
+        : "INVALID";
+    },
+  },
+  {
+    key: "BREVO_DOI_TEMPLATE_ID",
+    check: (value) => {
+      if (!value) return "MISSING";
+      return /^\d{1,9}$/.test(value) && Number(value) > 0
+        ? "PRESENT"
+        : "INVALID";
+    },
+  },
+  {
+    key: "BREVO_DOI_REDIRECT_URL",
+    check: (value) => {
+      if (!value) return "MISSING";
+      try {
+        const url = new URL(value);
+        const localHttp =
+          url.protocol === "http:" &&
+          ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname);
+        return url.protocol === "https:" || localHttp ? "PRESENT" : "INVALID";
+      } catch {
+        return "INVALID";
+      }
+    },
   },
 ];
 

@@ -1,5 +1,9 @@
 import type { Locale } from "@/i18n/routing";
 import type { DonationFrequency, DonationVisibility } from "./config";
+import {
+  newsletterConsentMetadata,
+  type NewsletterConsentEvidence,
+} from "./consent";
 
 export type DonationMetadata = {
   purpose: "cir_donation";
@@ -8,11 +12,9 @@ export type DonationMetadata = {
   donor_first_name: string;
   donor_last_name: string;
   locale: Locale;
-  cover_processing_costs: "true" | "false";
   base_donation_amount_cents: string;
-  processing_cost_contribution_cents: string;
   total_amount_cents: string;
-};
+} & NewsletterConsentEvidence;
 
 export function donationMetadata(input: {
   frequency: DonationFrequency;
@@ -20,10 +22,9 @@ export function donationMetadata(input: {
   firstName: string;
   lastName: string;
   locale: Locale;
-  coverProcessingCosts: boolean;
   donationCents: number;
-  contributionCents: number;
-  totalCents: number;
+  newsletterConsent: boolean;
+  consentAt?: Date;
 }): DonationMetadata {
   return {
     purpose: "cir_donation",
@@ -32,10 +33,13 @@ export function donationMetadata(input: {
     donor_first_name: input.firstName,
     donor_last_name: input.lastName,
     locale: input.locale,
-    cover_processing_costs: input.coverProcessingCosts ? "true" : "false",
     base_donation_amount_cents: String(input.donationCents),
-    processing_cost_contribution_cents: String(input.contributionCents),
-    total_amount_cents: String(input.totalCents),
+    total_amount_cents: String(input.donationCents),
+    ...newsletterConsentMetadata({
+      consent: input.newsletterConsent,
+      locale: input.locale,
+      at: input.consentAt,
+    }),
   };
 }
 

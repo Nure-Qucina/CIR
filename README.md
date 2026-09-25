@@ -175,12 +175,14 @@ Finché non arrivano, il sito mostra placeholder evidenti (mai dati finti).
 
 ## Donazioni (Stripe)
 
-Flusso interno `/donazioni` con Checkout Sessions (`ui_mode: "elements"`). Due tipi:
+Flusso interno `/donazioni` con Checkout Sessions (`ui_mode: "elements"`), **embedded nel dominio CIR** (niente redirect a checkout.stripe.com). Due tipi:
 
-- donazione singola (`frequency: "one_time"`, `mode: "payment"`)
-- donazione mensile (`frequency: "monthly"`, `mode: "subscription"` con `price_data.recurring.interval: "month"`)
+- donazione mensile (`frequency: "monthly"`, `mode: "subscription"` con `price_data.recurring.interval: "month"`) — **prima opzione e default**
+- donazione una tantum (`frequency: "one_time"`, `mode: "payment"`)
 
-Prima della Checkout Session il modulo raccoglie nome, cognome, email e visibilità (`public` | `anonymous`). **Anonimo** significa solo che il nome non va mostrato pubblicamente: CIR e Stripe conservano i dati necessari a elaborare e gestire la donazione. L’email è usata solo per comunicazioni transazionali sulla donazione (nessun consenso newsletter in questo flusso).
+Prima della Checkout Session il modulo raccoglie nome, cognome, email e visibilità pubblica del nome (`public` | `anonymous`). **«Non mostrare pubblicamente il mio nome»** (`anonymous`) riguarda solo l’eventuale visualizzazione pubblica: CIR e Stripe ricevono comunque nome, email e dati di pagamento. L’email transazionale di ringraziamento è distinta dalla newsletter. Il payload include sempre `newsletterConsent: boolean` (default `false`); la casella è visibile solo se `DONATION_NEWSLETTER_ENABLED=true`.
+
+Non esiste un checkbox di contributo ai costi di transazione: l’importo donato è l’importo addebitato.
 
 La sessione è esplicita: `payment_method_types: ["card", "link", "paypal", "sepa_debit"]` sia per il pagamento unico sia per l’abbonamento mensile. La carta è il fallback universale. SEPA Direct Debit compare nel Payment Element (IBAN e mandato restano di Stripe; CIR non li memorizza). Apple Pay, Google Pay, PayPal e Link compaiono in Express Checkout solo se Stripe, il browser, l’account e il dominio li ammettono. Klarna, Amazon Pay, Bancontact, EPS, Satispay e altri metodi BNPL/ecommerce locali non fanno parte del flusso.
 
@@ -190,19 +192,19 @@ La sessione è esplicita: `payment_method_types: ["card", "link", "paypal", "sep
 {
   "amount": "25",
   "locale": "it",
-  "frequency": "one_time",
+  "frequency": "monthly",
   "firstName": "Sara",
   "lastName": "Rossi",
   "email": "sara@example.com",
   "visibility": "anonymous",
-  "coverProcessingCosts": false,
+  "newsletterConsent": false,
   "turnstileToken": "…"
 }
 ```
 
-Campi mancanti, sconosciuti, email malformate, `frequency`/`visibility` non ammessi, `coverProcessingCosts` non booleano o lunghezze eccessive vengono rifiutati. Il server resta autoritativo: l’eventuale contributo ai costi è calcolato solo lato server (mai un importo commissione inviato dal client).
+Campi mancanti, sconosciuti, email malformate, `frequency`/`visibility` non ammessi, `newsletterConsent` non booleano o lunghezze eccessive vengono rifiutati. Il server resta autoritativo: l’importo addebitato è l’importo donato (nessun extra client-side).
 
-`GET /api/donazioni/status` restituisce `{ state, amount, donationAmount, contributionAmount, currency, frequency }`. Non espone nome, email, Customer/Subscription/Invoice ID, IBAN o mandato. L’esito in `/donazioni/esito` si verifica sempre da questa API, mai dall’URL.
+`GET /api/donazioni/status` restituisce `{ state, amount, donationAmount, contributionAmount, currency, frequency }`. `contributionAmount` resta nel parser per sessioni Sandbox legacy che avevano un contributo costi; per i checkout nuovi è sempre `0`. Non espone nome, email, Customer/Subscription/Invoice ID, IBAN o mandato. L’esito in `/donazioni/esito` si verifica sempre da questa API, mai dall’URL.
 
 Prima di creare la Checkout Session, `POST /api/donazioni/checkout` esegue: same-origin → sessione donazione/CSRF → rate limit Upstash → verifica Turnstile server-side → validazione payload → Stripe. Il webhook **non** è dietro questo rate limiter.
 
@@ -217,9 +219,10 @@ Variabili:
 - `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` rate limit distribuito
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` (in locale usa le [test key Cloudflare](https://developers.cloudflare.com/turnstile/troubleshooting/testing/)). In produzione le test key Cloudflare sono rifiutate: `donationSecurityReady` fallisce chiuso e Siteverify non ha eccezioni sul campo `action`.
 - `TURNSTILE_ALLOWED_HOSTNAMES` (CSV, niente wildcard) in aggiunta all’hostname di `NEXT_PUBLIC_SITE_URL`. Locale/test-key: `localhost,127.0.0.1,example.com` (le dummy key Cloudflare possono riportare `example.com`). Preview: l’hostname del Preview. Produzione: l’hostname CIR. Siteverify richiede `success === true`, `action === donation_checkout` e hostname in questa allow-list. Solo in non-produzione, e solo con la dummy secret always-pass documentata, un `action` vuoto della risposta di test Cloudflare è accettato. Hostname/action dal body client sono ignorati.
-- `DONATION_FEE_REFERENCE_BPS` e `DONATION_FEE_REFERENCE_FIXED_CENTS`: stima del contributo costi. I default `150` + `25` sono **riferimenti di sviluppo**, non la commissione Stripe reale del CIR. In produzione vanno impostati esplicitamente. Il calcolo non dipende dal metodo di pagamento scelto dal client.
 - `RESEND_API_KEY` (opzionale) per l’email di ringraziamento transazionale
 - `DONATION_EMAIL_FROM` (opzionale). L’indirizzo verified viene usato come From; il display name è sempre `Comunità Islamica di Roma`. Default di sviluppo: `Comunità Islamica di Roma <onboarding@resend.dev>`
+- `DONATION_NEWSLETTER_ENABLED` — solo il valore esatto `true` mostra la casella newsletter sul modulo. **Lasciare disabilitata** finché Brevo DOI non è pronto (dominio autenticato, mittente, template, API key).
+- `BREVO_API_KEY` (solo server, mai `NEXT_PUBLIC_`), `BREVO_NEWSLETTER_LIST_ID` (lista «Newsletter CIR», id `3`), `BREVO_DOI_TEMPLATE_ID`, `BREVO_DOI_REDIRECT_URL` (pagina `/newsletter/confermata`). Opzionali: se mancano, le donazioni restano operative.
 - Override opzionali: `DONATION_RATE_LIMIT_SESSION_MAX` / `_WINDOW_SEC`, `DONATION_RATE_LIMIT_IP_MAX` / `_WINDOW_SEC`, `DONATION_RATE_LIMIT_EMAIL_MAX` / `_WINDOW_SEC`, `DONATION_RATE_LIMIT_MINT_MAX` / `_WINDOW_SEC`
 
 Con `DONATIONS_ENABLED=true`, checkout e sessione donazione **falliscono chiusi** se manca la configurazione di sicurezza (niente bypass locale).
@@ -251,13 +254,17 @@ Carte Radar (Sandbox, non sono un cambio Dashboard applicato da CIR):
 | `4000 0000 0000 4954` | Rischio massimo          |
 | `4000 0000 0000 9235` | Rischio elevato          |
 
-### Contributo facoltativo ai costi
+### Importo addebitato
 
-Checkbox nello step 1, **spenta** di default. Formula server (**stima**, non commissione Stripe reale e non dipendente dal metodo di pagamento):
+L’importo scelto dal donatore è l’importo inviato a Stripe (un solo line item). Non c’è contributo ai costi di transazione. Sessioni Sandbox precedenti con metadata `processing_cost_contribution_cents` restano leggibili dallo status parser; i checkout nuovi non scrivono quel campo.
 
-`total = ceil((donazione + fisso) / (1 - bps/10000))`, contributo = totale − donazione.
+### Newsletter (Brevo, flag spento)
 
-I default 150 bps + 25 cent sono riferimenti di sviluppo. Con quei default su 25,00 € il contributo stimato è 0,64 € (totale 25,64 €). In produzione impostare `DONATION_FEE_REFERENCE_BPS` e `DONATION_FEE_REFERENCE_FIXED_CENTS`. Per il mensile entrambi gli importi sono ricorrenti. Stripe riceve due line item distinti se il checkbox è attivo.
+Provider previsto: **Brevo**, lista «Newsletter CIR» (id `3`), double opt-in. La casella è **spenta di default**. `DONATION_NEWSLETTER_ENABLED` deve essere esattamente `true` per mostrarla. Qualsiasi altro valore la nasconde; il checkout invia `newsletterConsent=false` e la donazione funziona normalmente.
+
+L’adapter server-only (`lib/newsletter/brevo.ts`) è pronto per `POST /v3/contacts/doubleOptinConfirmation`. **La chiamata runtime è disabilitata** finché dominio, mittente, template DOI e API key non sono completi: il webhook donazione non invoca Brevo e non manda marketing. Un errore Brevo non deve mai far fallire una donazione Stripe andata a buon fine.
+
+Quando il flag è attivo: checkbox **deselezionata** di default, non obbligatoria, mai precompilata. Il server esige un boolean esplicito e registra su metadata Stripe: `newsletter_consent`, `newsletter_consent_at`, `newsletter_consent_source=donation_form`, `newsletter_consent_locale`, `newsletter_consent_copy`. Pagina di conferma DOI: `/newsletter/confermata` (`/en/...`, `/ar/...`, `/bn/...`).
 
 ### Webhook (locale)
 
@@ -302,10 +309,10 @@ Imposta `STRIPE_CUSTOMER_PORTAL_LOGIN_URL` con quell’URL. L’email mensile in
 Solo dopo verifica Stripe lato webhook. Non parte dalla pagina esito. Nessun contenuto marketing/newsletter.
 
 - HTML + testo semplice, localizzati (`it` / `en` / `ar` / `bn`; locale non valido → italiano).
-- Una tantum: nome, importo, ringraziamento inclusivo, riepilogo (donazione / eventuale contributo costi / totale), tipo e stato.
+- Una tantum: nome, importo, ringraziamento inclusivo, riepilogo (donazione; eventuale riga contributo **solo** per sessioni legacy), tipo e stato.
 - Mensile: stesso schema con importi «/ mese» (o equivalente); CTA al Customer Portal solo se `STRIPE_CUSTOMER_PORTAL_LOGIN_URL` è un URL hosted `/p/login/` valido.
-- Il contributo costi è una **stima**, non «commissione Stripe».
 - Nessuna email custom su ogni `invoice.paid` di rinnovo.
+- Il consenso newsletter **non** cambia l’idoneità del thank-you transazionale.
 - Anteprima locale senza invio: `pnpm donation:email:preview` scrive HTML in `tmp/donation-email-preview/`.
 
 CIR **non** invia una seconda ricevuta di pagamento. Abilita in Stripe Dashboard → **Settings → Customer emails** (o Billing email settings) le ricevute automatiche / invoice emails: è il canale di ricevuta fiscale/contabile. L’email Resend CIR resta il ringraziamento di marca e, per il mensile, il link di gestione.

@@ -23,12 +23,11 @@ function json(
   });
 }
 
-function lineItems(
+function lineItem(
   monthly: boolean,
   donationCents: number,
-  contributionCents: number,
-): Stripe.Checkout.SessionCreateParams.LineItem[] {
-  const donation: Stripe.Checkout.SessionCreateParams.LineItem = {
+): Stripe.Checkout.SessionCreateParams.LineItem {
+  return {
     quantity: 1,
     price_data: {
       currency: DONATION_CURRENCY,
@@ -39,21 +38,6 @@ function lineItems(
       ...(monthly ? { recurring: { interval: "month" as const } } : {}),
     },
   };
-  if (contributionCents <= 0) return [donation];
-  return [
-    donation,
-    {
-      quantity: 1,
-      price_data: {
-        currency: DONATION_CURRENCY,
-        unit_amount: contributionCents,
-        product_data: {
-          name: "Contributo stimato ai costi di transazione",
-        },
-        ...(monthly ? { recurring: { interval: "month" as const } } : {}),
-      },
-    },
-  ];
 }
 
 export async function POST(request: Request): Promise<Response> {
@@ -80,18 +64,12 @@ export async function POST(request: Request): Promise<Response> {
     firstName: guard.value.firstName,
     lastName: guard.value.lastName,
     locale: guard.value.locale,
-    coverProcessingCosts: guard.value.coverProcessingCosts,
     donationCents: guard.donationCents,
-    contributionCents: guard.contributionCents,
-    totalCents: guard.totalCents,
+    newsletterConsent: guard.value.newsletterConsent,
   });
   const paymentMethodTypes = [...DONATION_PAYMENT_METHOD_TYPES];
   const monthly = guard.value.frequency === "monthly";
-  const items = lineItems(
-    monthly,
-    guard.donationCents,
-    guard.contributionCents,
-  );
+  const items = [lineItem(monthly, guard.donationCents)];
 
   try {
     const stripe = getStripeServer();
@@ -129,7 +107,6 @@ export async function POST(request: Request): Promise<Response> {
       {
         clientSecret: session.client_secret,
         donationAmount: guard.donationCents,
-        contributionAmount: guard.contributionCents,
         totalAmount: guard.totalCents,
       },
       200,

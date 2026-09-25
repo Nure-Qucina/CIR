@@ -1,5 +1,6 @@
 import {
   donationSecurityReady,
+  isDonationNewsletterEnabled,
   isDonationsEnabled,
 } from "@/lib/donazioni/config";
 import { authorizeDonationSession } from "@/lib/donazioni/session-guard";
@@ -42,7 +43,7 @@ export async function POST(request: Request): Promise<Response> {
     {
       csrfToken: result.csrfToken,
       turnstileSiteKey: result.turnstileSiteKey,
-      feeReference: result.feeReference,
+      newsletterEnabled: isDonationNewsletterEnabled(),
     },
     200,
     { cookie: result.cookie },

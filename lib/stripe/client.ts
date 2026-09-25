@@ -3,6 +3,7 @@
 import { loadStripe } from "@stripe/stripe-js/pure";
 import type { Stripe } from "@stripe/stripe-js";
 import type { Locale } from "@/i18n/routing";
+import { stripeLocaleFromCir } from "@/lib/donazioni/stripe-locale";
 
 const stripePromises = new Map<string, Promise<Stripe | null>>();
 
@@ -13,7 +14,7 @@ export function getStripeClient(locale: Locale = "it"): Promise<Stripe | null> {
   if (typeof window === "undefined" || !publishableKey)
     return Promise.resolve(null);
 
-  const stripeLocale = locale === "bn" ? "en" : locale;
+  const stripeLocale = stripeLocaleFromCir(locale);
   let stripePromise = stripePromises.get(stripeLocale);
   if (!stripePromise) {
     stripePromise = loadStripe(publishableKey, { locale: stripeLocale }).catch(

@@ -7,7 +7,6 @@ import {
   turnstileSiteKey,
 } from "./config";
 import { trustedClientIp } from "./client-ip";
-import { getFeeReference, type FeeReference } from "./fees";
 import { isSameSiteOrigin } from "./origin";
 import {
   createUpstashMintLimiter,
@@ -33,7 +32,6 @@ export type SessionGuardSuccess = {
   ok: true;
   csrfToken: string;
   turnstileSiteKey: string;
-  feeReference: FeeReference;
   cookie: string;
 };
 
@@ -100,7 +98,6 @@ export async function authorizeDonationSession(
     ok: true,
     csrfToken: issued.session.csrf,
     turnstileSiteKey: siteKey,
-    feeReference: getFeeReference(),
     cookie: serializeDonationCookie(
       issued.token,
       maxAge,

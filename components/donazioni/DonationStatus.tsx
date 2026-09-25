@@ -9,6 +9,7 @@ import {
   DONATION_ROUTE,
   type DonationFrequency,
 } from "@/lib/donazioni/config";
+import { STATUS_CARD, STATUS_ICON } from "@/lib/donazioni/status-ui";
 import { DonationProgress } from "./DonationProgress";
 
 type DonationState = "paid" | "pending" | "unpaid";
@@ -151,11 +152,8 @@ export function DonationStatus() {
     return (
       <div className="space-y-5" role="alert" aria-live="assertive">
         <DonationProgress current="confirm" />
-        <div className="flex items-start gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-5">
-          <AlertCircle
-            className="mt-0.5 shrink-0 text-orange-800"
-            aria-hidden
-          />
+        <div className={STATUS_CARD.error}>
+          <AlertCircle className={STATUS_ICON.error} aria-hidden />
           <p className="text-ink">{t("resultInvalid")}</p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -183,8 +181,8 @@ export function DonationStatus() {
     return (
       <div className="space-y-5" role="status" aria-live="polite">
         <DonationProgress current="confirm" />
-        <div className="flex items-start gap-3 rounded-2xl border border-teal-200 bg-teal-50 p-5">
-          <CheckCircle2 className="text-teal mt-0.5 shrink-0" aria-hidden />
+        <div className={STATUS_CARD.success}>
+          <CheckCircle2 className={STATUS_ICON.success} aria-hidden />
           <div className="space-y-2">
             <p className="text-ink text-[length:var(--text-h3)] font-bold">
               {t("resultPaid")}
@@ -196,21 +194,21 @@ export function DonationStatus() {
                   })
                 : t("resultPaidAmount", { amount: labeled(amount ?? 0) })}
             </p>
-            {donationAmount !== null ? (
-              <p className="text-ink-soft text-sm">
-                {t("resultPaidDonation", { amount: labeled(donationAmount) })}
-              </p>
+            {contributionAmount > 0 && donationAmount !== null ? (
+              <>
+                <p className="text-ink-soft text-sm">
+                  {t("resultPaidDonation", { amount: labeled(donationAmount) })}
+                </p>
+                <p className="text-ink-soft text-sm">
+                  {t("resultPaidContribution", {
+                    amount: labeled(contributionAmount),
+                  })}
+                </p>
+                <p className="text-ink-soft text-sm">
+                  {t("resultPaidTotal", { amount: labeled(amount ?? 0) })}
+                </p>
+              </>
             ) : null}
-            {contributionAmount > 0 ? (
-              <p className="text-ink-soft text-sm">
-                {t("resultPaidContribution", {
-                  amount: labeled(contributionAmount),
-                })}
-              </p>
-            ) : null}
-            <p className="text-ink-soft text-sm">
-              {t("resultPaidTotal", { amount: labeled(amount ?? 0) })}
-            </p>
             <p className="text-ink-soft">
               {monthly ? t("resultPaidThanksMonthly") : t("resultPaidThanks")}
             </p>
@@ -231,8 +229,8 @@ export function DonationStatus() {
     return (
       <div className="space-y-5" role="status" aria-live="polite">
         <DonationProgress current="confirm" />
-        <div className="flex items-start gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-5">
-          <Clock className="mt-0.5 shrink-0 text-orange-800" aria-hidden />
+        <div className={STATUS_CARD.pending}>
+          <Clock className={STATUS_ICON.pending} aria-hidden />
           <div className="space-y-2">
             <p className="text-ink text-[length:var(--text-h3)] font-bold">
               {t("resultPendingTitle")}
@@ -252,11 +250,8 @@ export function DonationStatus() {
     return (
       <div className="space-y-5" role="status" aria-live="polite">
         <DonationProgress current="confirm" />
-        <div className="flex items-start gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-5">
-          <AlertCircle
-            className="mt-0.5 shrink-0 text-orange-800"
-            aria-hidden
-          />
+        <div className={STATUS_CARD.error}>
+          <AlertCircle className={STATUS_ICON.error} aria-hidden />
           <div className="space-y-2">
             <p className="text-ink text-[length:var(--text-h3)] font-bold">
               {t("resultUnpaidTitle")}
@@ -277,8 +272,8 @@ export function DonationStatus() {
   return (
     <div className="space-y-5" role="alert" aria-live="assertive">
       <DonationProgress current="confirm" />
-      <div className="flex items-start gap-3 rounded-2xl border border-orange-200 bg-orange-50 p-5">
-        <AlertCircle className="mt-0.5 shrink-0 text-orange-800" aria-hidden />
+      <div className={STATUS_CARD.error}>
+        <AlertCircle className={STATUS_ICON.error} aria-hidden />
         <p className="text-ink">
           {view === "invalid" ? t("resultInvalid") : t("resultError")}
         </p>

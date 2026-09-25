@@ -66,6 +66,17 @@
   /* --- Neutri di supporto --- */
   --color-surface: #ffffff;
   --color-border: #e7ddcf;
+
+  /* Semantic feedback (donation status / form errors only) */
+  --color-status-success: #14532d;
+  --color-status-success-bg: #ecfdf5;
+  --color-status-success-border: #15803d;
+  --color-status-error: #7f1d1d;
+  --color-status-error-bg: #fef2f2;
+  --color-status-error-border: #b91c1c;
+  --color-status-pending: #78350f;
+  --color-status-pending-bg: #fffbeb;
+  --color-status-pending-border: #b45309;
 }
 
 @theme inline {
@@ -119,6 +130,15 @@
 
   --color-surface: var(--color-surface);
   --color-border: var(--color-border);
+  --color-status-success: var(--color-status-success);
+  --color-status-success-bg: var(--color-status-success-bg);
+  --color-status-success-border: var(--color-status-success-border);
+  --color-status-error: var(--color-status-error);
+  --color-status-error-bg: var(--color-status-error-bg);
+  --color-status-error-border: var(--color-status-error-border);
+  --color-status-pending: var(--color-status-pending);
+  --color-status-pending-bg: var(--color-status-pending-bg);
+  --color-status-pending-border: var(--color-status-pending-border);
 
   /* Font */
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;

@@ -26,6 +26,8 @@ import {
   type DonationFrequency,
 } from "@/lib/donazioni/config";
 import { donorPaymentMessage } from "@/lib/donazioni/payment-message";
+import { STATUS_ALERT } from "@/lib/donazioni/status-ui";
+import { stripeUsesFallbackLocale } from "@/lib/donazioni/stripe-locale";
 import { DonationTrust } from "./DonationTrust";
 
 const appearance: Appearance = {
@@ -35,7 +37,7 @@ const appearance: Appearance = {
     colorBackground: "#fdfaf5",
     colorText: "#2a1f0e",
     colorTextSecondary: "#5a4f3e",
-    colorDanger: "#8a4918",
+    colorDanger: "#b91c1c",
     accessibleColorOnColorPrimary: "#2a1f0e",
     borderRadius: "12px",
     fontFamily: "Montserrat, Arial, sans-serif",
@@ -156,12 +158,15 @@ function PaymentFields({
   if (state.type !== "success")
     return (
       <div className="mt-6 space-y-5">
-        <p
-          role={state.type === "error" ? "alert" : "status"}
-          aria-live={state.type === "error" ? "assertive" : "polite"}
-        >
-          {state.type === "error" ? t("genericError") : t("loadingPayment")}
-        </p>
+        {state.type === "error" ? (
+          <p role="alert" aria-live="assertive" className={STATUS_ALERT.error}>
+            {t("genericError")}
+          </p>
+        ) : (
+          <p role="status" aria-live="polite">
+            {t("loadingPayment")}
+          </p>
+        )}
         <Button variant="ghost" onClick={onBack}>
           {t("changeAmount")}
         </Button>
@@ -189,19 +194,21 @@ function PaymentFields({
             : t("donationLine", { amount: money(donationCents) })}
         </p>
         {contributionCents > 0 ? (
-          <p className="text-ink-soft text-sm">
-            {frequency === "monthly"
-              ? t("contributionLineMonthly", {
-                  amount: money(contributionCents),
-                })
-              : t("contributionLine", { amount: money(contributionCents) })}
-          </p>
+          <>
+            <p className="text-ink-soft text-sm">
+              {frequency === "monthly"
+                ? t("contributionLineMonthly", {
+                    amount: money(contributionCents),
+                  })
+                : t("contributionLine", { amount: money(contributionCents) })}
+            </p>
+            <p className="font-semibold">
+              {frequency === "monthly"
+                ? t("totalLineMonthly", { amount: totalLabel })
+                : t("totalLine", { amount: totalLabel })}
+            </p>
+          </>
         ) : null}
-        <p className="font-semibold">
-          {frequency === "monthly"
-            ? t("totalLineMonthly", { amount: totalLabel })
-            : t("totalLine", { amount: totalLabel })}
-        </p>
       </div>
       <div
         className={
@@ -265,10 +272,7 @@ function PaymentFields({
       </div>
       <div aria-live="assertive" aria-atomic="true">
         {displayError ? (
-          <p
-            role="alert"
-            className="rounded-xl border border-orange-200 bg-orange-50 p-3 text-sm text-orange-800"
-          >
+          <p role="alert" className={STATUS_ALERT.error}>
             {displayError}
           </p>
         ) : null}
@@ -324,7 +328,7 @@ export function DonationPayment({
   const t = useTranslations("donazioni");
   return (
     <>
-      {locale === "bn" && (
+      {stripeUsesFallbackLocale(locale) && (
         <p className="text-ink-soft mt-4 text-sm">{t("stripeLanguage")}</p>
       )}
       <CheckoutElementsProvider

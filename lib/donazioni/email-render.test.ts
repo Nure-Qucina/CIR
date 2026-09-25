@@ -74,7 +74,7 @@ test("email one-time: subject, name, amounts, no fee row, no portal", () => {
   assert.match(rendered.text, /Ciao Sara,/);
   assert.match(rendered.html, /Ciao Sara,/);
   assert.match(rendered.text, /Donazione: 25,00\s*€/);
-  assert.match(rendered.text, /Totale: 25,00\s*€/);
+  assert.doesNotMatch(rendered.text, /Totale: 25,00\s*€/);
   assert.doesNotMatch(rendered.text, /Contributo ai costi di transazione/);
   assert.doesNotMatch(rendered.html, /Contributo ai costi di transazione/);
   assert.match(rendered.text, /Tipo: Donazione una tantum/);
@@ -84,7 +84,7 @@ test("email one-time: subject, name, amounts, no fee row, no portal", () => {
   assert.doesNotMatch(rendered.text, /\/ mese/);
 });
 
-test("email one-time: contribution row when cents > 0", () => {
+test("email one-time: legacy contribution row when cents > 0", () => {
   const rendered = oneTime({
     contributionCents: 64,
     totalCents: 2564,
@@ -130,7 +130,7 @@ test("email monthly: wording, period suffix, portal CTA", () => {
   assert.doesNotMatch(badPortal.html, /href="#"/);
 });
 
-test("email monthly: contribution uses monthly wording", () => {
+test("email monthly: legacy contribution uses monthly wording", () => {
   const rendered = monthly({
     contributionCents: 64,
     totalCents: 2564,
@@ -216,11 +216,9 @@ test("email summary: total row is emphasized without color-only cues", () => {
     /border-top:1px solid #efe2cf;font-size:14px;line-height:1\.5;color:#2a1f0e;font-weight:700;">Totale/,
   );
   assert.match(rendered.html, /font-weight:700;white-space:nowrap;">25,64/);
-  const monthlyRendered = monthly({
-    contributionCents: 64,
-    totalCents: 2564,
-  });
-  assert.match(monthlyRendered.html, /font-weight:700;">Totale/);
+  const simple = oneTime();
+  assert.match(simple.html, /font-weight:700;">Donazione/);
+  assert.doesNotMatch(simple.html, />Totale</);
 });
 
 test("email footer is 13px", () => {

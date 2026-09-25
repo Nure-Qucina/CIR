@@ -9,7 +9,6 @@ import {
   donationSecurityReady,
 } from "./config";
 import { authorizeDonationCheckout } from "./checkout-guard";
-import { donationTotals, processingContributionCents } from "./fees";
 import { isSameSiteOrigin } from "./origin";
 import {
   createDonationSession,
@@ -20,6 +19,7 @@ import {
 import { authorizeDonationSession } from "./session-guard";
 import {
   donationState,
+  publicDonationAmounts,
   shouldSendInitialThankYou,
   thankYouIdempotencyKey,
 } from "./status-state";
@@ -61,6 +61,7 @@ function enableSecurityEnv() {
     TURNSTILE_ALLOWED_HOSTNAMES: process.env.TURNSTILE_ALLOWED_HOSTNAMES,
     NODE_ENV: process.env.NODE_ENV,
     VERCEL_ENV: process.env.VERCEL_ENV,
+    DONATION_NEWSLETTER_ENABLED: process.env.DONATION_NEWSLETTER_ENABLED,
   };
   process.env.DONATIONS_ENABLED = "true";
   process.env.DONATION_SESSION_SECRET = SECRET;
@@ -72,6 +73,7 @@ function enableSecurityEnv() {
   envBag().NODE_ENV = "test";
   delete process.env.TURNSTILE_ALLOWED_HOSTNAMES;
   delete process.env.VERCEL_ENV;
+  delete process.env.DONATION_NEWSLETTER_ENABLED;
   return previous;
 }
 
@@ -83,7 +85,7 @@ const validBody = {
   lastName: "Rossi",
   email: "sara@example.com",
   visibility: "anonymous",
-  coverProcessingCosts: false,
+  newsletterConsent: false,
   turnstileToken: "turnstile-token-ok",
 };
 
@@ -125,44 +127,25 @@ function siteverify(body: unknown) {
   return async () => new Response(JSON.stringify(body), { status: 200 });
 }
 
-test("fees: 25 euro gross-up is 0.64 euro contribution", () => {
-  const result = processingContributionCents(2500);
-  assert.equal(result.ok, true);
-  if (result.ok) {
-    assert.equal(result.contributionCents, 64);
-    assert.equal(result.totalCents, 2564);
+test("fees: new checkout never adds a processing contribution", () => {
+  const parsed = parseCheckoutRequest(validBody);
+  assert.equal(parsed.ok, true);
+  if (parsed.ok) {
+    assert.equal(parsed.value.amountCents, 2500);
+    assert.equal("coverProcessingCosts" in parsed.value, false);
   }
 });
 
-test("fees: checkbox false keeps donation total", () => {
-  const result = donationTotals(1250, false);
-  assert.equal(result.ok, true);
-  if (result.ok) {
-    assert.equal(result.contributionCents, 0);
-    assert.equal(result.totalCents, 1250);
-  }
-});
-
-test("fees: monthly uses the same integer-cent formula", () => {
-  const result = donationTotals(2500, true);
-  assert.equal(result.ok, true);
-  if (result.ok) assert.equal(result.contributionCents, 64);
-});
-
-test("fees: total cannot exceed donation max", () => {
-  const result = donationTotals(500000, true);
-  assert.equal(result.ok, false);
-});
-
-test("validation: coverProcessingCosts must be boolean", () => {
-  const without = { ...validBody } as Record<string, unknown>;
-  delete without.coverProcessingCosts;
-  const parsed = parseCheckoutRequest(without);
+test("fees: extra fee fields are rejected", () => {
+  const parsed = parseCheckoutRequest({
+    ...validBody,
+    coverProcessingCosts: false,
+  });
   assert.equal(parsed.ok, false);
-  if (!parsed.ok) assert.equal(parsed.error, "invalid_cover_processing_costs");
+  if (!parsed.ok) assert.equal(parsed.error, "invalid_request");
 });
 
-test("validation: client-supplied fee amount is rejected", () => {
+test("fees: client-supplied fee amount is rejected", () => {
   const parsed = parseCheckoutRequest({
     ...validBody,
     processingCostCents: 64,
@@ -171,12 +154,41 @@ test("validation: client-supplied fee amount is rejected", () => {
   if (!parsed.ok) assert.equal(parsed.error, "invalid_request");
 });
 
-test("validation: coverProcessingCosts true is accepted without a client fee", () => {
+test("legacy metadata: contribution parser does not crash", () => {
+  const split = publicDonationAmounts({
+    amountTotal: 2564,
+    metadata: {
+      base_donation_amount_cents: "2500",
+      processing_cost_contribution_cents: "64",
+    },
+  });
+  assert.equal(split.donationAmount, 2500);
+  assert.equal(split.contributionAmount, 64);
+  assert.equal(split.amount, 2564);
+
+  const missing = publicDonationAmounts({
+    amountTotal: 2500,
+    metadata: { base_donation_amount_cents: "2500" },
+  });
+  assert.equal(missing.donationAmount, 2500);
+  assert.equal(missing.contributionAmount, 0);
+});
+
+test("validation: newsletterConsent must be boolean", () => {
+  const without = { ...validBody } as Record<string, unknown>;
+  delete without.newsletterConsent;
+  const parsed = parseCheckoutRequest(without);
+  assert.equal(parsed.ok, false);
+  if (!parsed.ok) assert.equal(parsed.error, "invalid_newsletter_consent");
+});
+
+test("validation: newsletterConsent true is accepted", () => {
   const parsed = parseCheckoutRequest({
     ...validBody,
-    coverProcessingCosts: true,
+    newsletterConsent: true,
   });
   assert.equal(parsed.ok, true);
+  if (parsed.ok) assert.equal(parsed.value.newsletterConsent, true);
 });
 
 test("origin: configured origin is required", () => {
@@ -603,21 +615,49 @@ test("checkout guard: missing session, CSRF, origin, turnstile, 429", async () =
   assert.equal(ok.ok, true);
   if (ok.ok) {
     assert.equal(ok.donationCents, 2500);
-    assert.equal(ok.contributionCents, 0);
+    assert.equal(ok.totalCents, 2500);
+    assert.equal(ok.value.newsletterConsent, false);
   }
 
-  const covered = await authorizeDonationCheckout(
+  const withConsent = await authorizeDonationCheckout(
     checkoutRequest({
       cookie,
       csrf: created.session.csrf,
-      body: { ...validBody, coverProcessingCosts: true },
+      body: { ...validBody, newsletterConsent: true },
     }),
     { limiter: limiterOk, verifyTurnstile: turnstileOk },
   );
-  assert.equal(covered.ok, true);
-  if (covered.ok) {
-    assert.equal(covered.contributionCents, 64);
-    assert.equal(covered.totalCents, 2564);
+  assert.equal(withConsent.ok, true);
+  if (withConsent.ok) {
+    assert.equal(withConsent.donationCents, 2500);
+    assert.equal(withConsent.totalCents, 2500);
+    assert.equal(withConsent.value.newsletterConsent, false);
+  }
+
+  restoreEnv(env);
+});
+
+test("checkout guard: newsletter flag on records consent", async () => {
+  const env = enableSecurityEnv();
+  process.env.DONATION_NEWSLETTER_ENABLED = "true";
+  const created = createDonationSession(SECRET);
+  const cookie = `${DONATION_SESSION_COOKIE}=${encodeURIComponent(created.token)}`;
+  const limiterOk = async () => ({ ok: true as const });
+  const turnstileOk = async () => ({ ok: true as const });
+
+  const withConsent = await authorizeDonationCheckout(
+    checkoutRequest({
+      cookie,
+      csrf: created.session.csrf,
+      body: { ...validBody, newsletterConsent: true },
+    }),
+    { limiter: limiterOk, verifyTurnstile: turnstileOk },
+  );
+  assert.equal(withConsent.ok, true);
+  if (withConsent.ok) {
+    assert.equal(withConsent.donationCents, 2500);
+    assert.equal(withConsent.totalCents, 2500);
+    assert.equal(withConsent.value.newsletterConsent, true);
   }
 
   restoreEnv(env);

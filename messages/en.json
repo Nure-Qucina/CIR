@@ -7,6 +7,7 @@
     "frequencyLabel": "Donation type",
     "oneTime": "One-time donation",
     "monthly": "Monthly donation",
+    "monthlyRepeat": "Repeats every month",
     "perMonth": "{amount} / month",
     "chooseHint": "Choose the amount and enter your details for the donation.",
     "purpose": "Your donation supports the community’s activities, events, and the dialogue of the Islamic Community of Rome.",
@@ -17,11 +18,11 @@
     "firstName": "First name",
     "lastName": "Last name",
     "email": "Email",
-    "emailHint": "We use it only for communication about this donation.",
+    "emailHint": "We use it for transactional messages about this donation. The newsletter is optional.",
     "visibilityLabel": "Name visibility",
     "visibilityPublic": "Show my name publicly as a supporter",
-    "visibilityAnonymous": "Keep my donation anonymous",
-    "visibilityHint": "Choosing anonymous only affects whether your name may be shown publicly. CIR and the payment provider still use the required information to process the donation.",
+    "visibilityAnonymous": "Do not show my name publicly",
+    "visibilityHint": "CIR and Stripe will still process the data needed to manage the donation and the payment, as described in the Privacy Notice.",
     "stepAmount": "Amount",
     "stepPayment": "Payment",
     "stepConfirm": "Confirmation",
@@ -55,15 +56,13 @@
     "contributionLineMonthly": "Estimated processing-cost contribution: {amount} / month",
     "totalLine": "Total: {amount}",
     "totalLineMonthly": "Total: {amount} / month",
-    "coverCosts": "Would you also like to contribute to processing costs?",
-    "coverCostsHint": "This is optional. The amount is an estimate because costs can vary by payment method.",
-    "estimateOneTime": "Donation: {donation}. Processing-cost contribution (estimate): {contribution}. Total: {total}.",
-    "estimateMonthly": "Monthly donation: {donation} / month. Processing-cost contribution (estimate): {contribution} / month. Total: {total} / month.",
+    "newsletterConsent": "I would like to subscribe to the CIR newsletter to receive updates on the Community’s activities and projects.",
+    "newsletterConsentHint": "You can withdraw your consent at any time.",
     "pay": "Donate {amount}",
     "payMonthly": "Donate {amount} / month",
     "confirming": "Confirming your payment…",
     "paymentError": "We could not confirm the payment. Check your details and try again.",
-    "stripeLanguage": "Stripe payment fields are displayed in English.",
+    "stripeLanguage": "Stripe payment fields are shown in English because Stripe does not support Bengali.",
     "resultTitle": "Donation result",
     "resultVerifying": "Verifying your payment…",
     "resultPaid": "Thank you for your support ❤️",
@@ -375,5 +374,10 @@
         "Coverage of CIR initiatives."
       ]
     }
+  },
+  "newsletter": {
+    "confirmedTitle": "Subscription confirmed",
+    "confirmedBody": "Thank you! Your subscription to the newsletter of the Islamic Community of Rome has been confirmed. You will receive our updates on the Community’s activities and projects.",
+    "confirmedCta": "Back to home"
   }
 }

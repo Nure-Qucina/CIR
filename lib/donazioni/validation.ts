@@ -26,7 +26,7 @@ export type CheckoutParseError =
   | "invalid_first_name"
   | "invalid_last_name"
   | "invalid_email"
-  | "invalid_cover_processing_costs";
+  | "invalid_newsletter_consent";
 
 export type ParsedCheckoutRequest = {
   amountCents: number;
@@ -36,7 +36,7 @@ export type ParsedCheckoutRequest = {
   lastName: string;
   email: string;
   visibility: DonationVisibility;
-  coverProcessingCosts: boolean;
+  newsletterConsent: boolean;
 };
 
 const CHECKOUT_KEYS = new Set([
@@ -47,7 +47,7 @@ const CHECKOUT_KEYS = new Set([
   "lastName",
   "email",
   "visibility",
-  "coverProcessingCosts",
+  "newsletterConsent",
   "turnstileToken",
 ]);
 
@@ -195,8 +195,8 @@ export function parseCheckoutRequest(
   const visibility = parseDonationVisibility(record.visibility);
   if (!visibility.ok) return visibility;
 
-  if (typeof record.coverProcessingCosts !== "boolean") {
-    return { ok: false, error: "invalid_cover_processing_costs" };
+  if (typeof record.newsletterConsent !== "boolean") {
+    return { ok: false, error: "invalid_newsletter_consent" };
   }
 
   return {
@@ -209,7 +209,7 @@ export function parseCheckoutRequest(
       lastName: lastName.name,
       email: email.email,
       visibility: visibility.visibility,
-      coverProcessingCosts: record.coverProcessingCosts,
+      newsletterConsent: record.newsletterConsent,
     },
   };
 }

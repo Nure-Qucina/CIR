@@ -15,16 +15,14 @@ const LOCALES = {
   bn: bn.donazioni,
 } as const;
 
-test("result copy: one-time paid is inclusive and shows contribution placeholders", () => {
+test("result copy: one-time paid is inclusive without fee rows", () => {
   const copy = LOCALES.it;
   assert.equal(copy.resultPaid, "Grazie per il tuo sostegno ❤️");
   assert.match(copy.resultPaidAmount, /\{amount\}/);
-  assert.match(copy.resultPaidDonation, /\{amount\}/);
-  assert.match(copy.resultPaidContribution, /\{amount\}/);
-  assert.match(copy.resultPaidTotal, /\{amount\}/);
   assert.match(copy.resultPaidThanks, /Comunità Islamica di Roma/);
   assert.doesNotMatch(copy.resultPaid, RELIGIOUS);
   assert.doesNotMatch(copy.resultPaidAmount, /attiva/i);
+  assert.ok(!("coverCosts" in copy));
 });
 
 test("result copy: monthly paid uses period suffix and active wording", () => {

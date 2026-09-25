@@ -20,7 +20,7 @@ const fixtures = [
     },
   },
   {
-    file: "one-time-it-contribution.html",
+    file: "one-time-it-legacy-contribution.html",
     input: {
       firstName: "Sara",
       donationCents: 2500,
@@ -35,8 +35,8 @@ const fixtures = [
     input: {
       firstName: "Sara",
       donationCents: 2500,
-      contributionCents: 64,
-      totalCents: 2564,
+      contributionCents: 0,
+      totalCents: 2500,
       locale: "it",
       frequency: "monthly" as const,
       portalUrl: portal,
@@ -91,8 +91,8 @@ const fixtures = [
     input: {
       firstName: "Sara",
       donationCents: 2500,
-      contributionCents: 64,
-      totalCents: 2564,
+      contributionCents: 0,
+      totalCents: 2500,
       locale: "ar",
       frequency: "monthly" as const,
       portalUrl: portal,
@@ -103,8 +103,8 @@ const fixtures = [
     input: {
       firstName: "Sara",
       donationCents: 2500,
-      contributionCents: 64,
-      totalCents: 2564,
+      contributionCents: 0,
+      totalCents: 2500,
       locale: "bn",
       frequency: "monthly" as const,
       portalUrl: portal,

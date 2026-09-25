@@ -5,8 +5,9 @@
     "intro": "Aiutaci a dare voce alla comunità, organizzare iniziative e costruire dialogo.",
     "chooseAmount": "Scegli quanto donare",
     "frequencyLabel": "Tipo di donazione",
-    "oneTime": "Donazione singola",
+    "oneTime": "Donazione una tantum",
     "monthly": "Donazione mensile",
+    "monthlyRepeat": "Si rinnova ogni mese",
     "perMonth": "{amount} / mese",
     "chooseHint": "Scegli l’importo e indica i dati per la donazione.",
     "purpose": "La tua donazione sostiene le attività della comunità, gli eventi e il dialogo della Comunità Islamica di Roma.",
@@ -17,11 +18,11 @@
     "firstName": "Nome",
     "lastName": "Cognome",
     "email": "Email",
-    "emailHint": "La usiamo solo per comunicazioni relative a questa donazione.",
+    "emailHint": "La usiamo per comunicazioni transazionali su questa donazione. La newsletter è facoltativa.",
     "visibilityLabel": "Visibilità del nome",
     "visibilityPublic": "Mostra il mio nome pubblicamente come sostenitore",
-    "visibilityAnonymous": "Tieni anonima la mia donazione",
-    "visibilityHint": "La scelta anonima riguarda solo l’eventuale visualizzazione pubblica del nome. Il CIR e il gestore del pagamento usano comunque i dati necessari per elaborare la donazione.",
+    "visibilityAnonymous": "Non mostrare pubblicamente il mio nome",
+    "visibilityHint": "I dati necessari alla gestione della donazione e del pagamento saranno comunque trattati da CIR e Stripe secondo l’Informativa Privacy.",
     "stepAmount": "Importo",
     "stepPayment": "Pagamento",
     "stepConfirm": "Conferma",
@@ -55,15 +56,13 @@
     "contributionLineMonthly": "Contributo stimato ai costi: {amount} / mese",
     "totalLine": "Totale: {amount}",
     "totalLineMonthly": "Totale: {amount} / mese",
-    "coverCosts": "Vuoi contribuire anche ai costi di transazione?",
-    "coverCostsHint": "È facoltativo. L’importo è una stima perché i costi possono variare in base al metodo di pagamento.",
-    "estimateOneTime": "Donazione: {donation}. Contributo ai costi (stima): {contribution}. Totale: {total}.",
-    "estimateMonthly": "Donazione mensile: {donation} / mese. Contributo ai costi (stima): {contribution} / mese. Totale: {total} / mese.",
+    "newsletterConsent": "Desidero iscrivermi alla newsletter del CIR per ricevere aggiornamenti sulle attività e sui progetti della Comunità.",
+    "newsletterConsentHint": "Puoi revocare il consenso in qualsiasi momento.",
     "pay": "Dona {amount}",
     "payMonthly": "Dona {amount} / mese",
     "confirming": "Conferma del pagamento in corso…",
     "paymentError": "Non è stato possibile confermare il pagamento. Controlla i dati e riprova.",
-    "stripeLanguage": "I campi di pagamento Stripe sono disponibili in inglese.",
+    "stripeLanguage": "I campi di pagamento Stripe sono in inglese perché Stripe non supporta il bengalese.",
     "resultTitle": "Esito della donazione",
     "resultVerifying": "Verifica del pagamento in corso…",
     "resultPaid": "Grazie per il tuo sostegno ❤️",
@@ -375,5 +374,10 @@
         "Racconto delle iniziative del CIR."
       ]
     }
+  },
+  "newsletter": {
+    "confirmedTitle": "Iscrizione confermata",
+    "confirmedBody": "Grazie! La tua iscrizione alla newsletter della Comunità Islamica di Roma è stata confermata. Riceverai i nostri aggiornamenti sulle attività e sui progetti della Comunità.",
+    "confirmedCta": "Torna alla home"
   }
 }

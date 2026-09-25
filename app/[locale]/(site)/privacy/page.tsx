@@ -103,28 +103,40 @@ export default async function PrivacyCookiePage({
               Se utilizzi il modulo di donazione del sito, raccogliamo i dati
               che inserisci per elaborare la donazione: nome, cognome, indirizzo
               email, importo, frequenza (donazione unica o mensile) e la scelta
-              di visibilità del nome (pubblica o anonima). L’email è usata per
-              comunicazioni transazionali relative alla donazione, non per
-              newsletter o attività di marketing.
+              di visibilità pubblica del nome. L’email è usata per comunicazioni
+              transazionali relative alla donazione (conferma, gestione del
+              pagamento). Queste comunicazioni sono distinte da qualsiasi
+              attività di newsletter o marketing.
             </p>
             <p>
-              La scelta «anonima» riguarda solo l’eventuale visualizzazione
-              pubblica del nome. Non significa che la donazione sia anonima per
-              il CIR o per i fornitori che elaborano il pagamento: i dati
-              necessari restano trattati per ricevere, confermare e gestire la
-              donazione.
+              La preferenza «non mostrare pubblicamente il mio nome» riguarda
+              solo l’eventuale visualizzazione pubblica. Non significa che la
+              donazione sia anonima per il CIR o per Stripe: i dati necessari
+              restano trattati per ricevere, confermare e gestire la donazione e
+              il pagamento, anche se questa opzione è selezionata.
+            </p>
+            <p>
+              Se sul modulo è visibile una casella newsletter (solo quando CIR
+              la abilita), puoi scegliere, con una casella separata e non
+              precompilata, di iscriverti alla newsletter del CIR. Il consenso è
+              facoltativo e distinto dal pagamento: la donazione funziona anche
+              se la casella non è presente o resta deselezionata. Non inferiamo
+              il consenso da altri campi. Quando la newsletter sarà attiva,
+              l’iscrizione passerà da Brevo con conferma (double opt-in). Finché
+              Brevo non è configurato, la scelta viene solo registrata come
+              evidenza di consenso (sì/no, data, fonte, lingua) e non produce
+              invii di marketing.
             </p>
             <p>
               I pagamenti sono elaborati da Stripe (carta, Link, PayPal,
               addebito SEPA). Il CIR non riceve né conserva i dati completi
-              della carta, l’IBAN o gli identificativi di mandato. Un eventuale
-              contributo facoltativo ai costi di transazione è calcolato dal
-              server come stima, non come commissione Stripe esatta. Le email di
+              della carta, l’IBAN o gli identificativi di mandato. Le email di
               ringraziamento transazionali sulla donazione, quando inviate, sono
-              spedite tramite Resend solo dopo conferma di pagamento da Stripe.
-              Stripe, Resend e Cloudflare Turnstile (protezione da abusi sul
-              modulo) trattano i dati secondo le proprie informative, nei limiti
-              necessari a fornire il servizio.
+              spedite tramite Resend solo dopo conferma di pagamento da Stripe e
+              non dipendono dal consenso newsletter. Stripe, Resend, Brevo (solo
+              se e quando la newsletter è abilitata) e Cloudflare Turnstile
+              (protezione da abusi sul modulo) trattano i dati secondo le
+              proprie informative, nei limiti necessari a fornire il servizio.
             </p>
 
             <h2>3. Finalità e base giuridica</h2>

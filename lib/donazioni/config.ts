@@ -8,7 +8,13 @@ export const DONATION_MAX_CENTS = 500000;
 export const DONATION_NAME_MAX = 80;
 export const DONATION_EMAIL_MAX = 254;
 export const DONATION_FREQUENCIES = ["one_time", "monthly"] as const;
+/** UI order: monthly first and selected by default. Enum values stay unchanged. */
+export const DONATION_FREQUENCY_ORDER = ["monthly", "one_time"] as const;
+export const DONATION_DEFAULT_FREQUENCY = "monthly" as const;
 export const DONATION_VISIBILITIES = ["public", "anonymous"] as const;
+/** UI order: public-hidden first and selected by default. */
+export const DONATION_VISIBILITY_ORDER = ["anonymous", "public"] as const;
+export const DONATION_DEFAULT_VISIBILITY = "anonymous" as const;
 export const DONATION_PAYMENT_METHOD_TYPES = [
   "card",
   "link",
@@ -73,6 +79,28 @@ export type DonationVisibility = (typeof DONATION_VISIBILITIES)[number];
 
 /** Da chiamare sul server con process.env.DONATIONS_ENABLED: solo "true" abilita. */
 export function isDonationsEnabled(value: unknown): boolean {
+  return value === "true";
+}
+
+/** Initial Step 1 UI: monthly first/default, name hidden from public display. */
+export function initialDonationFormState() {
+  return {
+    frequency: DONATION_DEFAULT_FREQUENCY,
+    frequencyOrder: DONATION_FREQUENCY_ORDER,
+    visibility: DONATION_DEFAULT_VISIBILITY,
+    visibilityOrder: DONATION_VISIBILITY_ORDER,
+    newsletterConsent: false,
+    newsletterEnabled: false,
+  } as const;
+}
+
+/**
+ * Shows the donation-form newsletter checkbox only when exactly `"true"`.
+ * Keep off until Brevo DOI (list, template, authenticated domain) is ready.
+ */
+export function isDonationNewsletterEnabled(
+  value: unknown = process.env.DONATION_NEWSLETTER_ENABLED,
+): boolean {
   return value === "true";
 }
 

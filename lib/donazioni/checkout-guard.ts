@@ -2,12 +2,13 @@ import {
   donationSecurityReady,
   donationSessionSecret,
   getPublicSiteUrl,
+  isDonationNewsletterEnabled,
   isDonationsEnabled,
   TURNSTILE_ACTION,
   turnstileSecretKey,
 } from "./config";
+import { newsletterConsentForCheckout } from "./consent";
 import { trustedClientIp } from "./client-ip";
-import { getFeeReference, donationTotals } from "./fees";
 import { isSameSiteOrigin } from "./origin";
 import {
   createUpstashCheckoutLimiter,
@@ -40,7 +41,6 @@ export type GuardSuccess = {
   ok: true;
   value: ParsedCheckoutRequest;
   donationCents: number;
-  contributionCents: number;
   totalCents: number;
 };
 
@@ -130,18 +130,16 @@ export async function authorizeDonationCheckout(
   const parsed = parsedPreview.ok ? parsedPreview : parseCheckoutRequest(body);
   if (!parsed.ok) return fail(400, parsed.error);
 
-  const totals = donationTotals(
-    parsed.value.amountCents,
-    parsed.value.coverProcessingCosts,
-    getFeeReference(),
-  );
-  if (!totals.ok) return fail(400, totals.error);
-
   return {
     ok: true,
-    value: parsed.value,
-    donationCents: totals.donationCents,
-    contributionCents: totals.contributionCents,
-    totalCents: totals.totalCents,
+    value: {
+      ...parsed.value,
+      newsletterConsent: newsletterConsentForCheckout(
+        isDonationNewsletterEnabled(),
+        parsed.value.newsletterConsent,
+      ),
+    },
+    donationCents: parsed.value.amountCents,
+    totalCents: parsed.value.amountCents,
   };
 }
