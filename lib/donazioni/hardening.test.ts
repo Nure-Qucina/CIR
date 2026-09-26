@@ -4,6 +4,9 @@ import { normalizeIp, trustedClientIp } from "./client-ip";
 import {
   CLOUDFLARE_DUMMY_PASS_SECRET,
   DONATION_CSRF_HEADER,
+  DONATION_PRESETS_CENTS,
+  DONATION_CUSTOM_MIN_CENTS,
+  DONATION_MAX_CENTS,
   DONATION_SESSION_COOKIE,
   TURNSTILE_ACTION,
   donationSecurityReady,
@@ -32,7 +35,7 @@ import {
   prepareDonationCheckout,
 } from "./turnstile-client";
 import { shouldResetTurnstileAfterCheckout } from "./turnstile-reset";
-import { parseCheckoutRequest } from "./validation";
+import { parseCheckoutRequest, parseDonationAmount } from "./validation";
 
 const SECRET = "a".repeat(48);
 const SITE = "http://localhost:3100";
@@ -88,6 +91,63 @@ const validBody = {
   newsletterConsent: false,
   turnstileToken: "turnstile-token-ok",
 };
+
+test("custom amount boundaries use exact integer cents; presets stay unchanged", () => {
+  assert.equal(DONATION_CUSTOM_MIN_CENTS, 100);
+  assert.equal(DONATION_MAX_CENTS, 500000);
+  assert.deepEqual(DONATION_PRESETS_CENTS, [1000, 2500, 5000, 10000]);
+  for (const [amount, amountCents] of [
+    ["1", 100],
+    ["1.00", 100],
+    ["1.01", 101],
+    ["1.50", 150],
+    ["1,50", 150],
+    ["5000", 500000],
+  ] as const) {
+    assert.deepEqual(parseDonationAmount(amount), { ok: true, amountCents });
+  }
+  for (const amount of [
+    "0.99",
+    "0",
+    "-1",
+    "NaN",
+    NaN,
+    "bad",
+    "1.001",
+    "1e2",
+    "5000.01",
+  ]) {
+    assert.equal(parseDonationAmount(amount).ok, false, String(amount));
+  }
+});
+
+for (const frequency of ["one_time", "monthly"] as const) {
+  test(`${frequency}: checkout accepts custom EUR 1 after security checks`, async () => {
+    const previous = enableSecurityEnv();
+    try {
+      const created = createDonationSession(SECRET);
+      const result = await authorizeDonationCheckout(
+        checkoutRequest({
+          cookie: `${DONATION_SESSION_COOKIE}=${encodeURIComponent(created.token)}`,
+          csrf: created.session.csrf,
+          body: { ...validBody, amount: "1.00", frequency },
+        }),
+        {
+          limiter: async () => ({ ok: true as const }),
+          verifyTurnstile: async () => ({ ok: true as const }),
+        },
+      );
+      assert.equal(result.ok, true);
+      if (result.ok) {
+        assert.equal(result.donationCents, 100);
+        assert.equal(result.totalCents, 100);
+        assert.equal(result.value.frequency, frequency);
+      }
+    } finally {
+      restoreEnv(previous);
+    }
+  });
+}
 
 function checkoutRequest(input: {
   origin?: string | null;

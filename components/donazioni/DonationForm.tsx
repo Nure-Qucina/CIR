@@ -15,7 +15,7 @@ import {
   DONATION_DEFAULT_VISIBILITY,
   DONATION_FREQUENCY_ORDER,
   DONATION_VISIBILITY_ORDER,
-  DONATION_MIN_CENTS,
+  DONATION_CUSTOM_MIN_CENTS,
   DONATION_MAX_CENTS,
   DONATION_NAME_MAX,
   DONATION_EMAIL_MAX,
@@ -195,7 +195,7 @@ export function DonationForm({ locale }: { locale: Locale }) {
       code === "above_maximum"
     ) {
       return t("invalidAmount", {
-        min: money(DONATION_MIN_CENTS),
+        min: money(DONATION_CUSTOM_MIN_CENTS),
         max: money(DONATION_MAX_CENTS),
       });
     }
@@ -532,7 +532,7 @@ export function DonationForm({ locale }: { locale: Locale }) {
             )}
             <p id="donation-limits" className="text-ink-soft mt-4 text-sm">
               {t("limits", {
-                min: money(DONATION_MIN_CENTS),
+                min: money(DONATION_CUSTOM_MIN_CENTS),
                 max: money(DONATION_MAX_CENTS),
               })}
             </p>

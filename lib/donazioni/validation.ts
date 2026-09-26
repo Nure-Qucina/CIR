@@ -4,7 +4,7 @@ import {
   DONATION_EMAIL_MAX,
   DONATION_FREQUENCIES,
   DONATION_MAX_CENTS,
-  DONATION_MIN_CENTS,
+  DONATION_CUSTOM_MIN_CENTS,
   DONATION_NAME_MAX,
   DONATION_VISIBILITIES,
   type DonationFrequency,
@@ -75,7 +75,7 @@ export function parseDonationAmount(value: unknown): DonationAmountResult {
 
   const amountCents =
     Number(euros) * 100 + Number((match[2] ?? "").padEnd(2, "0"));
-  if (amountCents < DONATION_MIN_CENTS)
+  if (amountCents < DONATION_CUSTOM_MIN_CENTS)
     return { ok: false, error: "below_minimum" };
   if (amountCents > DONATION_MAX_CENTS)
     return { ok: false, error: "above_maximum" };
