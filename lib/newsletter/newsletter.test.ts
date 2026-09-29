@@ -7,11 +7,16 @@ import ar from "@/messages/ar.json";
 import bn from "@/messages/bn.json";
 import en from "@/messages/en.json";
 import it from "@/messages/it.json";
+import type { NewsletterDoubleOptInInput } from "./doi-request";
+import {
+  requestNewsletterDoiForCheckoutSession,
+  type NewsletterDoiDependencies,
+  type NewsletterDoiSession,
+} from "./doi-webhook";
 import { donationSecurityReady } from "@/lib/donazioni/config";
 import { parseCheckoutRequest } from "@/lib/donazioni/validation";
 import {
   BREVO_DOI_ENDPOINT,
-  DONATION_NEWSLETTER_DOI_RUNTIME_ENABLED,
   NEWSLETTER_CONFIRM_ROUTE,
   isBrevoDoiReady,
   isDonationNewsletterDoiRuntimeEnabled,
@@ -34,9 +39,63 @@ const CONFIRM = {
   bn: bn.newsletter,
 } as const;
 
-test("Brevo DOI runtime stays disabled until setup is complete", () => {
-  assert.equal(DONATION_NEWSLETTER_DOI_RUNTIME_ENABLED, false);
-  assert.equal(isDonationNewsletterDoiRuntimeEnabled(), false);
+function newsletterSession(
+  overrides: Partial<Omit<NewsletterDoiSession, "metadata">> & {
+    metadata?: Record<string, string> | null;
+  } = {},
+): NewsletterDoiSession {
+  const { metadata, ...session } = overrides;
+  return {
+    id: "cs_test_donation",
+    metadata: {
+      purpose: "cir_donation",
+      newsletter_consent: "true",
+      donor_first_name: "Sara",
+      donor_last_name: "Rossi",
+      locale: "it",
+      ...metadata,
+    },
+    customer_email: "sara@example.com",
+    customer_details: null,
+    payment_status: "paid",
+    ...session,
+  };
+}
+
+function createDoiHarness(overrides: Partial<NewsletterDoiDependencies> = {}) {
+  const locks = new Map<string, string>();
+  const inputs: NewsletterDoubleOptInInput[] = [];
+  const store = {
+    async claim(sessionId: string, token: string) {
+      if (locks.has(sessionId)) return false;
+      locks.set(sessionId, token);
+      return true;
+    },
+    async markSent() {},
+    async release(sessionId: string, token: string) {
+      if (locks.get(sessionId) === token) locks.delete(sessionId);
+    },
+  };
+  const dependencies: NewsletterDoiDependencies = {
+    newsletterEnabled: true,
+    runtimeEnabled: true,
+    getStore: async () => store,
+    request: async (input) => {
+      inputs.push(input);
+      return { ok: true };
+    },
+    createToken: () => "test-lock-token",
+    ...overrides,
+  };
+  return { dependencies, inputs, locks };
+}
+
+test("Brevo DOI runtime requires the exact true value", () => {
+  assert.equal(isDonationNewsletterDoiRuntimeEnabled("true"), true);
+  assert.equal(isDonationNewsletterDoiRuntimeEnabled("TRUE"), false);
+  assert.equal(isDonationNewsletterDoiRuntimeEnabled(" true "), false);
+  assert.equal(isDonationNewsletterDoiRuntimeEnabled("false"), false);
+  assert.equal(isDonationNewsletterDoiRuntimeEnabled(undefined), false);
 });
 
 test("missing Brevo config cannot break donation checkout parsing", () => {
@@ -198,13 +257,258 @@ test("DOI eligibility: consent + verified success only", () => {
   );
 });
 
-test("webhook still does not invoke Brevo or marketing", () => {
+test("webhook invokes DOI only from the verified checkout success cases", () => {
   const source = readFileSync(
     join(HERE, "..", "donazioni", "webhook.ts"),
     "utf8",
   );
-  assert.doesNotMatch(source, /brevo|requestNewsletterDoubleOptIn/i);
+  assert.match(source, /sendNewsletterDoiIfEligible\(event, session\)/);
+  assert.match(source, /case "checkout\.session\.completed"/);
+  assert.match(source, /case "checkout\.session\.async_payment_succeeded"/);
+  assert.doesNotMatch(source, /case "invoice\.paid"[\s\S]*?sendNewsletterDoi/);
   assert.match(source, /sendDonationThankYouEmail/);
+});
+
+test("DOI runtime off skips Brevo", async () => {
+  const harness = createDoiHarness({ runtimeEnabled: false });
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.completed",
+      newsletterSession(),
+      harness.dependencies,
+    ),
+    "newsletter_doi_skipped",
+  );
+  assert.equal(harness.inputs.length, 0);
+});
+
+test("newsletter feature flag off skips Brevo", async () => {
+  const harness = createDoiHarness({ newsletterEnabled: false });
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.completed",
+      newsletterSession(),
+      harness.dependencies,
+    ),
+    "newsletter_doi_skipped",
+  );
+  assert.equal(harness.inputs.length, 0);
+});
+
+test("explicit consent false skips Brevo", async () => {
+  const harness = createDoiHarness();
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.completed",
+      newsletterSession({
+        metadata: { newsletter_consent: "false" },
+      }),
+      harness.dependencies,
+    ),
+    "newsletter_doi_skipped",
+  );
+  assert.equal(harness.inputs.length, 0);
+});
+
+test("non-CIR Checkout Session skips Brevo", async () => {
+  const harness = createDoiHarness();
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.completed",
+      newsletterSession({ metadata: { purpose: "other" } }),
+      harness.dependencies,
+    ),
+    "newsletter_doi_skipped",
+  );
+  assert.equal(harness.inputs.length, 0);
+});
+
+test("paid card checkout requests DOI with verified session data", async () => {
+  const harness = createDoiHarness();
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.completed",
+      newsletterSession({
+        customer_email: null,
+        customer_details: { email: " sara@example.com " },
+      }),
+      harness.dependencies,
+    ),
+    "newsletter_doi_sent",
+  );
+  assert.deepEqual(harness.inputs, [
+    {
+      email: "sara@example.com",
+      firstName: "Sara",
+      lastName: "Rossi",
+      locale: "it",
+    },
+  ]);
+});
+
+test("completed SEPA processing session does not request DOI", async () => {
+  const harness = createDoiHarness();
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.completed",
+      newsletterSession({ payment_status: "unpaid" }),
+      harness.dependencies,
+    ),
+    "newsletter_doi_skipped",
+  );
+  assert.equal(harness.inputs.length, 0);
+});
+
+test("paid SEPA async success requests DOI", async () => {
+  const harness = createDoiHarness();
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.async_payment_succeeded",
+      newsletterSession(),
+      harness.dependencies,
+    ),
+    "newsletter_doi_sent",
+  );
+  assert.equal(harness.inputs.length, 1);
+});
+
+test("async success without paid status does not request DOI", async () => {
+  const harness = createDoiHarness();
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.async_payment_succeeded",
+      newsletterSession({ payment_status: "unpaid" }),
+      harness.dependencies,
+    ),
+    "newsletter_doi_skipped",
+  );
+  assert.equal(harness.inputs.length, 0);
+});
+
+test("async payment failure does not request DOI", async () => {
+  const harness = createDoiHarness();
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.async_payment_failed",
+      newsletterSession(),
+      harness.dependencies,
+    ),
+    "newsletter_doi_skipped",
+  );
+  assert.equal(harness.inputs.length, 0);
+});
+
+test("invoice renewal does not request DOI", async () => {
+  const harness = createDoiHarness();
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "invoice.paid",
+      newsletterSession(),
+      harness.dependencies,
+    ),
+    "newsletter_doi_skipped",
+  );
+  assert.equal(harness.inputs.length, 0);
+});
+
+test("invoice failure and subscription lifecycle events do not request DOI", async () => {
+  for (const eventType of [
+    "invoice.payment_failed",
+    "customer.subscription.updated",
+    "customer.subscription.deleted",
+  ]) {
+    const harness = createDoiHarness();
+    assert.equal(
+      await requestNewsletterDoiForCheckoutSession(
+        eventType,
+        newsletterSession(),
+        harness.dependencies,
+      ),
+      "newsletter_doi_skipped",
+      eventType,
+    );
+    assert.equal(harness.inputs.length, 0, eventType);
+  }
+});
+
+test("duplicate Checkout Session requests only one DOI", async () => {
+  const harness = createDoiHarness();
+  const session = newsletterSession();
+  const first = await requestNewsletterDoiForCheckoutSession(
+    "checkout.session.completed",
+    session,
+    harness.dependencies,
+  );
+  const retry = await requestNewsletterDoiForCheckoutSession(
+    "checkout.session.async_payment_succeeded",
+    session,
+    harness.dependencies,
+  );
+  assert.equal(first, "newsletter_doi_sent");
+  assert.equal(retry, "newsletter_doi_skipped");
+  assert.equal(harness.inputs.length, 1);
+});
+
+test("definite Brevo failure releases the lock for a Stripe retry", async () => {
+  let attempts = 0;
+  const harness = createDoiHarness({
+    request: async () => {
+      attempts += 1;
+      if (attempts === 1) return { ok: false, definitelyFailed: true };
+      return { ok: true };
+    },
+  });
+  const session = newsletterSession();
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.completed",
+      session,
+      harness.dependencies,
+    ),
+    "newsletter_doi_failed",
+  );
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.completed",
+      session,
+      harness.dependencies,
+    ),
+    "newsletter_doi_sent",
+  );
+  assert.equal(attempts, 2);
+});
+
+test("Brevo failure does not throw or fail the donation webhook", async () => {
+  const harness = createDoiHarness({
+    request: async () => {
+      throw new Error("sensitive provider error");
+    },
+  });
+  await assert.doesNotReject(
+    requestNewsletterDoiForCheckoutSession(
+      "checkout.session.completed",
+      newsletterSession(),
+      harness.dependencies,
+    ),
+  );
+  assert.equal(harness.inputs.length, 0);
+});
+
+test("idempotency store failure skips Brevo without throwing", async () => {
+  const harness = createDoiHarness({
+    getStore: async () => {
+      throw new Error("sensitive redis error");
+    },
+  });
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.completed",
+      newsletterSession(),
+      harness.dependencies,
+    ),
+    "newsletter_doi_failed",
+  );
+  assert.equal(harness.inputs.length, 0);
 });
 
 test("newsletter confirmation page copy is localized and secret-free", () => {

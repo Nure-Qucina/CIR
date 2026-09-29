@@ -21,5 +21,6 @@ export function shouldRequestNewsletterDoi(input: {
   const enabled = input.newsletterEnabled ?? isDonationNewsletterEnabled();
   if (!enabled) return false;
   if (!input.consented) return false;
+  if (input.paymentStatus !== "paid") return false;
   return shouldSendInitialThankYou(input.eventType, input.paymentStatus);
 }

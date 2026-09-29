@@ -229,17 +229,15 @@ test("new metadata has consent evidence and no fee keys", () => {
   assert.ok(!("processing_cost_contribution_cents" in meta));
 });
 
-test("webhook does not send marketing or newsletter email", () => {
+test("webhook isolates DOI from transactional email and marketing", () => {
   const source = readFileSync(
     join(dirname(fileURLToPath(import.meta.url)), "webhook.ts"),
     "utf8",
   );
   assert.match(source, /sendDonationThankYouEmail/);
   assert.match(source, /shouldSendInitialThankYou/);
-  assert.doesNotMatch(
-    source,
-    /mailchimp|brevo|sendgrid|audience|marketing|newsletter/i,
-  );
+  assert.match(source, /sendNewsletterDoiIfEligible/);
+  assert.doesNotMatch(source, /mailchimp|sendgrid|audience|marketing/i);
   assert.doesNotMatch(
     source,
     /sendMarketing|subscribeToList|addToList|Resend\.Audiences/,

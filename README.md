@@ -221,8 +221,9 @@ Variabili:
 - `TURNSTILE_ALLOWED_HOSTNAMES` (CSV, niente wildcard) in aggiunta all’hostname di `NEXT_PUBLIC_SITE_URL`. Locale/test-key: `localhost,127.0.0.1,example.com` (le dummy key Cloudflare possono riportare `example.com`). Preview: l’hostname del Preview. Produzione: l’hostname CIR. Siteverify richiede `success === true`, `action === donation_checkout` e hostname in questa allow-list. Solo in non-produzione, e solo con la dummy secret always-pass documentata, un `action` vuoto della risposta di test Cloudflare è accettato. Hostname/action dal body client sono ignorati.
 - `RESEND_API_KEY` (opzionale) per l’email di ringraziamento transazionale
 - `DONATION_EMAIL_FROM` (opzionale). L’indirizzo verified viene usato come From; il display name è sempre `Comunità Islamica di Roma`. Default di sviluppo: `Comunità Islamica di Roma <onboarding@resend.dev>`
-- `DONATION_NEWSLETTER_ENABLED` — solo il valore esatto `true` mostra la casella newsletter sul modulo. **Lasciare disabilitata** finché Brevo DOI non è pronto (dominio autenticato, mittente, template, API key).
+- `DONATION_NEWSLETTER_ENABLED` — solo il valore esatto `true` mostra la casella newsletter sul modulo. Mantenerla `false` finché CIR non decide di attivare le iscrizioni.
 - `BREVO_API_KEY` (solo server, mai `NEXT_PUBLIC_`), `BREVO_NEWSLETTER_LIST_ID` (lista «Newsletter CIR», id `3`), `BREVO_DOI_TEMPLATE_ID`, `BREVO_DOI_REDIRECT_URL` (pagina `/newsletter/confermata`). Opzionali: se mancano, le donazioni restano operative.
+- `DONATION_NEWSLETTER_DOI_RUNTIME_ENABLED` — solo il valore esatto `true` abilita le richieste DOI server-side; default `false`, indipendente dalla visibilità della casella.
 - Override opzionali: `DONATION_RATE_LIMIT_SESSION_MAX` / `_WINDOW_SEC`, `DONATION_RATE_LIMIT_IP_MAX` / `_WINDOW_SEC`, `DONATION_RATE_LIMIT_EMAIL_MAX` / `_WINDOW_SEC`, `DONATION_RATE_LIMIT_MINT_MAX` / `_WINDOW_SEC`
 
 Con `DONATIONS_ENABLED=true`, checkout e sessione donazione **falliscono chiusi** se manca la configurazione di sicurezza (niente bypass locale).
@@ -258,13 +259,13 @@ Carte Radar (Sandbox, non sono un cambio Dashboard applicato da CIR):
 
 L’importo scelto dal donatore è l’importo inviato a Stripe (un solo line item). Non c’è contributo ai costi di transazione. Sessioni Sandbox precedenti con metadata `processing_cost_contribution_cents` restano leggibili dallo status parser; i checkout nuovi non scrivono quel campo.
 
-### Newsletter (Brevo, flag spento)
+### Newsletter (Brevo Double Opt-In)
 
-Provider previsto: **Brevo**, lista «Newsletter CIR» (id `3`), double opt-in. La casella è **spenta di default**. `DONATION_NEWSLETTER_ENABLED` deve essere esattamente `true` per mostrarla. Qualsiasi altro valore la nasconde; il checkout invia `newsletterConsent=false` e la donazione funziona normalmente.
+Provider: **Brevo**, lista «Newsletter CIR» (id `3`), double opt-in. La casella è **spenta di default**. `DONATION_NEWSLETTER_ENABLED` deve essere esattamente `true` per mostrarla; qualsiasi altro valore la nasconde e il checkout invia `newsletterConsent=false`.
 
-L’adapter server-only (`lib/newsletter/brevo.ts`) è pronto per `POST /v3/contacts/doubleOptinConfirmation`. **La chiamata runtime è disabilitata** finché dominio, mittente, template DOI e API key non sono completi: il webhook donazione non invoca Brevo e non manda marketing. Un errore Brevo non deve mai far fallire una donazione Stripe andata a buon fine.
+Le richieste a `POST /v3/contacts/doubleOptinConfirmation` richiedono anche `DONATION_NEWSLETTER_DOI_RUNTIME_ENABLED=true` (default `false`). Il webhook le invia solo con consenso esplicito e pagamento verificato: `checkout.session.completed` pagato o `checkout.session.async_payment_succeeded` pagato. SEPA in elaborazione, pagamenti falliti e rinnovi non richiedono DOI. Errori Brevo o Redis non fanno fallire il webhook Stripe; Redis deduplica le richieste per Checkout Session.
 
-Quando il flag è attivo: checkbox **deselezionata** di default, non obbligatoria, mai precompilata. Il server esige un boolean esplicito e registra su metadata Stripe: `newsletter_consent`, `newsletter_consent_at`, `newsletter_consent_source=donation_form`, `newsletter_consent_locale`, `newsletter_consent_copy`. Pagina di conferma DOI: `/newsletter/confermata` (`/en/...`, `/ar/...`, `/bn/...`).
+Quando la casella viene abilitata: checkbox **deselezionata** di default, non obbligatoria, mai precompilata. Il server esige un boolean esplicito e registra su metadata Stripe: `newsletter_consent`, `newsletter_consent_at`, `newsletter_consent_source=donation_form`, `newsletter_consent_locale`, `newsletter_consent_copy`. Pagina di conferma DOI: `/newsletter/confermata` (`/en/...`, `/ar/...`, `/bn/...`).
 
 ### Webhook (locale)
 

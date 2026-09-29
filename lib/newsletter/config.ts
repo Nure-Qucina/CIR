@@ -5,12 +5,6 @@ export const BREVO_DOI_ENDPOINT =
   "https://api.brevo.com/v3/contacts/doubleOptinConfirmation";
 export const BREVO_DOI_TIMEOUT_MS = 8000;
 
-/**
- * Runtime Brevo calls stay off until CIR finishes domain, sender, DOI
- * template, and API key setup. Eligibility helpers can still be tested.
- */
-export const DONATION_NEWSLETTER_DOI_RUNTIME_ENABLED = false;
-
 export type BrevoDoiConfig = {
   apiKey: string;
   listId: number;
@@ -72,6 +66,8 @@ export function isBrevoDoiReady(
   return readBrevoDoiConfig(env) !== null;
 }
 
-export function isDonationNewsletterDoiRuntimeEnabled(): boolean {
-  return DONATION_NEWSLETTER_DOI_RUNTIME_ENABLED;
+export function isDonationNewsletterDoiRuntimeEnabled(
+  value: unknown = process.env.DONATION_NEWSLETTER_DOI_RUNTIME_ENABLED,
+): boolean {
+  return value === "true";
 }

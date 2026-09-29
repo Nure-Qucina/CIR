@@ -1,16 +1,22 @@
 import "server-only";
+import { randomUUID } from "node:crypto";
 import Stripe from "stripe";
 import {
   donationFrequencyFromMetadata,
   isCirDonationPurpose,
 } from "./metadata";
 import { sendDonationThankYouEmail } from "./email";
+import { isDonationNewsletterEnabled } from "./config";
 import type { DonationFrequency } from "./config";
 import {
   parseMetadataCents,
   shouldSendInitialThankYou,
   thankYouIdempotencyKey,
 } from "./status-state";
+import { requestNewsletterDoubleOptIn } from "@/lib/newsletter/brevo";
+import { isDonationNewsletterDoiRuntimeEnabled } from "@/lib/newsletter/config";
+import { createUpstashNewsletterDoiIdempotencyStore } from "@/lib/newsletter/doi-idempotency";
+import { requestNewsletterDoiForCheckoutSession } from "@/lib/newsletter/doi-webhook";
 
 function sessionEmail(session: Stripe.Checkout.Session): string | null {
   const fromSession = session.customer_email?.trim();
@@ -72,6 +78,27 @@ async function sendThankYouIfEligible(
   logDonationWebhook(event, `email_${emailStatus}`);
 }
 
+async function sendNewsletterDoiIfEligible(
+  event: Stripe.Event,
+  session: Stripe.Checkout.Session,
+): Promise<void> {
+  let status: Awaited<
+    ReturnType<typeof requestNewsletterDoiForCheckoutSession>
+  >;
+  try {
+    status = await requestNewsletterDoiForCheckoutSession(event.type, session, {
+      newsletterEnabled: isDonationNewsletterEnabled(),
+      runtimeEnabled: isDonationNewsletterDoiRuntimeEnabled(),
+      getStore: createUpstashNewsletterDoiIdempotencyStore,
+      request: requestNewsletterDoubleOptIn,
+      createToken: randomUUID,
+    });
+  } catch {
+    status = "newsletter_doi_failed";
+  }
+  logDonationWebhook(event, status);
+}
+
 /**
  * Side-effect persistente: email di ringraziamento iniziale dopo successo
  * verificato (carta immediata o SEPA async). Idempotenza Resend = session id,
@@ -84,10 +111,9 @@ export async function handleDonationWebhookEvent(
   switch (event.type) {
     case "checkout.session.completed":
     case "checkout.session.async_payment_succeeded": {
-      await sendThankYouIfEligible(
-        event,
-        event.data.object as Stripe.Checkout.Session,
-      );
+      const session = event.data.object as Stripe.Checkout.Session;
+      await sendThankYouIfEligible(event, session);
+      await sendNewsletterDoiIfEligible(event, session);
       return;
     }
     case "checkout.session.async_payment_failed": {
