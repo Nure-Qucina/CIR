@@ -8,6 +8,7 @@ import bn from "@/messages/bn.json";
 import en from "@/messages/en.json";
 import it from "@/messages/it.json";
 import {
+  DONATION_DEFAULT_CENTS,
   DONATION_DEFAULT_FREQUENCY,
   DONATION_DEFAULT_VISIBILITY,
   DONATION_FREQUENCY_ORDER,
@@ -38,6 +39,7 @@ const LOCALES = {
 
 test("monthly is first in UI order and is the default", () => {
   const initial = initialDonationFormState();
+  assert.equal(DONATION_DEFAULT_CENTS, 1000);
   assert.deepEqual(DONATION_FREQUENCY_ORDER, ["monthly", "one_time"]);
   assert.equal(DONATION_DEFAULT_FREQUENCY, "monthly");
   assert.equal(DONATION_FREQUENCY_ORDER.includes("one_time"), true);

@@ -2,7 +2,7 @@
 export const DONATION_ROUTE = "/donazioni";
 export const DONATION_CURRENCY = "eur";
 export const DONATION_PRESETS_CENTS = [1000, 2500, 5000, 10000] as const;
-export const DONATION_DEFAULT_CENTS = 2500;
+export const DONATION_DEFAULT_CENTS = 1000;
 /** Lower bound for custom amounts; preset buttons remain fixed above. */
 export const DONATION_CUSTOM_MIN_CENTS = 100;
 export const DONATION_MAX_CENTS = 500000;
