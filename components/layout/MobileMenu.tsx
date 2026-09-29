@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { buttonClassName } from "@/components/ui/Button";
+import { DONATION_ROUTE } from "@/lib/donazioni/config";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { cn } from "@/lib/utils/cn";
 
@@ -16,13 +17,7 @@ type NavItem = { label: string; href: string };
  *  - chiusura con Esc, click su link, o cambio rotta
  *  - focus trappola leggera (chiude on Escape) e blocco scroll body
  */
-export function MobileMenu({
-  nav,
-  donazioniUrl,
-}: {
-  nav: NavItem[];
-  donazioniUrl: string;
-}) {
+export function MobileMenu({ nav }: { nav: NavItem[] }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const t = useTranslations("common");
@@ -51,7 +46,7 @@ export function MobileMenu({
         aria-expanded={open}
         aria-controls="mobile-menu"
         aria-label={open ? t("chiudiMenu") : t("apriMenu")}
-        className="grid h-10 w-10 place-items-center rounded-lg text-ink hover:bg-cream-dark"
+        className="text-ink hover:bg-cream-dark grid h-10 w-10 place-items-center rounded-lg"
       >
         {open ? <X size={22} /> : <Menu size={22} />}
       </button>
@@ -61,8 +56,8 @@ export function MobileMenu({
         id="mobile-menu"
         hidden={!open}
         className={cn(
-          "fixed inset-x-0 top-16 bottom-0 z-50 bg-cream",
-          "flex flex-col gap-1 overflow-y-auto border-t border-border p-6",
+          "bg-cream fixed inset-x-0 top-16 bottom-0 z-50",
+          "border-border flex flex-col gap-1 overflow-y-auto border-t p-6",
         )}
       >
         <nav aria-label={t("navigazionePrincipale")}>
@@ -93,16 +88,15 @@ export function MobileMenu({
           </ul>
         </nav>
 
-        <LanguageSwitcher className="mt-4 border-t border-border pt-4" />
+        <LanguageSwitcher className="border-border mt-4 border-t pt-4" />
 
-        <Button
-          href={donazioniUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 w-full"
+        <Link
+          href={DONATION_ROUTE}
+          onClick={() => setOpen(false)}
+          className={buttonClassName({ className: "mt-4 w-full" })}
         >
           {t("dona")}
-        </Button>
+        </Link>
       </div>
     </div>
   );

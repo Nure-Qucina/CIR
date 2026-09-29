@@ -75,16 +75,16 @@ export default async function Home({
       <section aria-labelledby="valori-home" className="bg-cream-50">
         <Container className="py-16 sm:py-20">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold tracking-[0.2em] text-orange uppercase">
+            <p className="text-orange text-sm font-semibold tracking-[0.2em] uppercase">
               {t("valoriOcchiello")}
             </p>
             <h2
               id="valori-home"
-              className="mt-3 text-[length:var(--text-h2)] font-bold text-balance text-ink"
+              className="text-ink mt-3 text-[length:var(--text-h2)] font-bold text-balance"
             >
               {t("valoriTitolo")}
             </h2>
-            <p className="mt-4 text-ink-soft">{t("valoriSottotitolo")}</p>
+            <p className="text-ink-soft mt-4">{t("valoriSottotitolo")}</p>
           </div>
           <div className="mt-10 grid gap-6 sm:grid-cols-2">
             {valori.map((v, i) => (
@@ -99,16 +99,16 @@ export default async function Home({
         <Container className="py-16 sm:py-20">
           <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start">
             <div className="lg:sticky lg:top-24">
-              <p className="text-sm font-semibold tracking-[0.2em] text-orange uppercase">
+              <p className="text-orange text-sm font-semibold tracking-[0.2em] uppercase">
                 {t("storiaOcchiello")}
               </p>
               <h2
                 id="storia-home"
-                className="mt-3 text-[length:var(--text-h2)] font-bold text-balance text-ink"
+                className="text-ink mt-3 text-[length:var(--text-h2)] font-bold text-balance"
               >
                 {t("storiaTitolo")}
               </h2>
-              <p className="mt-4 text-ink-soft">{t("storiaSottotitolo")}</p>
+              <p className="text-ink-soft mt-4">{t("storiaSottotitolo")}</p>
               <Button href="/chi-siamo" variant="ghost" className="mt-6">
                 {t("scopriChiSiamo")}
                 <ArrowRight size={16} className="rtl:rotate-180" aria-hidden />
@@ -127,12 +127,12 @@ export default async function Home({
           <Container className="py-16 sm:py-20">
             <div className="flex items-end justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold tracking-[0.2em] text-orange uppercase">
+                <p className="text-orange text-sm font-semibold tracking-[0.2em] uppercase">
                   {t("eventoOcchiello")}
                 </p>
                 <h2
                   id="evento-home"
-                  className="mt-3 text-[length:var(--text-h2)] font-bold text-ink"
+                  className="text-ink mt-3 text-[length:var(--text-h2)] font-bold"
                 >
                   {featured.isPast ? t("ultimoEvento") : t("prossimoEvento")}
                 </h2>
@@ -175,11 +175,11 @@ export default async function Home({
                     ? tEventi("eventoConcluso")
                     : tEventi("inProgramma")}
                 </span>
-                <h3 className="mt-3 flex flex-wrap items-center gap-2 text-2xl font-bold text-ink">
+                <h3 className="text-ink mt-3 flex flex-wrap items-center gap-2 text-2xl font-bold">
                   {featured.titolo}
                   {featured.isFallback && <LangBadge />}
                 </h3>
-                <div className="mt-3 flex flex-col gap-1.5 text-sm text-ink-soft">
+                <div className="text-ink-soft mt-3 flex flex-col gap-1.5 text-sm">
                   <span className="flex items-center gap-2">
                     <Calendar size={15} className="text-teal" aria-hidden />
                     <time dateTime={isoDate(featured.dataInizio)}>
@@ -195,20 +195,24 @@ export default async function Home({
                       .join(" · ")}
                   </span>
                 </div>
-                <p className="mt-3 whitespace-pre-line text-ink-soft">
+                <p className="text-ink-soft mt-3 whitespace-pre-line">
                   {featured.estratto}
                 </p>
                 <div className="mt-6">
                   <Button href={`/eventi/${featured.slug}`}>
                     {t("dettagliEvento")}
-                    <ArrowRight size={16} className="rtl:rotate-180" aria-hidden />
+                    <ArrowRight
+                      size={16}
+                      className="rtl:rotate-180"
+                      aria-hidden
+                    />
                   </Button>
                 </div>
               </div>
             </Card>
 
             {featured.isPast && (
-              <p className="mt-4 text-sm text-ink-soft">
+              <p className="text-ink-soft mt-4 text-sm">
                 {t("nessunEventoInProgramma")}
               </p>
             )}
@@ -222,12 +226,12 @@ export default async function Home({
           <Container className="py-16 sm:py-20">
             <div className="flex items-end justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold tracking-[0.2em] text-orange uppercase">
+                <p className="text-orange text-sm font-semibold tracking-[0.2em] uppercase">
                   {t("newsOcchiello")}
                 </p>
                 <h2
                   id="news-home"
-                  className="mt-3 text-[length:var(--text-h2)] font-bold text-ink"
+                  className="text-ink mt-3 text-[length:var(--text-h2)] font-bold"
                 >
                   {t("dalleNostre", { labelNews: site.labelNews })}
                 </h2>
@@ -258,7 +262,7 @@ export default async function Home({
       <MediaBlock locale={locale as Locale} />
 
       {/* G) Sostieni il CIR */}
-      <DonateBanner donazioniUrl={site.donazioniUrl} locale={locale as Locale} />
+      <DonateBanner locale={locale as Locale} />
     </main>
   );
 }

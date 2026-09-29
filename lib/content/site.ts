@@ -11,6 +11,7 @@ const DEFAULTS = {
   descrizione:
     "La Comunità Islamica di Roma (CIR) dà voce ai musulmani della capitale: 22 associazioni unite per diritti, dialogo e una città più giusta.",
   labelNews: "News",
+  // Fallback legacy: campagna esterna. I CTA pubblici usano /donazioni.
   donazioniUrl:
     "https://www.launchgood.com/v4/campaign/sostieni_cir_per_crescere",
   social: [

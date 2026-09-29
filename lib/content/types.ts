@@ -102,6 +102,7 @@ export type SiteConfig = {
   /** Etichetta configurabile per la sezione news (News/Articoli/Approfondimenti). */
   labelNews: string;
   social: SocialLink[];
+  /** URL campagna donazioni esterna legacy. Non controlla i CTA Dona del sito. */
   donazioniUrl: string;
   contatti: Contatti;
 };

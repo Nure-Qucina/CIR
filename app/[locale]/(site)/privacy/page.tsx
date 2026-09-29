@@ -18,7 +18,10 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale: locale as Locale, namespace: "legal" });
+  const t = await getTranslations({
+    locale: locale as Locale,
+    namespace: "legal",
+  });
   return {
     title: t("privacyCookie"),
     description:
@@ -65,11 +68,11 @@ export default async function PrivacyCookiePage({
       />
       <Container className="py-12 sm:py-16">
         <div className="mx-auto max-w-3xl">
-          <p className="mb-8 text-sm text-ink-soft">
-            Ultimo aggiornamento: luglio 2026. Informativa resa ai sensi degli
-            artt. 13-14 del Regolamento UE 2016/679 (GDPR). Si consiglia una
-            revisione da parte di un consulente legale prima della pubblicazione
-            definitiva.
+          <p className="text-ink-soft mb-8 text-sm">
+            Ultimo aggiornamento: settembre 2026. Informativa resa ai sensi
+            degli artt. 13-14 del Regolamento UE 2016/679 (GDPR). Si consiglia
+            una revisione da parte di un consulente legale prima della
+            pubblicazione definitiva.
           </p>
 
           <Prose>
@@ -89,11 +92,51 @@ export default async function PrivacyCookiePage({
 
             <h2>2. Dati raccolti</h2>
             <p>
-              Trattiamo i dati personali che ci fornisci volontariamente —
-              ad esempio tramite il modulo di contatto, moduli di iscrizione,
-              newsletter o eventuali donazioni — quali nome, indirizzo email,
-              telefono e il contenuto del messaggio. Trattiamo inoltre i dati
-              tecnici di navigazione raccolti tramite cookie (vedi punto 5).
+              Trattiamo i dati personali che ci fornisci volontariamente — ad
+              esempio tramite il modulo di contatto, moduli di iscrizione o
+              newsletter — quali nome, indirizzo email, telefono e il contenuto
+              del messaggio. Trattiamo inoltre i dati tecnici di navigazione
+              raccolti tramite cookie (vedi punto 5).
+            </p>
+            <h3>Donazioni online</h3>
+            <p>
+              Se utilizzi il modulo di donazione del sito, raccogliamo i dati
+              che inserisci per elaborare la donazione: nome, cognome, indirizzo
+              email, importo, frequenza (donazione unica o mensile) e la scelta
+              di visibilità pubblica del nome. L’email è usata per comunicazioni
+              transazionali relative alla donazione (conferma, gestione del
+              pagamento). Queste comunicazioni sono distinte da qualsiasi
+              attività di newsletter o marketing.
+            </p>
+            <p>
+              La preferenza «non mostrare pubblicamente il mio nome» riguarda
+              solo l’eventuale visualizzazione pubblica. Non significa che la
+              donazione sia anonima per il CIR o per Stripe: i dati necessari
+              restano trattati per ricevere, confermare e gestire la donazione e
+              il pagamento, anche se questa opzione è selezionata.
+            </p>
+            <p>
+              Se sul modulo è visibile una casella newsletter (solo quando CIR
+              la abilita), puoi scegliere, con una casella separata e non
+              precompilata, di iscriverti alla newsletter del CIR. Il consenso è
+              facoltativo e distinto dal pagamento: la donazione funziona anche
+              se la casella non è presente o resta deselezionata. Non inferiamo
+              il consenso da altri campi. Quando la newsletter sarà attiva,
+              l’iscrizione passerà da Brevo con conferma (double opt-in). Finché
+              Brevo non è configurato, la scelta viene solo registrata come
+              evidenza di consenso (sì/no, data, fonte, lingua) e non produce
+              invii di marketing.
+            </p>
+            <p>
+              I pagamenti sono elaborati da Stripe (carta, Link, PayPal,
+              addebito SEPA). Il CIR non riceve né conserva i dati completi
+              della carta, l’IBAN o gli identificativi di mandato. Le email di
+              ringraziamento transazionali sulla donazione, quando inviate, sono
+              spedite tramite Resend solo dopo conferma di pagamento da Stripe e
+              non dipendono dal consenso newsletter. Stripe, Resend, Brevo (solo
+              se e quando la newsletter è abilitata) e Cloudflare Turnstile
+              (protezione da abusi sul modulo) trattano i dati secondo le
+              proprie informative, nei limiti necessari a fornire il servizio.
             </p>
 
             <h2>3. Finalità e base giuridica</h2>
@@ -119,7 +162,9 @@ export default async function PrivacyCookiePage({
             <ul>
               <li>
                 <strong>Necessari:</strong> indispensabili al funzionamento del
-                sito. Sempre attivi.
+                sito (incluso un cookie HttpOnly di breve durata usato solo
+                durante la donazione per proteggere la creazione della sessione
+                di pagamento). Sempre attivi.
               </li>
               <li>
                 <strong>Statistiche:</strong> raccolgono informazioni anonime

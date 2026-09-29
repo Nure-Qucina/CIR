@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils/cn";
  *  - ghost:     trasparente, bordo teal, testo ink
  *
  * Rende <Link> locale-aware se passi un `href` interno, un `<a>` nativo per
- * URL esterni (LaunchGood, mailto, ecc. — non vanno prefissati di lingua),
+ * URL esterni (mailto, tel, ecc. — non vanno prefissati di lingua),
  * altrimenti <button>.
  */
 
@@ -35,16 +35,32 @@ const sizes: Record<Size, string> = {
   lg: "px-6 py-3 text-base",
 };
 
+/** Classi visive del Button, per Link locale-aware nei Server Component. */
+export function buttonClassName({
+  variant = "primary",
+  size = "md",
+  className,
+}: {
+  variant?: Variant;
+  size?: Size;
+  className?: string;
+} = {}) {
+  return cn(base, variants[variant], sizes[size], className);
+}
+
 type StyleProps = { variant?: Variant; size?: Size };
 
 type ButtonAsButton = StyleProps &
   ComponentProps<"button"> & { href?: undefined };
 
-type ButtonAsLink = StyleProps &
-  ComponentProps<"a"> & { href: string };
+type ButtonAsLink = StyleProps & ComponentProps<"a"> & { href: string };
 
 function isExternalHref(href: string): boolean {
-  return /^(https?:)?\/\//.test(href) || href.startsWith("mailto:") || href.startsWith("tel:");
+  return (
+    /^(https?:)?\/\//.test(href) ||
+    href.startsWith("mailto:") ||
+    href.startsWith("tel:")
+  );
 }
 
 export function Button({
@@ -57,7 +73,7 @@ export function Button({
   className?: string;
   children: ReactNode;
 }) {
-  const classes = cn(base, variants[variant], sizes[size], className);
+  const classes = buttonClassName({ variant, size, className });
 
   if ("href" in rest && rest.href !== undefined) {
     const { href, ...anchorRest } = rest as ComponentProps<"a"> & {
