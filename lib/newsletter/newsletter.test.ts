@@ -24,7 +24,10 @@ import {
   parsePositiveInt,
   readBrevoDoiConfig,
 } from "./config";
-import { buildBrevoDoubleOptInRequest } from "./doi-request";
+import {
+  buildBrevoDoubleOptInRequest,
+  safeBrevoErrorDetails,
+} from "./doi-request";
 import {
   metadataHasNewsletterConsent,
   shouldRequestNewsletterDoi,
@@ -177,11 +180,25 @@ test("Brevo request uses double opt-in only, never single opt-in", () => {
   assert.equal(request.method, "POST");
   assert.deepEqual(request.body.includeListIds, [3]);
   assert.equal(request.body.templateId, 12);
-  assert.deepEqual(request.body.attributes, {
-    NOME: "Sara",
-    COGNOME: "Rossi",
-  });
+  assert.equal("attributes" in request.body, false);
   assert.ok(!("updateEnabled" in request.body));
+});
+
+test("Brevo error diagnostics redact donor data and secrets", () => {
+  const diagnostic = safeBrevoErrorDetails(
+    {
+      code: "invalid_parameter",
+      message:
+        "sara@example.com Sara Rossi https://brevo.example/path token=private-token xkeysib-secretvalue",
+    },
+    ["sara@example.com", "Sara", "Rossi"],
+  );
+  assert.equal(diagnostic.code, "invalid_parameter");
+  assert.doesNotMatch(
+    diagnostic.message ?? "",
+    /sara@example\.com|Sara|Rossi|https:|private-token|xkeysib-secretvalue/i,
+  );
+  assert.match(diagnostic.message ?? "", /\[redacted/);
 });
 
 test("DOI eligibility: consent + verified success only", () => {
@@ -346,6 +363,27 @@ test("paid card checkout requests DOI with verified session data", async () => {
       locale: "it",
     },
   ]);
+});
+
+test("DOI does not require donor names or locale", async () => {
+  const harness = createDoiHarness();
+  assert.equal(
+    await requestNewsletterDoiForCheckoutSession(
+      "checkout.session.completed",
+      newsletterSession({
+        metadata: {
+          purpose: "cir_donation",
+          newsletter_consent: "true",
+          donor_first_name: "",
+          donor_last_name: "",
+          locale: "",
+        },
+      }),
+      harness.dependencies,
+    ),
+    "newsletter_doi_sent",
+  );
+  assert.deepEqual(harness.inputs, [{ email: "sara@example.com" }]);
 });
 
 test("completed SEPA processing session does not request DOI", async () => {

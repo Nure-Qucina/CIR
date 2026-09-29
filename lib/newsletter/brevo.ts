@@ -6,8 +6,10 @@ import {
 } from "./config";
 import {
   buildBrevoDoubleOptInRequest,
+  safeBrevoErrorDetails,
   type NewsletterDoubleOptInInput,
 } from "./doi-request";
+import { parseDonorEmail } from "@/lib/donazioni/validation";
 
 export type NewsletterDoubleOptInResult =
   | { ok: true }
@@ -42,18 +44,14 @@ export async function requestNewsletterDoubleOptIn(
     return { ok: false, definitelyFailed: true, reason: "not_configured" };
   }
 
-  const email = input.email.trim();
-  const firstName = input.firstName.trim();
-  const lastName = input.lastName.trim();
-  if (!email || !firstName || !lastName) {
+  const parsedEmail = parseDonorEmail(input.email);
+  if (!parsedEmail.ok) {
     return { ok: false, definitelyFailed: true, reason: "incomplete" };
   }
 
   const request = buildBrevoDoubleOptInRequest(config, {
-    email,
-    firstName,
-    lastName,
-    locale: input.locale,
+    ...input,
+    email: parsedEmail.email,
   });
 
   try {
@@ -64,9 +62,20 @@ export async function requestNewsletterDoubleOptIn(
       signal: AbortSignal.timeout(BREVO_DOI_TIMEOUT_MS),
     });
     if (!response.ok) {
+      let responseBody: unknown;
+      try {
+        responseBody = await response.json();
+      } catch {
+        responseBody = undefined;
+      }
+      const safeDetails = safeBrevoErrorDetails(responseBody, [
+        input.email,
+        input.firstName,
+        input.lastName,
+      ]);
       console.warn("newsletter_doi_http_error", {
         status: response.status,
-        reason: "brevo_non_2xx",
+        ...safeDetails,
       });
       return {
         ok: false,

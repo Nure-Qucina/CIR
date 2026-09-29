@@ -65,7 +65,7 @@ export async function requestNewsletterDoiForCheckoutSession(
   const firstName = session.metadata?.donor_first_name?.trim();
   const lastName = session.metadata?.donor_last_name?.trim();
   const locale = session.metadata?.locale?.trim();
-  if (!session.id || !email || !firstName || !lastName || !locale) {
+  if (!session.id || !email) {
     return "newsletter_doi_skipped";
   }
 
@@ -83,7 +83,12 @@ export async function requestNewsletterDoiForCheckoutSession(
 
   let result: NewsletterDoiRequestResult;
   try {
-    result = await dependencies.request({ email, firstName, lastName, locale });
+    result = await dependencies.request({
+      email,
+      ...(firstName ? { firstName } : {}),
+      ...(lastName ? { lastName } : {}),
+      ...(locale ? { locale } : {}),
+    });
   } catch {
     return "newsletter_doi_failed";
   }
