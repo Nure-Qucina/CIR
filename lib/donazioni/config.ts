@@ -19,7 +19,6 @@ export const DONATION_DEFAULT_VISIBILITY = "anonymous" as const;
 export const DONATION_PAYMENT_METHOD_TYPES = [
   "card",
   "link",
-  "paypal",
   "sepa_debit",
 ] as const;
 

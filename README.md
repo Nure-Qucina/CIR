@@ -184,7 +184,7 @@ Prima della Checkout Session il modulo raccoglie nome, cognome, email e visibili
 
 Non esiste un checkbox di contributo ai costi di transazione: l’importo donato è l’importo addebitato.
 
-La sessione è esplicita: `payment_method_types: ["card", "link", "paypal", "sepa_debit"]` sia per il pagamento unico sia per l’abbonamento mensile. La carta è il fallback universale. SEPA Direct Debit compare nel Payment Element (IBAN e mandato restano di Stripe; CIR non li memorizza). Apple Pay, Google Pay, PayPal e Link compaiono in Express Checkout solo se Stripe, il browser, l’account e il dominio li ammettono. Klarna, Amazon Pay, Bancontact, EPS, Satispay e altri metodi BNPL/ecommerce locali non fanno parte del flusso.
+La sessione è esplicita: `payment_method_types: ["card", "link", "sepa_debit"]` sia per il pagamento unico sia per l’abbonamento mensile. La carta è il fallback universale. SEPA Direct Debit compare nel Payment Element (IBAN e mandato restano di Stripe; CIR non li memorizza). Apple Pay, Google Pay e Link compaiono in Express Checkout solo se Stripe, il browser, l’account e il dominio li ammettono. Klarna, Amazon Pay, Bancontact, EPS, Satispay e altri metodi BNPL/ecommerce locali non fanno parte del flusso.
 
 `POST /api/donazioni/checkout` accetta solo:
 
@@ -381,9 +381,7 @@ Da eseguire a mano con Dashboard, `stripe listen`, carta di test Stripe (`4242�
 
 **Test Link:** dipende da eleggibilità Stripe (browser, account). L’email del donatore è raccolta nello step 1 e associata alla sessione con `customer_email`; il `ContactDetailsElement` resta per Link.
 
-**Test PayPal:** richiede PayPal attivo sull’account Stripe (Dashboard → **Settings → Payment methods → PayPal → Turn on**). Per le donazioni mensili serve anche **PayPal recurring payments / Billing Agreements** sullo stesso account. In questo Sandbox la creazione di Checkout Session `mode: subscription` con `paypal` è riuscita (insieme a card e Link). Le credenziali PayPal non vanno in env né nel repo. Dopo l’autorizzazione PayPal, il donatore torna su `/donazioni/esito`; l’esito è verificato server-side sulla Checkout Session, non inferito dall’URL.
-
-Il supporto wallet/Link/PayPal non si considera verificato finché non è stato provato su un dispositivo/browser/dominio eleggibile.
+Il supporto wallet/Link non si considera verificato finché non è stato provato su un dispositivo/browser/dominio eleggibile.
 
 ### Ambiente locale (Sandbox)
 
@@ -418,7 +416,7 @@ Da configurare in Dashboard / Vercel; **non** è completato da questo codice:
 - Payment Method Domains sul dominio CIR
 - Radar (Dashboard)
 - business profile, statement descriptor, conto payout
-- PayPal e SEPA live se accettati
+- SEPA live se accettato
 - Turnstile di produzione (le dummy key Cloudflare sono rifiutate)
 - mittente Resend verificato
 - Upstash di produzione

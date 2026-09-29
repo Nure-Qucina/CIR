@@ -128,13 +128,13 @@ export default async function PrivacyCookiePage({
               invii di marketing.
             </p>
             <p>
-              I pagamenti sono elaborati da Stripe (carta, Link, PayPal,
-              addebito SEPA). Il CIR non riceve né conserva i dati completi
-              della carta, l’IBAN o gli identificativi di mandato. Le email di
-              ringraziamento transazionali sulla donazione, quando inviate, sono
-              spedite tramite Resend solo dopo conferma di pagamento da Stripe e
-              non dipendono dal consenso newsletter. Stripe, Resend, Brevo (solo
-              se e quando la newsletter è abilitata) e Cloudflare Turnstile
+              I pagamenti sono elaborati da Stripe (carta, Link, addebito SEPA).
+              Il CIR non riceve né conserva i dati completi della carta, l’IBAN
+              o gli identificativi di mandato. Le email di ringraziamento
+              transazionali sulla donazione, quando inviate, sono spedite
+              tramite Resend solo dopo conferma di pagamento da Stripe e non
+              dipendono dal consenso newsletter. Stripe, Resend, Brevo (solo se
+              e quando la newsletter è abilitata) e Cloudflare Turnstile
               (protezione da abusi sul modulo) trattano i dati secondo le
               proprie informative, nei limiti necessari a fornire il servizio.
             </p>

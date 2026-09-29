@@ -50,14 +50,12 @@ const expressCheckoutOptions: StripeCheckoutExpressCheckoutElementOptions = {
   buttonType: {
     applePay: "donate",
     googlePay: "donate",
-    paypal: "paypal",
   },
   layout: { maxColumns: 2, overflow: "auto" },
-  paymentMethodOrder: ["applePay", "googlePay", "paypal", "link"],
+  paymentMethodOrder: ["applePay", "googlePay", "link"],
   paymentMethods: {
     applePay: "auto",
     googlePay: "auto",
-    paypal: "auto",
     link: "auto",
     amazonPay: "never",
     klarna: "never",
@@ -73,7 +71,6 @@ function preferredWalletsAvailable(
   return (
     isWalletFlagOn(methods.applePay) ||
     isWalletFlagOn(methods.googlePay) ||
-    isWalletFlagOn(methods.paypal) ||
     isWalletFlagOn(methods.link)
   );
 }
