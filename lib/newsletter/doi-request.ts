@@ -20,7 +20,7 @@ export function buildBrevoDoubleOptInRequest(
   };
   body: {
     email: string;
-    attributes: { FIRSTNAME: string; LASTNAME: string };
+    attributes: { NOME: string; COGNOME: string };
     includeListIds: number[];
     templateId: number;
     redirectionUrl: string;
@@ -37,8 +37,8 @@ export function buildBrevoDoubleOptInRequest(
     body: {
       email: input.email,
       attributes: {
-        FIRSTNAME: input.firstName,
-        LASTNAME: input.lastName,
+        NOME: input.firstName,
+        COGNOME: input.lastName,
       },
       includeListIds: [config.listId],
       templateId: config.templateId,

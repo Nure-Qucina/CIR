@@ -64,6 +64,10 @@ export async function requestNewsletterDoubleOptIn(
       signal: AbortSignal.timeout(BREVO_DOI_TIMEOUT_MS),
     });
     if (!response.ok) {
+      console.warn("newsletter_doi_http_error", {
+        status: response.status,
+        reason: "brevo_non_2xx",
+      });
       return {
         ok: false,
         definitelyFailed: response.status < 500,

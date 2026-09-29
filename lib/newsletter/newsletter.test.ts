@@ -177,8 +177,10 @@ test("Brevo request uses double opt-in only, never single opt-in", () => {
   assert.equal(request.method, "POST");
   assert.deepEqual(request.body.includeListIds, [3]);
   assert.equal(request.body.templateId, 12);
-  assert.equal(request.body.attributes.FIRSTNAME, "Sara");
-  assert.equal(request.body.attributes.LASTNAME, "Rossi");
+  assert.deepEqual(request.body.attributes, {
+    NOME: "Sara",
+    COGNOME: "Rossi",
+  });
   assert.ok(!("updateEnabled" in request.body));
 });
 
