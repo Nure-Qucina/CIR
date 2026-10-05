@@ -141,10 +141,10 @@ export default async function Home({
               </Link>
             </div>
 
-            <article className="foglio relative mt-8 grid -rotate-[0.5deg] shadow-[0_20px_40px_rgb(98_52_19/0.35)] md:grid-cols-2">
+            <article className="foglio relative mt-8 grid -rotate-[0.5deg] items-center shadow-[0_20px_40px_rgb(98_52_19/0.35)] md:grid-cols-[1.15fr_1fr]">
               <Link
                 href={`/eventi/${featured.slug}`}
-                className="relative m-3 mb-0 block aspect-[16/10] overflow-hidden rounded-sm md:me-0 md:mb-3 md:aspect-auto"
+                className="relative m-3 mb-0 block aspect-[16/9] overflow-hidden rounded-sm md:me-0 md:mb-3"
                 aria-hidden="true"
                 tabIndex={-1}
               >
@@ -154,7 +154,7 @@ export default async function Home({
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </Link>
-              <div className="flex flex-col justify-center p-6 sm:p-8">
+              <div className="flex flex-col justify-center p-6 lg:px-8">
                 <span
                   className={
                     "inline-flex w-fit items-center rounded-full px-3 py-1 text-xs font-semibold " +
@@ -187,7 +187,7 @@ export default async function Home({
                       .join(" · ")}
                   </span>
                 </div>
-                <p className="text-ink-soft mt-3 whitespace-pre-line">
+                <p className="text-ink-soft mt-3 line-clamp-3 whitespace-pre-line">
                   {featured.estratto}
                 </p>
                 <div className="mt-6">
@@ -225,16 +225,26 @@ export default async function Home({
         <section aria-labelledby="news-home">
           <Container className="py-16 sm:py-20">
             <div className="flex items-end justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold tracking-[0.2em] text-orange-700 uppercase">
-                  {t("newsOcchiello")}
-                </p>
-                <h2
-                  id="news-home"
-                  className="text-ink mt-3 text-[length:var(--text-h2)] font-bold"
-                >
-                  {t("dalleNostre", { labelNews: site.labelNews })}
-                </h2>
+              <div className="flex items-end gap-3 sm:gap-4">
+                <Image
+                  src={ILLUSTRAZIONI.documento.src}
+                  width={ILLUSTRAZIONI.documento.width}
+                  height={ILLUSTRAZIONI.documento.height}
+                  alt=""
+                  sizes="80px"
+                  className="ritaglio h-auto w-14 shrink-0 -rotate-[8deg] sm:w-20"
+                />
+                <div>
+                  <p className="text-sm font-semibold tracking-[0.2em] text-orange-700 uppercase">
+                    {t("newsOcchiello")}
+                  </p>
+                  <h2
+                    id="news-home"
+                    className="text-ink mt-3 text-[length:var(--text-h2)] font-bold"
+                  >
+                    {t("dalleNostre", { labelNews: site.labelNews })}
+                  </h2>
+                </div>
               </div>
               <Link
                 href="/news"
