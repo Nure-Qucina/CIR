@@ -142,6 +142,7 @@
     "occhiello": "Comunità Islamica di Roma",
     "scopriChiSiamo": "Scopri chi siamo",
     "iProssimiEventi": "I prossimi eventi",
+    "associazioni": "associazioni",
     "associazioniRappresentate": "associazioni rappresentate"
   },
   "nav": {
@@ -188,6 +189,7 @@
     "ctaSottotitolo": "Siamo aperti al dialogo con cittadini, istituzioni e media."
   },
   "eventi": {
+    "archivio": "Archivio",
     "occhiello": "Vita della comunità",
     "titolo": "Eventi",
     "sottotitolo": "Incontri, festività e iniziative aperte a tutta la città. Aggiungi gli appuntamenti al tuo calendario e partecipa.",
@@ -310,7 +312,7 @@
   "istituzionale": {
     "payoff": "Uniti per una comunità forte e consapevole",
     "mission": "La Comunità Islamica di Roma (CIR) nasce dall'incontro tra giovani, famiglie, responsabili di centri e associazioni. Uniamo le forze per dare voce ai musulmani della capitale, difendere i loro diritti e costruire, insieme a tutta la città, una convivenza più giusta, serena e rispettosa.",
-    "chiSiamoIntro": "Siamo una realtà che oggi rappresenta 22 associazioni islamiche attive sul territorio romano, un numero in continua crescita. Non siamo un progetto temporaneo né un'iniziativa simbolica: siamo una struttura organizzata, una rete solida e una voce unitaria.",
+    "chiSiamoIntro": "Siamo una realtà che oggi rappresenta 25 associazioni islamiche attive sul territorio romano, un numero in continua crescita. Non siamo un progetto temporaneo né un'iniziativa simbolica: siamo una struttura organizzata, una rete solida e una voce unitaria.",
     "chiSiamoPunti": [
       "Una rete di associazioni che mette in comune esperienze, energie e competenze.",
       "Un coordinamento che trasforma la collaborazione in responsabilità condivisa.",

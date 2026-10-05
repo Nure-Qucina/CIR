@@ -78,3 +78,21 @@ export function isoDate(value: string): string {
   const p = parseNaive(value);
   return `${p.y}-${String(p.mo).padStart(2, "0")}-${String(p.d).padStart(2, "0")}`;
 }
+
+/** Giorno del mese (es. "19") per il blocco data dell'archivio eventi. */
+export function dayIt(value: string): string {
+  return String(parseNaive(value).d);
+}
+
+/** Mese abbreviato (es. "set") per il blocco data dell'archivio eventi. */
+export function monthShortIt(value: string): string {
+  const d = toUtcDate(parseNaive(value));
+  return new Intl.DateTimeFormat("it-IT", { month: "short", timeZone: "UTC" })
+    .format(d)
+    .replace(".", "");
+}
+
+/** Anno (es. 2026) per raggruppare l'archivio eventi. */
+export function yearOf(value: string): number {
+  return parseNaive(value).y;
+}

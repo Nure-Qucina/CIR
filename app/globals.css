@@ -216,26 +216,6 @@
   }
 }
 
-/* Rivelazione progressiva delle card timeline (disattivata da reduced-motion). */
-.timeline-node {
-  opacity: 0;
-  transform: translateY(16px);
-  transition:
-    opacity 0.5s ease,
-    transform 0.5s ease;
-}
-.timeline-node.is-visible {
-  opacity: 1;
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .timeline-node {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
-
 /* Banner cookie: entrata dal basso (reduced-motion gestito dalla regola
    globale che azzera animation-duration). */
 @keyframes cookie-banner-in {
@@ -270,17 +250,39 @@
 
 /* ============================================================
    Carta intagliata — superfici del redesign "Il foglio".
-   I fogli teal/arancio hanno lo stesso colore del corpo delle
-   strisce strappate (components/carta/Strappo), così il bordo
-   strappato e la sezione si saldano senza giunture.
+   La grana della carta è rumore SVG (feTurbulence) in data-URI:
+   nitida a ogni risoluzione, pochi byte, nessuna immagine da caricare.
+   Lo strappo (components/carta/Strappo) usa lo stesso fondo del
+   foglio con una maschera SVG, quindi colore e grana combaciano.
    ============================================================ */
+:root {
+  /* puntinatura fine scura (fibre corte) */
+  --carta-grana: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .08 0 0 0 0 .05 .7 0 0 0 -.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  /* puntinatura fine chiara (fibre chiare), seed diverso */
+  --carta-fibre: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75 .55' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 .95 .6 0 0 0 -.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+}
 .carta-teal {
-  background: #576b65 url(/images/carta/carta-teal.webp) center / cover;
+  background-color: #5f746e;
+  background-image: var(--carta-grana), var(--carta-fibre);
   color: var(--color-cream);
 }
 .carta-arancio {
-  background: #e37226;
+  background-color: #e8822f;
+  background-image: var(--carta-grana), var(--carta-fibre);
   color: var(--color-ink);
+}
+
+/* Bordo strappato: foglio mascherato + fibre chiare che sporgono. */
+.strappo-foglio,
+.strappo-fibre {
+  -webkit-mask: url(/images/carta/strappo-bordo.svg) center bottom / cover
+    no-repeat;
+  mask: url(/images/carta/strappo-bordo.svg) center bottom / cover no-repeat;
+}
+.strappo-fibre {
+  background: #faf5ec;
+  -webkit-mask-image: url(/images/carta/strappo-fibre.svg);
+  mask-image: url(/images/carta/strappo-fibre.svg);
 }
 
 /* Foglio di carta: superficie delle card (crema chiaro, ombra morbida). */

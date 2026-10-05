@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     template: "%s · Comunità Islamica di Roma",
   },
   description:
-    "La Comunità Islamica di Roma (CIR) dà voce ai musulmani della capitale: 22 associazioni unite per diritti, dialogo e una città più giusta.",
+    "La Comunità Islamica di Roma (CIR) dà voce ai musulmani della capitale: 25 associazioni unite per diritti, dialogo e una città più giusta.",
   openGraph: {
     type: "website",
     locale: "it_IT",

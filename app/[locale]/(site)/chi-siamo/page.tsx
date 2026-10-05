@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Check } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -9,6 +8,7 @@ import { ValoriArcate } from "@/components/home/ValoriArcate";
 import { StoriaSentiero } from "@/components/home/StoriaSentiero";
 import { Button } from "@/components/ui/Button";
 import { ILLUSTRAZIONI } from "@/lib/carta";
+import { cn } from "@/lib/utils/cn";
 import { routing, type Locale } from "@/i18n/routing";
 import { buildAlternates, buildOgLocale } from "@/lib/seo/metadata";
 import {
@@ -30,7 +30,7 @@ export async function generateMetadata({
   return {
     title: "Chi siamo",
     description:
-      "La Comunità Islamica di Roma è una rete di 22 associazioni: coordinamento, rappresentanza e dialogo per i musulmani della capitale.",
+      "La Comunità Islamica di Roma è una rete di 25 associazioni: coordinamento, rappresentanza e dialogo per i musulmani della capitale.",
     alternates: buildAlternates("/chi-siamo", locale as Locale),
     openGraph: buildOgLocale(locale as Locale),
   };
@@ -64,34 +64,43 @@ export default async function ChiSiamoPage({
         illustrazione="treccia"
       />
 
-      {/* Intro + dato chiave */}
-      <Container className="pb-12 sm:pb-16">
-        <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:items-start">
-          <div className="text-ink text-lg leading-relaxed">
-            <p>{ti("chiSiamoIntro")}</p>
-            <ul className="mt-6 space-y-3">
-              {chiSiamoPunti.map((p) => (
-                <li key={p} className="flex gap-3">
-                  <Check
-                    size={20}
-                    className="text-orange mt-1 shrink-0"
-                    aria-hidden
-                  />
-                  <span>{p}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="carta-teal rotate-[1deg] rounded-md p-8 shadow-[0_18px_36px_rgb(20_30_28/0.3)]">
-            <p className="text-6xl font-bold">{DATO_ASSOCIAZIONI}</p>
-            <p className="mt-2 font-semibold">
+      {/* Intro + dato chiave: il numero su un foglio teal, il testo in evidenza
+          accanto; i punti diventano foglietti numerati da leggere a colpo d'occhio. */}
+      <Container className="pb-14 sm:pb-20">
+        <div className="grid items-center gap-8 md:grid-cols-[minmax(0,280px)_1fr] md:gap-12">
+          <div className="carta-teal -rotate-[1.5deg] rounded-md px-8 py-7 shadow-[0_18px_36px_rgb(20_30_28/0.3)]">
+            <p className="font-serif text-7xl leading-none font-semibold">
+              {DATO_ASSOCIAZIONI}
+            </p>
+            <p className="mt-3 font-semibold">
               {t("associazioniRappresentate")}
             </p>
             <p className="text-cream/80 mt-1 text-sm">
               {t("associazioniSottotitolo")}
             </p>
           </div>
+          <p className="text-ink text-xl leading-relaxed text-pretty sm:text-2xl sm:leading-relaxed">
+            {ti("chiSiamoIntro")}
+          </p>
         </div>
+
+        <ol className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {chiSiamoPunti.map((p, i) => (
+            <li
+              key={p}
+              className={cn(
+                "foglio flex gap-4 p-5",
+                i % 3 === 0 && "lg:-rotate-[0.8deg]",
+                i % 3 === 2 && "lg:rotate-[0.7deg]",
+              )}
+            >
+              <span className="font-serif text-3xl leading-none font-semibold text-orange-600">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className="text-ink leading-snug">{p}</span>
+            </li>
+          ))}
+        </ol>
       </Container>
 
       {/* Valori: le quattro arcate su foglio teal */}

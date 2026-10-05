@@ -9,7 +9,7 @@ import type { Locale } from "@/i18n/routing";
 
 /**
  * Blocco "Media e Comunicazione" (sezione F della home): foglio teal con i
- * microfoni di carta che escono dal bordo inferiore. Le liste vivono in
+ * microfoni di carta, interi e dentro il foglio. Le liste vivono in
  * messages/*.json (namespace "istituzionale.media").
  */
 export async function MediaBlock({ locale }: { locale: Locale }) {
@@ -23,7 +23,7 @@ export async function MediaBlock({ locale }: { locale: Locale }) {
   const { microfoni } = ILLUSTRAZIONI;
   return (
     <FoglioSezione tono="teal" className="overflow-hidden">
-      <Container className="relative grid gap-10 pt-12 sm:pt-16 lg:grid-cols-[1fr_1.15fr_0.75fr] lg:items-end">
+      <Container className="relative grid gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1.15fr_0.75fr] lg:items-center">
         <div className="lg:self-start">
           <p className="text-sm font-semibold tracking-[0.2em] text-orange-200 uppercase">
             {t("mediaOcchiello")}
@@ -72,14 +72,13 @@ export async function MediaBlock({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        {/* I microfoni "affondano" nello strappo di chiusura. */}
         <Image
           src={microfoni.src}
           width={microfoni.width}
           height={microfoni.height}
           alt=""
           sizes="(max-width: 1024px) 70vw, 280px"
-          className="ritaglio mx-auto -mb-[14%] h-auto w-[70%] max-w-[340px] lg:-mb-[22%] lg:w-full"
+          className="ritaglio mx-auto h-auto w-[62%] max-w-[300px] lg:w-full"
         />
       </Container>
     </FoglioSezione>

@@ -22,7 +22,7 @@ export async function HeroFoglio({ locale }: { locale: Locale }) {
     getTranslations({ locale, namespace: "common" }),
     getTranslations({ locale, namespace: "istituzionale" }),
   ]);
-  const { finestra, fumettoArancio, fumettoTeal, cartellino } = ILLUSTRAZIONI;
+  const { finestra, fumettoArancio, fumettoTeal } = ILLUSTRAZIONI;
 
   return (
     <section className="bg-cream relative overflow-hidden">
@@ -48,15 +48,17 @@ export async function HeroFoglio({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        {/* Composizione di ritagli: decorativa tranne il cartellino col dato. */}
-        <div className="relative mx-auto w-[min(72%,400px)] lg:w-[78%]">
+        {/* Composizione di ritagli. Il cartellino fa parte dell'illustrazione
+            (legato al bordo della finestra): qui sopra c'è solo il testo,
+            in unità del contenitore così scala insieme all'immagine. */}
+        <div className="@container relative mx-auto w-[min(84%,400px)] lg:w-[80%]">
           <Image
             src={finestra.src}
             width={finestra.width}
             height={finestra.height}
             alt=""
             priority
-            sizes="(max-width: 1024px) 72vw, 420px"
+            sizes="(max-width: 1024px) 84vw, 440px"
             className="ritaglio h-auto w-full"
           />
           <Image
@@ -65,33 +67,28 @@ export async function HeroFoglio({ locale }: { locale: Locale }) {
             height={fumettoArancio.height}
             alt=""
             sizes="140px"
-            className="ritaglio carta-galleggia absolute -start-[20%] top-[30%] h-auto w-[30%]"
+            className="ritaglio carta-galleggia absolute top-[30%] -left-[14%] h-auto w-[28%]"
           />
           <Image
             src={fumettoTeal.src}
             width={fumettoTeal.width}
             height={fumettoTeal.height}
             alt=""
-            sizes="130px"
-            className="ritaglio carta-galleggia absolute -end-[16%] top-[42%] h-auto w-[28%] [animation-delay:-3s]"
+            sizes="120px"
+            className="ritaglio carta-galleggia absolute top-[16%] -right-[10%] h-auto w-[22%] [animation-delay:-3s]"
           />
-          <div className="carta-dondola absolute -end-[10%] bottom-[2%] w-[32%] lg:w-[28%]">
-            <Image
-              src={cartellino.src}
-              width={cartellino.width}
-              height={cartellino.height}
-              alt=""
-              sizes="120px"
-              className="ritaglio h-auto w-full"
-            />
-            <p className="text-cream absolute inset-x-[10%] top-[38%] bottom-[8%] grid rotate-[4deg] place-content-center text-center text-[clamp(0.55rem,2.1vw,0.74rem)] leading-tight font-semibold hyphens-auto">
-              <span className="block text-[2.4em] leading-none font-bold">
-                {DATO_ASSOCIAZIONI}
-              </span>
-              {t("associazioniRappresentate")}
-              <span className="sr-only"> · {tc("roma")}</span>
-            </p>
-          </div>
+          <p className="text-cream absolute top-[49%] right-[2%] bottom-[23%] left-[78%] flex flex-col items-center justify-center text-center leading-none">
+            <span className="font-serif text-[12cqw] font-semibold tracking-tight">
+              {DATO_ASSOCIAZIONI}
+            </span>
+            <span className="mt-[1.2cqw] text-[2.8cqw] font-semibold tracking-wide">
+              {t("associazioni")}
+            </span>
+            <span className="sr-only">
+              {" "}
+              {t("associazioniRappresentate")} · {tc("roma")}
+            </span>
+          </p>
         </div>
       </Container>
     </section>

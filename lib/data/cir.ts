@@ -6,7 +6,7 @@
  * eventi/articoli, non ha un flusso in Keystatic).
  */
 
-export const DATO_ASSOCIAZIONI = 22;
+export const DATO_ASSOCIAZIONI = 25;
 
 export type Valore = {
   titolo: string;

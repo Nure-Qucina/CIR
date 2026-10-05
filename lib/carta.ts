@@ -13,11 +13,10 @@ const img = (nome: string, width: number, height: number): Illustrazione => ({
 });
 
 export const ILLUSTRAZIONI = {
-  finestra: img("finestra", 1000, 1626),
+  finestra: img("finestra-cartellino", 1000, 1525), // col cartellino legato al bordo
   lanterna: img("lanterna", 600, 911),
   treccia: img("treccia", 512, 981),
   germoglio: img("germoglio", 600, 793),
-  cartellino: img("cartellino-hero", 400, 718),
   microfoni: img("microfoni", 700, 660),
   calendario: img("calendario", 700, 547),
   busta: img("busta", 700, 771),

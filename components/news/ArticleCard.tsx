@@ -2,31 +2,60 @@ import { Clock } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Articolo, Categoria } from "@/lib/content/types";
-import { Card } from "@/components/ui/Card";
 import { CoverImage } from "@/components/ui/CoverImage";
 import { CategoryPill } from "@/components/ui/CategoryPill";
 import { formatDateIt, isoDate } from "@/lib/utils/date";
 import { LangBadge } from "@/components/ui/LangBadge";
 import type { Locale } from "@/i18n/routing";
+import { cn } from "@/lib/utils/cn";
 
+/** Inclinazioni delle card "storte": scelte dallo slug, quindi stabili. */
+const INCLINAZIONI = [
+  "-rotate-[1.4deg]",
+  "rotate-[0.9deg]",
+  "-rotate-[0.6deg]",
+  "rotate-[1.5deg]",
+  "-rotate-[1deg]",
+  "rotate-[0.5deg]",
+];
+
+function inclinazione(slug: string) {
+  let h = 0;
+  for (const c of slug) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return INCLINAZIONI[h % INCLINAZIONI.length];
+}
+
+/**
+ * Card articolo come un foglio di carta: cornice crema con la copertina
+ * incassata, categoria, titolo (massimo tre righe) e data. Tutte alte uguali
+ * dentro la griglia. `storta` le inclina leggermente (pagina News); al
+ * passaggio del mouse si raddrizzano.
+ */
 export async function ArticleCard({
   articolo,
   categoria,
   priority = false,
+  storta = false,
   locale,
 }: {
   articolo: Articolo;
   categoria?: Categoria;
   priority?: boolean;
+  storta?: boolean;
   locale: Locale;
 }) {
   const t = await getTranslations({ locale, namespace: "news" });
 
   return (
-    <Card as="article" className="flex h-full flex-col overflow-hidden">
+    <article
+      className={cn(
+        "foglio flex h-full flex-col rounded-[3px] p-2.5 pb-4 transition-transform duration-300",
+        storta && [inclinazione(articolo.slug), "hover:rotate-0"],
+      )}
+    >
       <Link
         href={`/news/${articolo.slug}`}
-        className="relative block aspect-[16/9] overflow-hidden"
+        className="relative block aspect-[16/9] overflow-hidden rounded-[2px]"
         tabIndex={-1}
         aria-hidden="true"
       >
@@ -34,16 +63,17 @@ export async function ArticleCard({
           src={articolo.copertina}
           alt={articolo.titolo}
           priority={priority}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
         />
         {articolo.tipo === "comunicato" && (
-          <span className="absolute top-3 start-3 inline-flex items-center rounded-full bg-ink px-3 py-1 text-xs font-semibold text-cream">
+          <span className="bg-ink text-cream absolute start-2 top-2 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold">
             {t("comunicato")}
           </span>
         )}
       </Link>
 
-      <div className="flex flex-1 flex-col p-5">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-1 flex-col px-2 pt-3">
+        <div className="flex min-h-6 flex-wrap items-center gap-2">
           {categoria && (
             <CategoryPill
               color={categoria.colore}
@@ -55,7 +85,8 @@ export async function ArticleCard({
           {articolo.isFallback && <LangBadge />}
         </div>
 
-        <h3 className="mt-3 text-lg leading-snug font-bold text-ink">
+        {/* Tre righe fisse: le card restano tutte della stessa altezza. */}
+        <h3 className="text-ink mt-3 line-clamp-3 min-h-[3lh] text-[1.05rem] leading-snug font-bold">
           <Link
             href={`/news/${articolo.slug}`}
             className="underline-offset-4 hover:underline"
@@ -64,11 +95,7 @@ export async function ArticleCard({
           </Link>
         </h3>
 
-        <p className="mt-2 line-clamp-3 flex-1 text-sm text-ink-soft">
-          {articolo.estratto}
-        </p>
-
-        <div className="mt-4 flex items-center gap-3 text-xs text-ink-soft">
+        <div className="text-ink-soft mt-auto flex items-center gap-3 pt-4 text-xs">
           {articolo.dataPubblicazione && (
             <time dateTime={isoDate(articolo.dataPubblicazione)}>
               {formatDateIt(articolo.dataPubblicazione)}
@@ -82,6 +109,6 @@ export async function ArticleCard({
           ) : null}
         </div>
       </div>
-    </Card>
+    </article>
   );
 }

@@ -3,7 +3,10 @@ import type { Articolo, Categoria } from "@/lib/content/types";
 import { ArticleCard } from "./ArticleCard";
 import type { Locale } from "@/i18n/routing";
 
-/** Griglia responsive di articoli; risolve la categoria per ogni card. */
+/**
+ * Griglia responsive di articoli; risolve la categoria per ogni card.
+ * Le card sono "storte" (leggermente inclinate) come fogli sparsi.
+ */
 export async function ArticleGrid({
   articoli,
   categorieMap,
@@ -16,20 +19,21 @@ export async function ArticleGrid({
   if (articoli.length === 0) {
     const t = await getTranslations({ locale, namespace: "news" });
     return (
-      <div className="foglio p-10 text-center text-ink-soft">
+      <div className="foglio text-ink-soft p-10 text-center">
         {t("nessunContenuto")}
       </div>
     );
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-x-7 gap-y-9 sm:grid-cols-2 lg:grid-cols-3">
       {articoli.map((a, i) => (
         <ArticleCard
           key={a.slug}
           articolo={a}
           categoria={categorieMap.get(a.categoria)}
           priority={i < 3}
+          storta
           locale={locale}
         />
       ))}

@@ -1,11 +1,11 @@
-import Image from "next/image";
 import { cn } from "@/lib/utils/cn";
 
 /**
- * Bordo di carta strappata (illustrazione generata, non disegnata in CSS).
- * `verso="su"` apre un foglio colorato, `verso="giu"` lo chiude: è la stessa
- * striscia capovolta. Il corpo della striscia ha il colore di `.carta-teal` /
- * `.carta-arancio`, quindi va messo a contatto con quel foglio.
+ * Bordo di carta strappata. È lo stesso fondo del foglio (`.carta-teal` /
+ * `.carta-arancio`) ritagliato da una maschera SVG, con sotto uno strato di
+ * fibre chiare che sporge di qualche px: colore e grana combaciano con la
+ * sezione per costruzione. Maschere generate da scripts/genera-strappo.mjs.
+ * `verso="su"` apre il foglio, `verso="giu"` lo chiude (stesso bordo capovolto).
  */
 export function Strappo({
   colore,
@@ -20,19 +20,17 @@ export function Strappo({
     <div
       aria-hidden="true"
       className={cn(
-        // Su telefono l'altezza minima ingrandisce lo strappo (object-cover
-        // ritaglia in larghezza), così i denti restano visibili.
-        "relative h-[max(30px,4.8vw)] max-h-[76px] w-full overflow-hidden",
+        "relative h-9 w-full drop-shadow-[0_-1px_1.5px_rgb(42_31_14/0.16)] sm:h-14",
         verso === "giu" ? "-mt-px -scale-y-100" : "-mb-px",
         className,
       )}
     >
-      <Image
-        src={`/images/carta/strappo-${colore}.webp`}
-        alt=""
-        fill
-        sizes="100vw"
-        className="object-cover object-left-top"
+      <div className="strappo-fibre absolute inset-0" />
+      <div
+        className={cn(
+          "strappo-foglio absolute inset-0",
+          colore === "teal" ? "carta-teal" : "carta-arancio",
+        )}
       />
     </div>
   );
