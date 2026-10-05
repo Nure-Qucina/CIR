@@ -155,6 +155,7 @@
   "home": {
     "valoriOcchiello": "What drives us",
     "valoriTitolo": "The values that unite us",
+    "valoriSottotitoloBreve": "We come from different backgrounds, but we are moving in the same direction.",
     "valoriSottotitolo": "We come from different backgrounds, but we are moving in the same direction. Here are the principles that guide our work.",
     "storiaOcchiello": "Our roots",
     "storiaTitolo": "Our story",
@@ -326,22 +327,26 @@
       {
         "titolo": "Faith that becomes action",
         "icona": "heart",
-        "testo": "For us, Islam is light and responsibility. Prayer, the Quran, and spirituality drive us to care for the people and places we live in. Our faith must leave tangible signs of goodness, not just words."
+        "testo": "For us, Islam is light and responsibility. Prayer, the Quran, and spirituality drive us to care for the people and places we live in. Our faith must leave tangible signs of goodness, not just words.",
+        "breve": "For us, Islam is light and responsibility. Our faith must leave tangible signs of goodness, not just words."
       },
       {
         "titolo": "Unity without erasing differences",
         "icona": "users",
-        "testo": "We come from different backgrounds, cultures, and life paths. We do not want to erase this plurality; we want to coordinate it. Within CIR, everyone brings their own contribution, but we are all rowing in the same direction."
+        "testo": "We come from different backgrounds, cultures, and life paths. We do not want to erase this plurality; we want to coordinate it. Within CIR, everyone brings their own contribution, but we are all rowing in the same direction.",
+        "breve": "We do not want to erase plurality; we want to coordinate it. Everyone brings their own contribution."
       },
       {
         "titolo": "Service to the community and the city",
         "icona": "hand-helping",
-        "testo": "We were born from the Muslim community, but our vision is broader. We want to be of service to our Muslim brothers and sisters while simultaneously being a positive presence for all of Rome."
+        "testo": "We were born from the Muslim community, but our vision is broader. We want to be of service to our Muslim brothers and sisters while simultaneously being a positive presence for all of Rome.",
+        "breve": "Of service to our Muslim brothers and sisters and, at the same time, a positive presence for all of Rome."
       },
       {
         "titolo": "Clear dialogue and standing tall",
         "icona": "messages-square",
-        "testo": "We speak with institutions, media, schools, and associations with respect, but also with dignity. We do not seek privileges: we demand justice, recognition, and genuine spaces for dialogue, without hiding who we are."
+        "testo": "We speak with institutions, media, schools, and associations with respect, but also with dignity. We do not seek privileges: we demand justice, recognition, and genuine spaces for dialogue, without hiding who we are.",
+        "breve": "We speak with institutions, media and schools with respect and dignity, without hiding who we are."
       }
     ],
     "storia": [

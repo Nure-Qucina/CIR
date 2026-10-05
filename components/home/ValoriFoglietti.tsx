@@ -18,7 +18,7 @@ export function ValoriFoglietti({ valori }: { valori: Valore[] }) {
           <li
             key={v.titolo}
             className={cn(
-              "foglio text-ink relative px-5 pt-20 pb-6 sm:px-6 lg:pt-24",
+              "foglio text-ink relative px-5 pt-20 pb-5 sm:px-6 lg:pt-24",
               i % 2 === 0 ? "-rotate-[1.2deg]" : "rotate-[1deg]",
             )}
           >
@@ -33,7 +33,7 @@ export function ValoriFoglietti({ valori }: { valori: Valore[] }) {
             />
             <h3 className="text-lg leading-snug font-bold">{v.titolo}</h3>
             <p className="text-ink-soft mt-2 text-[0.95rem] leading-relaxed">
-              {v.testo}
+              {v.breve ?? v.testo}
             </p>
           </li>
         );

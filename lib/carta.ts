@@ -25,6 +25,7 @@ export const ILLUSTRAZIONI = {
   libri: img("libri", 700, 876),
   documento: img("documento", 700, 773),
   mappa: img("mappa", 900, 434),
+  panorama: img("panorama-roma", 2400, 1029), // Roma: acquedotto, pini, cupola, minareto
 } as const;
 
 export type NomeIllustrazione = keyof typeof ILLUSTRAZIONI;

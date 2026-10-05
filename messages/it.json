@@ -155,6 +155,7 @@
   "home": {
     "valoriOcchiello": "Cosa ci muove",
     "valoriTitolo": "I valori che ci tengono uniti",
+    "valoriSottotitoloBreve": "Veniamo da storie diverse, ma remiamo nella stessa direzione.",
     "valoriSottotitolo": "Veniamo da storie diverse, ma remiamo nella stessa direzione. Ecco i principi che guidano il nostro lavoro.",
     "storiaOcchiello": "Da dove veniamo",
     "storiaTitolo": "La nostra storia",
@@ -326,22 +327,26 @@
       {
         "titolo": "Fede che diventa azione",
         "icona": "heart",
-        "testo": "L'Islam, per noi, è luce e responsabilità. La preghiera, il Corano, la spiritualità ci spingono a prenderci cura delle persone e dei luoghi in cui viviamo. La nostra fede deve lasciare segni di bene, non solo parole."
+        "testo": "L'Islam, per noi, è luce e responsabilità. La preghiera, il Corano, la spiritualità ci spingono a prenderci cura delle persone e dei luoghi in cui viviamo. La nostra fede deve lasciare segni di bene, non solo parole.",
+        "breve": "L'Islam, per noi, è luce e responsabilità. La nostra fede deve lasciare segni di bene, non solo parole."
       },
       {
         "titolo": "Unità senza annullare le differenze",
         "icona": "users",
-        "testo": "Veniamo da storie, culture e percorsi diversi. Non vogliamo cancellare questa pluralità: vogliamo coordinarla. Nel CIR ognuno porta il proprio contributo, ma tutti remiamo nella stessa direzione."
+        "testo": "Veniamo da storie, culture e percorsi diversi. Non vogliamo cancellare questa pluralità: vogliamo coordinarla. Nel CIR ognuno porta il proprio contributo, ma tutti remiamo nella stessa direzione.",
+        "breve": "Non vogliamo cancellare la pluralità: vogliamo coordinarla. Ognuno porta il proprio contributo."
       },
       {
         "titolo": "Servizio alla comunità e alla città",
         "icona": "hand-helping",
-        "testo": "Siamo nati dalla comunità musulmana, ma il nostro sguardo è più ampio. Vogliamo essere utili ai nostri fratelli e sorelle musulmani e, allo stesso tempo, essere una presenza positiva per tutta Roma."
+        "testo": "Siamo nati dalla comunità musulmana, ma il nostro sguardo è più ampio. Vogliamo essere utili ai nostri fratelli e sorelle musulmani e, allo stesso tempo, essere una presenza positiva per tutta Roma.",
+        "breve": "Utili ai nostri fratelli e sorelle musulmani e, allo stesso tempo, una presenza positiva per tutta Roma."
       },
       {
         "titolo": "Dialogo chiaro e schiena dritta",
         "icona": "messages-square",
-        "testo": "Parliamo con istituzioni, media, scuole e associazioni con rispetto, ma anche con dignità. Non cerchiamo privilegi: chiediamo giustizia, riconoscimento e spazi di dialogo veri, senza nascondere chi siamo."
+        "testo": "Parliamo con istituzioni, media, scuole e associazioni con rispetto, ma anche con dignità. Non cerchiamo privilegi: chiediamo giustizia, riconoscimento e spazi di dialogo veri, senza nascondere chi siamo.",
+        "breve": "Parliamo con istituzioni, media e scuole con rispetto e dignità, senza nascondere chi siamo."
       }
     ],
     "storia": [

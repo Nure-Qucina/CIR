@@ -311,6 +311,12 @@
   mask-composite: intersect;
 }
 
+/* Illustrazione a tutta larghezza che sfuma in alto nel crema della pagina. */
+.sfuma-alto {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 28%);
+  mask-image: linear-gradient(to bottom, transparent, #000 28%);
+}
+
 /* Fumetti e cartellino dell'hero: movimento lento, spento da reduced-motion. */
 @keyframes carta-galleggia {
   50% {

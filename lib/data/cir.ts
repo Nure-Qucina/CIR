@@ -11,6 +11,8 @@ export const DATO_ASSOCIAZIONI = 25;
 export type Valore = {
   titolo: string;
   testo: string;
+  /** Versione corta per i foglietti della home. */
+  breve?: string;
   icona: "heart" | "users" | "hand-helping" | "messages-square";
 };
 
