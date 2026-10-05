@@ -51,7 +51,7 @@ export async function ArticleCard({
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
         />
         {articolo.tipo === "comunicato" && (
-          <span className="bg-ink text-cream absolute start-2 top-2 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold">
+          <span className="bg-ink text-cream absolute end-2 top-2 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold">
             {t("comunicato")}
           </span>
         )}
