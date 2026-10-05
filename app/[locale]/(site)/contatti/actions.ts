@@ -64,7 +64,7 @@ export async function sendContactMessage(
       from: "Sito CIR <onboarding@resend.dev>",
       to,
       replyTo: email,
-      subject: `Nuovo messaggio dal sito — ${nome}`,
+      subject: `Nuovo messaggio dal sito - ${nome}`,
       text: `Nome: ${nome}\nEmail: ${email}\n\n${messaggio}`,
     });
     if (error) throw new Error(error.message);

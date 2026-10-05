@@ -93,9 +93,9 @@ export default async function PrivacyCookiePage({
 
             <h2>2. Dati raccolti</h2>
             <p>
-              Trattiamo i dati personali che ci fornisci volontariamente — ad
+              Trattiamo i dati personali che ci fornisci volontariamente - ad
               esempio tramite il modulo di contatto, moduli di iscrizione o
-              newsletter — quali nome, indirizzo email, telefono e il contenuto
+              newsletter - quali nome, indirizzo email, telefono e il contenuto
               del messaggio. Trattiamo inoltre i dati tecnici di navigazione
               raccolti tramite cookie (vedi punto 5).
             </p>

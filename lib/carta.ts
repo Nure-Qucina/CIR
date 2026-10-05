@@ -16,7 +16,7 @@ export const ILLUSTRAZIONI = {
   finestra: img("finestra-25", 1000, 1501), // col cartellino largo legato al bordo
   lanterna: img("lanterna", 600, 911),
   treccia: img("treccia", 512, 981),
-  maniCuore: img("mani-cuore", 700, 775), // donazioni: mani che offrono un cuore che germoglia
+  cassetta: img("cassetta-offerte", 700, 834), // donazioni: cassetta delle offerte con il cuore
   microfoni: img("microfoni", 700, 660),
   calendario: img("calendario", 700, 547),
   busta: img("busta", 700, 771),

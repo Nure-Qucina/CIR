@@ -7,7 +7,7 @@ import "../globals.css";
  * (robots.ts lo esclude, qui anche il meta per sicurezza).
  */
 export const metadata: Metadata = {
-  title: "Strumenti redazione — CIR",
+  title: "Strumenti redazione - CIR",
   robots: { index: false, follow: false },
 };
 

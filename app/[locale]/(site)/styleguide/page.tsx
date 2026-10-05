@@ -85,20 +85,20 @@ export default function StyleguidePage() {
       <Section title="Tipografia">
         <div className="space-y-3">
           <h1 className="text-[length:var(--text-h1)] font-bold text-ink">
-            H1 — Uniti per una comunità forte
+            H1 - Uniti per una comunità forte
           </h1>
           <h2 className="text-[length:var(--text-h2)] font-bold text-ink">
-            H2 — Fede che diventa azione
+            H2 - Fede che diventa azione
           </h2>
           <h3 className="text-[length:var(--text-h3)] font-semibold text-ink">
-            H3 — Servizio alla comunità
+            H3 - Servizio alla comunità
           </h3>
           <p className="max-w-2xl text-base leading-relaxed text-ink">
-            Body — La Comunità Islamica di Roma nasce dall&apos;incontro tra
+            Body - La Comunità Islamica di Roma nasce dall&apos;incontro tra
             giovani, famiglie, responsabili di centri e associazioni.
           </p>
           <p className="max-w-2xl font-serif text-lg leading-relaxed text-ink">
-            Serif (corpo articoli) — Da 77 anni assistiamo a un&apos;ingiustizia
+            Serif (corpo articoli) - Da 77 anni assistiamo a un&apos;ingiustizia
             che continua senza sosta.
           </p>
         </div>

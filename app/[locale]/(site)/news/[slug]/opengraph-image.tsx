@@ -6,7 +6,7 @@ import type { Locale } from "@/i18n/routing";
 
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
-export const alt = "Articolo — Comunità Islamica di Roma";
+export const alt = "Articolo - Comunità Islamica di Roma";
 
 export default async function Image({
   params,

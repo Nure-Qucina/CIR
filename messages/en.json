@@ -165,7 +165,7 @@
     "ultimoEvento": "Latest event",
     "tuttiGliEventi": "All events",
     "dettagliEvento": "Event details",
-    "nessunEventoInProgramma": "No events scheduled at the moment — follow us on social media to stay updated on upcoming events.",
+    "nessunEventoInProgramma": "No events scheduled at the moment - follow us on social media to stay updated on upcoming events.",
     "newsOcchiello": "Community voices",
     "dalleNostre": "From our {labelNews}",
     "tuttiGliArticoli": "All articles",
@@ -175,7 +175,7 @@
     "donaOra": "Donate now",
     "mediaOcchiello": "Media & communication",
     "mediaTitolo": "A trustworthy partner, moving beyond stereotypes",
-    "mediaSottotitolo": "We highlight faces, stories, and projects — not labels — and we are available to journalists and newsrooms to ensure accurate reporting.",
+    "mediaSottotitolo": "We highlight faces, stories, and projects - not labels - and we are available to journalists and newsrooms to ensure accurate reporting.",
     "percheComunichiamo": "Why we communicate",
     "cosaFacciamo": "What we do"
   },
@@ -218,7 +218,7 @@
   },
   "news": {
     "occhiello": "Community voices",
-    "sottotitolo": "Editorials, insights, and press releases: we highlight faces, stories, and projects — not labels.",
+    "sottotitolo": "Editorials, insights, and press releases: we highlight faces, stories, and projects - not labels.",
     "comunicato": "Statement",
     "comunicatoStampa": "Press release",
     "articoloNonTrovato": "Article not found",
@@ -313,7 +313,7 @@
   "istituzionale": {
     "payoff": "United for a strong and conscious community",
     "mission": "The Islamic Community of Rome (CIR) was born from the meeting of young people, families, and leaders of centers and associations. We join forces to give a voice to Muslims in the capital, defend their rights, and build, together with the entire city, a more just, peaceful, and respectful coexistence.",
-    "chiSiamoIntro": "Today, we represent 25 Islamic associations active throughout Rome—a number that is constantly growing. We are neither a temporary project nor a symbolic initiative: we are an organized structure, a solid network, and a unified voice.",
+    "chiSiamoIntro": "Today, we represent 25 Islamic associations active throughout Rome - a number that is constantly growing. We are neither a temporary project nor a symbolic initiative: we are an organized structure, a solid network, and a unified voice.",
     "chiSiamoPunti": [
       "A network of associations pooling experiences, energy, and expertise.",
       "A coordination body that transforms collaboration into shared responsibility.",
@@ -365,7 +365,7 @@
     "media": {
       "perche": [
         "Countering distorted and Islamophobic narratives.",
-        "Highlighting faces, stories, and projects—not labels.",
+        "Highlighting faces, stories, and projects - not labels.",
         "Serving as a reliable partner for journalists and institutions.",
         "Building trust, not fear."
       ],

@@ -12,7 +12,7 @@ export function Logo({ className }: { className?: string }) {
     <Link
       href="/"
       className={cn("inline-flex items-center", className)}
-      aria-label="Comunità Islamica di Roma — home"
+      aria-label="Comunità Islamica di Roma - home"
     >
       <Image
         src="/LogoCirNeroIcon.png"

@@ -17,7 +17,7 @@ import { salvaBozze } from "./actions";
 export const dynamic = "force-dynamic";
 
 const ESITI: Record<string, { testo: string; ok: boolean }> = {
-  ok: { testo: "Modifiche salvate in un unico commit — il deploy è partito, online tra 1-2 minuti.", ok: true },
+  ok: { testo: "Modifiche salvate in un unico commit - il deploy è partito, online tra 1-2 minuti.", ok: true },
   nessuna: { testo: "Nessuna modifica da salvare.", ok: true },
   login: { testo: "Sessione GitHub assente o scaduta: apri /keystatic, fai login, poi torna qui.", ok: false },
   permessi: { testo: "Il tuo account GitHub non ha i permessi di scrittura sul repo.", ok: false },
@@ -84,7 +84,7 @@ export default async function BozzePage({
       <p className="mt-2 text-sm text-ink-soft">
         Spunta i contenuti da mettere in bozza (nascosti dal sito), togli la
         spunta per pubblicarli. <strong>Salva</strong> applica tutto insieme:
-        un solo commit, un solo deploy — qualunque sia il numero di modifiche.
+        un solo commit, un solo deploy - qualunque sia il numero di modifiche.
       </p>
 
       {messaggio && (

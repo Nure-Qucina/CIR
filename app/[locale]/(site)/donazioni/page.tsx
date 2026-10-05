@@ -43,7 +43,7 @@ export default async function DonationPage({
         titolo={t("title")}
         sottotitolo={t("intro")}
         crumbs={[{ label: common("home"), href: "/" }, { label: t("title") }]}
-        illustrazione="maniCuore"
+        illustrazione="cassetta"
       />
       <Container className="py-6 sm:py-8">
         <div className="mx-auto max-w-2xl">
