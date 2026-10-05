@@ -87,12 +87,6 @@ export default async function Home({
             <p className="text-cream/85 mt-4">{t("valoriSottotitoloBreve")}</p>
           </div>
           <ValoriFoglietti valori={valori} />
-          <div className="mt-12">
-            <Button href="/chi-siamo" size="lg">
-              {t("scopriChiSiamo")}
-              <ArrowRight size={18} className="rtl:rotate-180" aria-hidden />
-            </Button>
-          </div>
         </Container>
       </FoglioSezione>
 
