@@ -17,9 +17,8 @@ import type { Locale } from "@/i18n/routing";
  * "istituzionale"): vedi §12 del brief i18n.
  */
 export async function HeroFoglio({ locale }: { locale: Locale }) {
-  const [t, tc, ti] = await Promise.all([
+  const [t, ti] = await Promise.all([
     getTranslations({ locale, namespace: "hero" }),
-    getTranslations({ locale, namespace: "common" }),
     getTranslations({ locale, namespace: "istituzionale" }),
   ]);
   const { finestra, fumettoArancio, fumettoTeal } = ILLUSTRAZIONI;
@@ -51,14 +50,14 @@ export async function HeroFoglio({ locale }: { locale: Locale }) {
         {/* Composizione di ritagli. Il cartellino fa parte dell'illustrazione
             (legato al bordo della finestra): qui sopra c'è solo il testo,
             in unità del contenitore così scala insieme all'immagine. */}
-        <div className="@container relative mx-auto w-[min(84%,400px)] lg:w-[80%]">
+        <div className="@container relative mx-auto w-[min(94%,420px)] lg:w-[82%]">
           <Image
             src={finestra.src}
             width={finestra.width}
             height={finestra.height}
             alt=""
             priority
-            sizes="(max-width: 1024px) 84vw, 440px"
+            sizes="(max-width: 1024px) 94vw, 460px"
             className="ritaglio h-auto w-full"
           />
           <Image
@@ -67,7 +66,7 @@ export async function HeroFoglio({ locale }: { locale: Locale }) {
             height={fumettoArancio.height}
             alt=""
             sizes="140px"
-            className="ritaglio carta-galleggia absolute top-[30%] -left-[14%] h-auto w-[28%]"
+            className="ritaglio carta-galleggia absolute top-[30%] -left-[5%] h-auto w-[28%] lg:-left-[14%]"
           />
           <Image
             src={fumettoTeal.src}
@@ -77,16 +76,17 @@ export async function HeroFoglio({ locale }: { locale: Locale }) {
             sizes="120px"
             className="ritaglio carta-galleggia absolute top-[16%] -right-[10%] h-auto w-[22%] [animation-delay:-3s]"
           />
-          <p className="text-cream absolute top-[49%] right-[2%] bottom-[23%] left-[78%] flex flex-col items-center justify-center text-center leading-none">
-            <span className="font-serif text-[12cqw] font-semibold tracking-tight">
+          {/* Testo del cartellino (area misurata sull'illustrazione). "Rappresentiamo"
+              è in serif corsivo, più stretto, così sta intero nella larghezza. */}
+          <p className="text-cream absolute top-[47%] right-[2.5%] bottom-[25%] left-[76.5%] flex flex-col items-center justify-center text-center leading-none">
+            <span className="font-serif text-[2.7cqw] italic">
+              {t("rappresentiamo")}
+            </span>
+            <span className="mt-[0.8cqw] font-serif text-[12cqw] font-semibold tracking-tight">
               {DATO_ASSOCIAZIONI}
             </span>
-            <span className="mt-[1.2cqw] text-[2.8cqw] font-semibold tracking-wide">
+            <span className="mt-[0.6cqw] text-[2.6cqw] font-semibold tracking-wide">
               {t("associazioni")}
-            </span>
-            <span className="sr-only">
-              {" "}
-              {t("associazioniRappresentate")} · {tc("roma")}
             </span>
           </p>
         </div>

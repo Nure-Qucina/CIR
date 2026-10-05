@@ -9,19 +9,19 @@ import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 /**
- * Banner donazioni (sezione G): foglio di carta con il germoglio nel vaso che
- * esce dal bordo. CTA "Dona ora" → pagina interna /donazioni.
+ * Banner donazioni (sezione G): foglio di carta con le mani che offrono un
+ * cuore da cui spunta un germoglio, che esce dal bordo. CTA "Dona ora" → pagina interna /donazioni.
  */
 export async function DonateBanner({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: "home" });
-  const { germoglio } = ILLUSTRAZIONI;
+  const { maniCuore } = ILLUSTRAZIONI;
   return (
     <Container className="pt-28 pb-16 sm:pb-20 lg:pt-32">
       <div className="foglio relative px-6 pt-36 pb-8 text-center sm:px-10 lg:grid lg:grid-cols-[220px_1fr_auto] lg:items-center lg:gap-10 lg:py-10 lg:text-start">
         <Image
-          src={germoglio.src}
-          width={germoglio.width}
-          height={germoglio.height}
+          src={maniCuore.src}
+          width={maniCuore.width}
+          height={maniCuore.height}
           alt=""
           sizes="(max-width: 1024px) 170px, 220px"
           className="ritaglio absolute start-1/2 -top-20 h-auto w-[170px] -translate-x-1/2 lg:static lg:-my-24 lg:w-full lg:translate-x-0 rtl:translate-x-1/2 rtl:lg:translate-x-0"

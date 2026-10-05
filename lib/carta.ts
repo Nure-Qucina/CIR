@@ -13,10 +13,10 @@ const img = (nome: string, width: number, height: number): Illustrazione => ({
 });
 
 export const ILLUSTRAZIONI = {
-  finestra: img("finestra-cartellino", 1000, 1525), // col cartellino legato al bordo
+  finestra: img("finestra-25", 1000, 1501), // col cartellino largo legato al bordo
   lanterna: img("lanterna", 600, 911),
   treccia: img("treccia", 512, 981),
-  germoglio: img("germoglio", 600, 793),
+  maniCuore: img("mani-cuore", 700, 775), // donazioni: mani che offrono un cuore che germoglia
   microfoni: img("microfoni", 700, 660),
   calendario: img("calendario", 700, 547),
   busta: img("busta", 700, 771),
@@ -47,3 +47,22 @@ export const TAPPE_STORIA: Illustrazione[] = [
   img("tappa-3", 900, 313), // bandierine della manifestazione
   img("tappa-4", 900, 324), // arco della nascita del CIR
 ];
+
+/**
+ * Inclinazione leggera per le card "storte" (news, archivio eventi): scelta
+ * dallo slug, quindi stabile tra un render e l'altro e diversa tra card vicine.
+ */
+const INCLINAZIONI = [
+  "-rotate-[1.4deg]",
+  "rotate-[0.9deg]",
+  "-rotate-[0.6deg]",
+  "rotate-[1.5deg]",
+  "-rotate-[1deg]",
+  "rotate-[0.5deg]",
+];
+
+export function inclinazione(slug: string) {
+  let h = 0;
+  for (const c of slug) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return INCLINAZIONI[h % INCLINAZIONI.length];
+}

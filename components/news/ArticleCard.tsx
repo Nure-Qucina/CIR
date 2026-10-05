@@ -8,22 +8,7 @@ import { formatDateIt, isoDate } from "@/lib/utils/date";
 import { LangBadge } from "@/components/ui/LangBadge";
 import type { Locale } from "@/i18n/routing";
 import { cn } from "@/lib/utils/cn";
-
-/** Inclinazioni delle card "storte": scelte dallo slug, quindi stabili. */
-const INCLINAZIONI = [
-  "-rotate-[1.4deg]",
-  "rotate-[0.9deg]",
-  "-rotate-[0.6deg]",
-  "rotate-[1.5deg]",
-  "-rotate-[1deg]",
-  "rotate-[0.5deg]",
-];
-
-function inclinazione(slug: string) {
-  let h = 0;
-  for (const c of slug) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  return INCLINAZIONI[h % INCLINAZIONI.length];
-}
+import { inclinazione } from "@/lib/carta";
 
 /**
  * Card articolo come un foglio di carta: cornice crema con la copertina

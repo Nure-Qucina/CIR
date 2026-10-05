@@ -18,6 +18,7 @@ import {
   yearOf,
 } from "@/lib/utils/date";
 import { cn } from "@/lib/utils/cn";
+import { inclinazione } from "@/lib/carta";
 
 type Filtro = "prossimi" | "passati" | "tutti";
 
@@ -141,7 +142,7 @@ function Archivio({ eventi }: { eventi: EventoView[] }) {
             <p className="mb-3 font-serif text-2xl font-semibold text-orange-700">
               {anno}
             </p>
-            <ol className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 lg:gap-6">
+            <ol className="grid grid-cols-1 gap-x-7 gap-y-9 sm:grid-cols-2 lg:grid-cols-3">
               {delAnno.map((e) => (
                 <li key={e.slug}>
                   <CartaEvento evento={e} />
@@ -165,20 +166,25 @@ function CartaEvento({ evento }: { evento: EventoView }) {
     .filter(Boolean)
     .join(" · ");
   return (
-    <article className="foglio group relative flex h-full flex-col rounded-[3px] p-2 pb-3 sm:p-2.5 sm:pb-4">
+    <article
+      className={cn(
+        "foglio group relative flex h-full flex-col rounded-[3px] p-2.5 pb-4 transition-transform duration-300 hover:rotate-0",
+        inclinazione(evento.slug),
+      )}
+    >
       <div className="relative">
         <div className="relative aspect-[16/10] overflow-hidden rounded-[2px]">
           <CoverImage
             src={evento.copertina}
             alt=""
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 45vw, 380px"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
             className="transition-transform duration-500 group-hover:scale-[1.03]"
           />
         </div>
-        {/* La data sta a cavallo del bordo inferiore: non copre la locandina. */}
+        {/* La data sta a cavallo del bordo inferiore, a destra: non copre la locandina. */}
         <time
           dateTime={isoDate(evento.dataInizio)}
-          className="bg-cream-50 absolute start-2 bottom-0 translate-y-1/2 rounded-[3px] px-2 py-1.5 text-center leading-none shadow-[0_4px_10px_rgb(42_31_14/0.25)] sm:px-2.5"
+          className="bg-cream-50 absolute end-3 bottom-0 translate-y-[70%] rounded-[3px] px-2 py-1.5 text-center leading-none shadow-[0_4px_10px_rgb(42_31_14/0.25)] sm:px-2.5"
         >
           <span className="text-ink block font-serif text-xl font-semibold sm:text-2xl">
             {dayIt(evento.dataInizio)}
@@ -188,8 +194,8 @@ function CartaEvento({ evento }: { evento: EventoView }) {
           </span>
         </time>
       </div>
-      <div className="flex flex-1 flex-col px-1 pt-9 sm:px-1.5 sm:pt-10">
-        <h3 className="text-ink line-clamp-2 min-h-[2lh] text-sm leading-snug font-bold sm:text-base">
+      <div className="flex flex-1 flex-col px-1.5 pe-20 pt-3">
+        <h3 className="text-ink line-clamp-2 min-h-[2lh] leading-snug font-bold">
           {/* Il link copre tutta la card (stretched link). */}
           <Link
             href={`/eventi/${evento.slug}`}
@@ -199,7 +205,7 @@ function CartaEvento({ evento }: { evento: EventoView }) {
           </Link>
           {evento.isFallback && <LangBadge className="ms-2 align-middle" />}
         </h3>
-        <p className="text-ink-soft mt-1.5 flex items-center gap-1.5 text-xs sm:text-sm">
+        <p className="text-ink-soft mt-1.5 flex items-center gap-1.5 text-sm">
           {luogo && (
             <>
               <MapPin size={13} className="text-teal shrink-0" aria-hidden />
@@ -207,7 +213,7 @@ function CartaEvento({ evento }: { evento: EventoView }) {
             </>
           )}
           {!evento.tuttoIlGiorno && (
-            <span className="hidden shrink-0 sm:inline">
+            <span className="shrink-0">
               {luogo && "· "}
               {formatTimeIt(evento.dataInizio)}
             </span>
