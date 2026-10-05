@@ -40,6 +40,25 @@ export const ARCATE_VALORI: Record<
   "messages-square": img("arco-4", 606, 987), // fumetti sul ponte: dialogo
 };
 
+/**
+ * Oggetti ritagliati dei valori (versione a foglietti, home): immagine, altezza
+ * a schermo in px e quanto sporge sopra il foglietto. Le forme basse (datteri,
+ * fumetto) sono più piccole e sporgono meno, così il peso visivo è simile.
+ */
+export const OGGETTI_VALORI: Record<
+  "heart" | "users" | "hand-helping" | "messages-square",
+  { img: Illustrazione; altezza: number; sporge: number }
+> = {
+  heart: { img: img("lanterna", 600, 911), altezza: 132, sporge: 60 },
+  users: { img: img("treccia", 512, 981), altezza: 132, sporge: 60 },
+  "hand-helping": { img: img("datteri", 600, 459), altezza: 92, sporge: 34 },
+  "messages-square": {
+    img: img("fumetto-arancio", 346, 298),
+    altezza: 92,
+    sporge: 34,
+  },
+};
+
 /** Le tappe del sentiero della storia, in ordine cronologico. */
 export const TAPPE_STORIA: Illustrazione[] = [
   img("tappa-1", 900, 395), // germoglio

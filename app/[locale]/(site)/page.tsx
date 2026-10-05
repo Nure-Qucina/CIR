@@ -9,7 +9,7 @@ import { CoverImage } from "@/components/ui/CoverImage";
 import { Button } from "@/components/ui/Button";
 import { FoglioSezione } from "@/components/carta/FoglioSezione";
 import { HeroFoglio } from "@/components/home/HeroFoglio";
-import { ValoriArcate } from "@/components/home/ValoriArcate";
+import { ValoriFoglietti } from "@/components/home/ValoriFoglietti";
 import { MediaBlock } from "@/components/home/MediaBlock";
 import { DonateBanner } from "@/components/home/DonateBanner";
 import { ArticleCard } from "@/components/news/ArticleCard";
@@ -70,10 +70,15 @@ export default async function Home({
       {/* A) HERO */}
       <HeroFoglio locale={locale as Locale} />
 
-      {/* B) Valori: le quattro arcate su foglio teal */}
-      <FoglioSezione tono="teal" aria-labelledby="valori-home">
+      {/* B) Valori: foglietti con gli oggetti ritagliati, su foglio teal che
+          (se c'è l'evento) si chiude direttamente sul foglio arancio. */}
+      <FoglioSezione
+        tono="teal"
+        chiudeSu={featured ? "arancio" : undefined}
+        aria-labelledby="valori-home"
+      >
         <Container className="py-12 sm:py-16">
-          <div className="mx-auto mb-10 max-w-2xl text-center sm:mb-12">
+          <div className="mb-8 max-w-2xl">
             <p className="text-sm font-semibold tracking-[0.2em] text-orange-200 uppercase">
               {t("valoriOcchiello")}
             </p>
@@ -85,8 +90,8 @@ export default async function Home({
             </h2>
             <p className="text-cream/85 mt-4">{t("valoriSottotitolo")}</p>
           </div>
-          <ValoriArcate valori={valori} />
-          <div className="mt-12 text-center">
+          <ValoriFoglietti valori={valori} />
+          <div className="mt-12">
             <Button href="/chi-siamo" size="lg">
               {t("scopriChiSiamo")}
               <ArrowRight size={18} className="rtl:rotate-180" aria-hidden />
@@ -97,7 +102,11 @@ export default async function Home({
 
       {/* D) Evento in evidenza: foglio arancio */}
       {featured && (
-        <FoglioSezione tono="arancio" aria-labelledby="evento-home">
+        <FoglioSezione
+          tono="arancio"
+          apertura={false}
+          aria-labelledby="evento-home"
+        >
           <Container className="py-12 sm:py-16">
             <div className="flex items-end justify-between gap-4">
               <div>
