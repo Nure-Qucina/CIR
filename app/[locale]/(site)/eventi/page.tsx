@@ -49,6 +49,7 @@ export default async function EventiPage({
         occhiello={t("occhiello")}
         titolo={t("titolo")}
         sottotitolo={t("sottotitolo")}
+        illustrazione="calendario"
       />
       <Container className="py-12 sm:py-16">
         <Suspense fallback={null}>

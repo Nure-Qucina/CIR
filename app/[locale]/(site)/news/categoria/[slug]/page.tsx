@@ -80,10 +80,15 @@ export default async function CategoriaPage({
           { label: site.labelNews, href: "/news" },
           { label: categoria.nome },
         ]}
+        illustrazione="libri"
       />
       <Container className="py-12 sm:py-16">
         <div className="mb-10">
-          <CategoryFilter categorie={categorie} attiva={slug} locale={locale as Locale} />
+          <CategoryFilter
+            categorie={categorie}
+            attiva={slug}
+            locale={locale as Locale}
+          />
         </div>
         <ArticleGrid
           articoli={articoli}

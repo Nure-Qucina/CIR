@@ -46,6 +46,7 @@ export default async function NewsletterConfirmedPage({
           { label: common("home"), href: "/" },
           { label: t("confirmedTitle") },
         ]}
+        illustrazione="busta"
       />
       <Container className="py-6 sm:py-8">
         <div className="mx-auto max-w-2xl space-y-6">

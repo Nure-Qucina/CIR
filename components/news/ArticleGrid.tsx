@@ -16,7 +16,7 @@ export async function ArticleGrid({
   if (articoli.length === 0) {
     const t = await getTranslations({ locale, namespace: "news" });
     return (
-      <div className="rounded-2xl border border-border bg-cream-50 p-10 text-center text-ink-soft">
+      <div className="foglio p-10 text-center text-ink-soft">
         {t("nessunContenuto")}
       </div>
     );

@@ -4,13 +4,13 @@ import { ArrowRight, Calendar, MapPin } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { Container } from "@/components/ui/Container";
-import { Card } from "@/components/ui/Card";
+import Image from "next/image";
 import { CoverImage } from "@/components/ui/CoverImage";
 import { Button } from "@/components/ui/Button";
-import { SectionDivider } from "@/components/layout/SectionDivider";
-import { HeroCentered } from "@/components/home/HeroCentered";
-import { ValueCard } from "@/components/home/ValueCard";
-import { StoriaTimeline } from "@/components/home/StoriaTimeline";
+import { FoglioSezione } from "@/components/carta/FoglioSezione";
+import { HeroFoglio } from "@/components/home/HeroFoglio";
+import { ValoriArcate } from "@/components/home/ValoriArcate";
+import { StoriaSentiero } from "@/components/home/StoriaSentiero";
 import { MediaBlock } from "@/components/home/MediaBlock";
 import { DonateBanner } from "@/components/home/DonateBanner";
 import { ArticleCard } from "@/components/news/ArticleCard";
@@ -22,6 +22,7 @@ import { getSiteConfig } from "@/lib/content/site";
 import type { Valore, MomentoStoria } from "@/lib/data/cir";
 import { formatDateIt, formatTimeIt, isoDate } from "@/lib/utils/date";
 import { buildAlternates, buildOgLocale } from "@/lib/seo/metadata";
+import { ILLUSTRAZIONI } from "@/lib/carta";
 
 export const revalidate = 3600;
 
@@ -69,65 +70,59 @@ export default async function Home({
   return (
     <main id="contenuto">
       {/* A) HERO */}
-      <HeroCentered locale={locale as Locale} />
+      <HeroFoglio locale={locale as Locale} />
 
-      {/* B) Valori */}
-      <section aria-labelledby="valori-home" className="bg-cream-50">
-        <Container className="py-16 sm:py-20">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-orange text-sm font-semibold tracking-[0.2em] uppercase">
+      {/* B) Valori: le quattro arcate su foglio teal */}
+      <FoglioSezione tono="teal" aria-labelledby="valori-home">
+        <Container className="py-12 sm:py-16">
+          <div className="mx-auto mb-10 max-w-2xl text-center sm:mb-12">
+            <p className="text-sm font-semibold tracking-[0.2em] text-orange-200 uppercase">
               {t("valoriOcchiello")}
             </p>
             <h2
               id="valori-home"
-              className="text-ink mt-3 text-[length:var(--text-h2)] font-bold text-balance"
+              className="mt-3 text-[length:var(--text-h2)] font-bold text-balance"
             >
               {t("valoriTitolo")}
             </h2>
-            <p className="text-ink-soft mt-4">{t("valoriSottotitolo")}</p>
+            <p className="text-cream/85 mt-4">{t("valoriSottotitolo")}</p>
           </div>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2">
-            {valori.map((v, i) => (
-              <ValueCard key={v.titolo} valore={v} index={i} />
-            ))}
-          </div>
+          <ValoriArcate valori={valori} />
         </Container>
-      </section>
+      </FoglioSezione>
 
-      {/* C) La nostra storia */}
+      {/* C) La nostra storia: il sentiero a tappe */}
       <section aria-labelledby="storia-home">
         <Container className="py-16 sm:py-20">
-          <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-start">
-            <div className="lg:sticky lg:top-24">
-              <p className="text-orange text-sm font-semibold tracking-[0.2em] uppercase">
-                {t("storiaOcchiello")}
-              </p>
-              <h2
-                id="storia-home"
-                className="text-ink mt-3 text-[length:var(--text-h2)] font-bold text-balance"
-              >
-                {t("storiaTitolo")}
-              </h2>
-              <p className="text-ink-soft mt-4">{t("storiaSottotitolo")}</p>
-              <Button href="/chi-siamo" variant="ghost" className="mt-6">
-                {t("scopriChiSiamo")}
-                <ArrowRight size={16} className="rtl:rotate-180" aria-hidden />
-              </Button>
-            </div>
-            <StoriaTimeline momenti={storia} />
+          <div className="mx-auto mb-8 max-w-2xl text-center">
+            <p className="text-sm font-semibold tracking-[0.2em] text-orange-700 uppercase">
+              {t("storiaOcchiello")}
+            </p>
+            <h2
+              id="storia-home"
+              className="text-ink mt-3 text-[length:var(--text-h2)] font-bold text-balance"
+            >
+              {t("storiaTitolo")}
+            </h2>
+            <p className="text-ink-soft mt-4">{t("storiaSottotitolo")}</p>
+          </div>
+          <StoriaSentiero momenti={storia} />
+          <div className="mt-10 text-center">
+            <Button href="/chi-siamo" variant="ghost">
+              {t("scopriChiSiamo")}
+              <ArrowRight size={16} className="rtl:rotate-180" aria-hidden />
+            </Button>
           </div>
         </Container>
       </section>
 
-      <SectionDivider accent="teal" />
-
-      {/* D) Evento in evidenza */}
+      {/* D) Evento in evidenza: foglio arancio */}
       {featured && (
-        <section aria-labelledby="evento-home">
-          <Container className="py-16 sm:py-20">
+        <FoglioSezione tono="arancio" aria-labelledby="evento-home">
+          <Container className="py-12 sm:py-16">
             <div className="flex items-end justify-between gap-4">
               <div>
-                <p className="text-orange text-sm font-semibold tracking-[0.2em] uppercase">
+                <p className="text-ink/75 text-sm font-semibold tracking-[0.2em] uppercase">
                   {t("eventoOcchiello")}
                 </p>
                 <h2
@@ -139,20 +134,17 @@ export default async function Home({
               </div>
               <Link
                 href="/eventi"
-                className="hidden shrink-0 items-center gap-1.5 text-sm font-semibold text-teal-700 underline-offset-4 hover:underline sm:inline-flex"
+                className="text-ink hidden shrink-0 items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline sm:inline-flex"
               >
                 {t("tuttiGliEventi")}
                 <ArrowRight size={15} className="rtl:rotate-180" aria-hidden />
               </Link>
             </div>
 
-            <Card
-              as="article"
-              className="mt-8 grid overflow-hidden md:grid-cols-2"
-            >
+            <article className="foglio relative mt-8 grid -rotate-[0.5deg] shadow-[0_20px_40px_rgb(98_52_19/0.35)] md:grid-cols-2">
               <Link
                 href={`/eventi/${featured.slug}`}
-                className="relative block aspect-[16/10] md:aspect-auto"
+                className="relative m-3 mb-0 block aspect-[16/10] overflow-hidden rounded-sm md:me-0 md:mb-3 md:aspect-auto"
                 aria-hidden="true"
                 tabIndex={-1}
               >
@@ -209,24 +201,32 @@ export default async function Home({
                   </Button>
                 </div>
               </div>
-            </Card>
+              <Image
+                src={ILLUSTRAZIONI.calendario.src}
+                width={ILLUSTRAZIONI.calendario.width}
+                height={ILLUSTRAZIONI.calendario.height}
+                alt=""
+                sizes="(max-width: 768px) 130px, 210px"
+                className="ritaglio pointer-events-none absolute -end-2 -bottom-9 h-auto w-[130px] md:-end-12 md:-bottom-14 md:w-[210px]"
+              />
+            </article>
 
             {featured.isPast && (
-              <p className="text-ink-soft mt-4 text-sm">
+              <p className="text-ink mt-8 text-sm md:max-w-[70%]">
                 {t("nessunEventoInProgramma")}
               </p>
             )}
           </Container>
-        </section>
+        </FoglioSezione>
       )}
 
       {/* E) News in evidenza */}
       {newsHome.length > 0 && (
-        <section aria-labelledby="news-home" className="bg-cream-50">
+        <section aria-labelledby="news-home">
           <Container className="py-16 sm:py-20">
             <div className="flex items-end justify-between gap-4">
               <div>
-                <p className="text-orange text-sm font-semibold tracking-[0.2em] uppercase">
+                <p className="text-sm font-semibold tracking-[0.2em] text-orange-700 uppercase">
                   {t("newsOcchiello")}
                 </p>
                 <h2

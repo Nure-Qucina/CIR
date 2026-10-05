@@ -50,16 +50,17 @@ export default async function ContattiPage({
         titolo={t("titolo")}
         sottotitolo={t("sottotitolo")}
         crumbs={[{ label: tc("home"), href: "/" }, { label: t("titolo") }]}
+        illustrazione="busta"
       />
 
       <Container className="py-12 sm:py-16">
         <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr]">
           {/* Form */}
           <div>
-            <h2 className="text-[length:var(--text-h3)] font-bold text-ink">
+            <h2 className="text-ink text-[length:var(--text-h3)] font-bold">
               {t("scriviciUnMessaggio")}
             </h2>
-            <p className="mt-2 text-ink-soft">{t("compilaIlModulo")}</p>
+            <p className="text-ink-soft mt-2">{t("compilaIlModulo")}</p>
             <div className="mt-6">
               <ContactForm />
             </div>
@@ -67,8 +68,8 @@ export default async function ContattiPage({
 
           {/* Info istituzionali */}
           <aside className="space-y-6">
-            <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
-              <h2 className="text-lg font-bold text-ink">{t("recapiti")}</h2>
+            <div className="foglio p-6">
+              <h2 className="text-ink text-lg font-bold">{t("recapiti")}</h2>
 
               {contatti.placeholder ? (
                 <div className="mt-4 flex items-start gap-3 rounded-xl border border-orange-200 bg-orange-50 p-4 text-sm">
@@ -83,7 +84,11 @@ export default async function ContattiPage({
                 <ul className="mt-4 space-y-4 text-sm">
                   {contatti.email && (
                     <li className="flex gap-3">
-                      <Mail size={18} className="mt-0.5 shrink-0 text-teal" aria-hidden />
+                      <Mail
+                        size={18}
+                        className="text-teal mt-0.5 shrink-0"
+                        aria-hidden
+                      />
                       <a
                         href={`mailto:${contatti.email}`}
                         className="text-ink underline-offset-4 hover:underline"
@@ -94,7 +99,11 @@ export default async function ContattiPage({
                   )}
                   {contatti.telefono && (
                     <li className="flex gap-3">
-                      <Phone size={18} className="mt-0.5 shrink-0 text-teal" aria-hidden />
+                      <Phone
+                        size={18}
+                        className="text-teal mt-0.5 shrink-0"
+                        aria-hidden
+                      />
                       <a
                         href={`tel:${contatti.telefono.replace(/\s/g, "")}`}
                         className="text-ink underline-offset-4 hover:underline"
@@ -105,7 +114,11 @@ export default async function ContattiPage({
                   )}
                   {contatti.indirizzo && (
                     <li className="flex gap-3">
-                      <MapPin size={18} className="mt-0.5 shrink-0 text-teal" aria-hidden />
+                      <MapPin
+                        size={18}
+                        className="text-teal mt-0.5 shrink-0"
+                        aria-hidden
+                      />
                       <span className="text-ink">{contatti.indirizzo}</span>
                     </li>
                   )}
@@ -113,8 +126,8 @@ export default async function ContattiPage({
               )}
             </div>
 
-            <div className="rounded-2xl border border-border bg-cream-50 p-6">
-              <h2 className="text-lg font-bold text-ink">{t("seguici")}</h2>
+            <div className="foglio p-6">
+              <h2 className="text-ink text-lg font-bold">{t("seguici")}</h2>
               <div className="mt-4 flex gap-3">
                 {site.social.map((s) => {
                   const Icon =
@@ -126,7 +139,7 @@ export default async function ContattiPage({
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={s.piattaforma}
-                      className="grid h-11 w-11 place-items-center rounded-lg bg-teal text-cream transition-colors hover:bg-teal-dark"
+                      className="bg-teal text-cream hover:bg-teal-dark grid h-11 w-11 place-items-center rounded-lg transition-colors"
                     >
                       <Icon size={20} />
                     </a>
@@ -135,9 +148,9 @@ export default async function ContattiPage({
               </div>
             </div>
 
-            <div className="rounded-2xl border border-border bg-teal p-6 text-cream">
+            <div className="carta-teal rotate-[0.6deg] rounded-md p-6 shadow-[0_16px_32px_rgb(20_30_28/0.28)]">
               <h2 className="text-lg font-bold">{t("seiGiornalista")}</h2>
-              <p className="mt-2 text-sm text-cream/85">
+              <p className="text-cream/85 mt-2 text-sm">
                 {t("giornalistaBody")}
               </p>
             </div>

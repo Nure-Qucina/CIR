@@ -84,8 +84,7 @@ export default async function EventoPage({
   ]);
   if (!evento) notFound();
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   const ics = buildIcs(evento, siteUrl);
   const gcal = googleCalendarUrl(evento);
   const luogoCompleto = [
@@ -125,21 +124,19 @@ export default async function EventoPage({
             >
               {evento.isPast ? t("eventoConcluso") : t("inProgramma")}
             </span>
-            {evento.isFallback && (
-              <LangBadge className="ms-2" />
-            )}
+            {evento.isFallback && <LangBadge className="ms-2" />}
 
-            <h1 className="mt-4 text-[length:var(--text-h1)] leading-tight font-bold text-balance text-ink">
+            <h1 className="text-ink mt-4 text-[length:var(--text-h1)] leading-tight font-bold text-balance">
               {evento.titolo}
             </h1>
 
             {/* whitespace-pre-line: preserva gli a-capo inseriti in Keystatic
                 (altrimenti l'HTML li collasserebbe in un unico blocco). */}
-            <p className="mt-4 text-lg leading-relaxed whitespace-pre-line text-ink-soft">
+            <p className="text-ink-soft mt-4 text-lg leading-relaxed whitespace-pre-line">
               {evento.estratto}
             </p>
 
-            <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-2xl border border-border">
+            <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-md shadow-[0_12px_28px_rgb(42_31_14/0.12)]">
               <CoverImage
                 src={evento.copertina}
                 alt={evento.titolo}
@@ -149,7 +146,7 @@ export default async function EventoPage({
             </div>
 
             {evento.descrizione && (
-              <div className="mt-8 text-lg leading-relaxed whitespace-pre-line text-ink">
+              <div className="text-ink mt-8 text-lg leading-relaxed whitespace-pre-line">
                 <p>{evento.descrizione}</p>
               </div>
             )}
@@ -167,13 +164,17 @@ export default async function EventoPage({
 
           {/* Sidebar dettagli */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
-              <h2 className="text-lg font-bold text-ink">{tc("dettagli")}</h2>
+            <div className="foglio p-6">
+              <h2 className="text-ink text-lg font-bold">{tc("dettagli")}</h2>
               <dl className="mt-4 space-y-4 text-sm">
                 <div className="flex gap-3">
-                  <Calendar size={18} className="mt-0.5 shrink-0 text-teal" aria-hidden />
+                  <Calendar
+                    size={18}
+                    className="text-teal mt-0.5 shrink-0"
+                    aria-hidden
+                  />
                   <div>
-                    <dt className="font-semibold text-ink">{t("data")}</dt>
+                    <dt className="text-ink font-semibold">{t("data")}</dt>
                     <dd className="text-ink-soft">
                       <time dateTime={isoDate(evento.dataInizio)}>
                         {formatDateIt(evento.dataInizio)}
@@ -183,20 +184,29 @@ export default async function EventoPage({
                 </div>
                 {!evento.tuttoIlGiorno && (
                   <div className="flex gap-3">
-                    <Clock size={18} className="mt-0.5 shrink-0 text-teal" aria-hidden />
+                    <Clock
+                      size={18}
+                      className="text-teal mt-0.5 shrink-0"
+                      aria-hidden
+                    />
                     <div>
-                      <dt className="font-semibold text-ink">{t("orario")}</dt>
+                      <dt className="text-ink font-semibold">{t("orario")}</dt>
                       <dd className="text-ink-soft">
                         {formatTimeIt(evento.dataInizio)}
-                        {evento.dataFine && ` – ${formatTimeIt(evento.dataFine)}`}
+                        {evento.dataFine &&
+                          ` – ${formatTimeIt(evento.dataFine)}`}
                       </dd>
                     </div>
                   </div>
                 )}
                 <div className="flex gap-3">
-                  <MapPin size={18} className="mt-0.5 shrink-0 text-teal" aria-hidden />
+                  <MapPin
+                    size={18}
+                    className="text-teal mt-0.5 shrink-0"
+                    aria-hidden
+                  />
                   <div>
-                    <dt className="font-semibold text-ink">{t("luogo")}</dt>
+                    <dt className="text-ink font-semibold">{t("luogo")}</dt>
                     <dd className="text-ink-soft">{luogoCompleto}</dd>
                     <a
                       href={mapsUrl(evento.luogo)}
@@ -226,8 +236,8 @@ export default async function EventoPage({
                 </Button>
               )}
 
-              <div className="mt-6 border-t border-border pt-6">
-                <p className="mb-3 text-sm font-semibold text-ink">
+              <div className="border-border mt-6 border-t pt-6">
+                <p className="text-ink mb-3 text-sm font-semibold">
                   {t("aggiungiAlCalendario")}
                 </p>
                 <AddToCalendar

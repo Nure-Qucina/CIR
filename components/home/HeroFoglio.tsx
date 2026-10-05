@@ -1,0 +1,99 @@
+import Image from "next/image";
+import { getTranslations } from "next-intl/server";
+import { ArrowRight } from "lucide-react";
+import { Container } from "@/components/ui/Container";
+import { Button } from "@/components/ui/Button";
+import { DATO_ASSOCIAZIONI } from "@/lib/data/cir";
+import { ILLUSTRAZIONI } from "@/lib/carta";
+import type { Locale } from "@/i18n/routing";
+
+/**
+ * Hero "Il foglio": titolo a sinistra, a destra la finestra ad arco di carta
+ * con dentro Roma (acquedotto, pini, cupola, minareto), i fumetti che le
+ * girano intorno e il cartellino delle associazioni. Text-first: l'LCP resta
+ * l'h1, la finestra ha priority perché è sopra la piega su desktop.
+ *
+ * Payoff e mission sono testi istituzionali (messages/*.json, namespace
+ * "istituzionale"): vedi §12 del brief i18n.
+ */
+export async function HeroFoglio({ locale }: { locale: Locale }) {
+  const [t, tc, ti] = await Promise.all([
+    getTranslations({ locale, namespace: "hero" }),
+    getTranslations({ locale, namespace: "common" }),
+    getTranslations({ locale, namespace: "istituzionale" }),
+  ]);
+  const { finestra, fumettoArancio, fumettoTeal, cartellino } = ILLUSTRAZIONI;
+
+  return (
+    <section className="bg-cream relative overflow-hidden">
+      <Container className="grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.1fr_1fr] lg:gap-12 lg:py-20">
+        <div>
+          <p className="text-sm font-semibold tracking-[0.22em] text-orange-700 uppercase">
+            {t("occhiello")}
+          </p>
+          <h1 className="text-ink mt-4 text-[clamp(2.4rem,6vw,4.25rem)] leading-[1.06] font-bold text-balance">
+            {ti("payoff")}
+          </h1>
+          <p className="text-ink-soft mt-6 max-w-xl text-lg leading-relaxed text-pretty">
+            {ti("mission")}
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Button href="/chi-siamo" size="lg">
+              {t("scopriChiSiamo")}
+              <ArrowRight size={18} className="rtl:rotate-180" aria-hidden />
+            </Button>
+            <Button href="/eventi" variant="ghost" size="lg">
+              {t("iProssimiEventi")}
+            </Button>
+          </div>
+        </div>
+
+        {/* Composizione di ritagli: decorativa tranne il cartellino col dato. */}
+        <div className="relative mx-auto w-[min(72%,400px)] lg:w-[78%]">
+          <Image
+            src={finestra.src}
+            width={finestra.width}
+            height={finestra.height}
+            alt=""
+            priority
+            sizes="(max-width: 1024px) 72vw, 420px"
+            className="ritaglio h-auto w-full"
+          />
+          <Image
+            src={fumettoArancio.src}
+            width={fumettoArancio.width}
+            height={fumettoArancio.height}
+            alt=""
+            sizes="140px"
+            className="ritaglio carta-galleggia absolute -start-[20%] top-[30%] h-auto w-[30%]"
+          />
+          <Image
+            src={fumettoTeal.src}
+            width={fumettoTeal.width}
+            height={fumettoTeal.height}
+            alt=""
+            sizes="130px"
+            className="ritaglio carta-galleggia absolute -end-[16%] top-[42%] h-auto w-[28%] [animation-delay:-3s]"
+          />
+          <div className="carta-dondola absolute -end-[10%] bottom-[2%] w-[32%] lg:w-[28%]">
+            <Image
+              src={cartellino.src}
+              width={cartellino.width}
+              height={cartellino.height}
+              alt=""
+              sizes="120px"
+              className="ritaglio h-auto w-full"
+            />
+            <p className="text-cream absolute inset-x-[10%] top-[38%] bottom-[8%] grid rotate-[4deg] place-content-center text-center text-[clamp(0.55rem,2.1vw,0.74rem)] leading-tight font-semibold hyphens-auto">
+              <span className="block text-[2.4em] leading-none font-bold">
+                {DATO_ASSOCIAZIONI}
+              </span>
+              {t("associazioniRappresentate")}
+              <span className="sr-only"> · {tc("roma")}</span>
+            </p>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}

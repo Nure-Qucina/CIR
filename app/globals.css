@@ -267,3 +267,73 @@
 .skip-link:focus {
   top: 0.5rem;
 }
+
+/* ============================================================
+   Carta intagliata — superfici del redesign "Il foglio".
+   I fogli teal/arancio hanno lo stesso colore del corpo delle
+   strisce strappate (components/carta/Strappo), così il bordo
+   strappato e la sezione si saldano senza giunture.
+   ============================================================ */
+.carta-teal {
+  background: #576b65 url(/images/carta/carta-teal.webp) center / cover;
+  color: var(--color-cream);
+}
+.carta-arancio {
+  background: #e37226;
+  color: var(--color-ink);
+}
+
+/* Foglio di carta: superficie delle card (crema chiaro, ombra morbida). */
+.foglio {
+  background: var(--color-cream-50);
+  border-radius: 0.375rem;
+  box-shadow:
+    0 1px 0 rgb(42 31 14 / 0.04),
+    0 12px 28px rgb(42 31 14 / 0.1);
+}
+
+/* Ritagli che "escono" dalla pagina: ombra portata sulla sagoma. */
+.ritaglio {
+  filter: drop-shadow(0 12px 14px rgb(42 31 14 / 0.22));
+}
+
+/* Tappe della storia: tagli di un'unica illustrazione, bordi sfumati. */
+.sfuma-bordi {
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent),
+    linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent),
+    linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  mask-composite: intersect;
+}
+
+/* Fumetti e cartellino dell'hero: movimento lento, spento da reduced-motion. */
+@keyframes carta-galleggia {
+  50% {
+    transform: translateY(-10px) rotate(-2deg);
+  }
+}
+@keyframes carta-dondola {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+.carta-galleggia {
+  animation: carta-galleggia 6s ease-in-out infinite;
+}
+.carta-dondola {
+  transform-origin: 50% 8%;
+  animation: carta-dondola 5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .carta-galleggia,
+  .carta-dondola {
+    animation: none;
+  }
+}

@@ -56,6 +56,7 @@ export default async function NewsPage({
         occhiello={t("occhiello")}
         titolo={site.labelNews}
         sottotitolo={t("sottotitolo")}
+        illustrazione="documento"
       />
       <Container className="py-12 sm:py-16">
         <div className="mb-10">

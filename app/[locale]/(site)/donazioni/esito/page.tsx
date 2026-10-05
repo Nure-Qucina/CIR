@@ -40,6 +40,7 @@ export default async function DonationResultPage({
           { label: t("title"), href: DONATION_ROUTE },
           { label: t("resultTitle") },
         ]}
+        illustrazione="lanterna"
       />
       <Container className="py-6 sm:py-8">
         <Card className="mx-auto max-w-2xl p-6 sm:p-8">

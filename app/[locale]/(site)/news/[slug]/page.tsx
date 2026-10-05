@@ -103,7 +103,7 @@ export default async function ArticoloPage({
           <header>
             <div className="flex flex-wrap items-center gap-2">
               {articolo.tipo === "comunicato" && (
-                <span className="inline-flex items-center rounded-full bg-ink px-3 py-1 text-xs font-semibold text-cream">
+                <span className="bg-ink text-cream inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold">
                   {t("comunicatoStampa")}
                 </span>
               )}
@@ -118,15 +118,15 @@ export default async function ArticoloPage({
               {articolo.isFallback && <LangBadge />}
             </div>
 
-            <h1 className="mt-4 text-[length:var(--text-h1)] leading-tight font-bold text-balance text-ink">
+            <h1 className="text-ink mt-4 text-[length:var(--text-h1)] leading-tight font-bold text-balance">
               {articolo.titolo}
             </h1>
 
-            <p className="mt-4 text-lg leading-relaxed text-ink-soft">
+            <p className="text-ink-soft mt-4 text-lg leading-relaxed">
               {articolo.estratto}
             </p>
 
-            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-ink-soft">
+            <div className="text-ink-soft mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
               <span>{articolo.autore}</span>
               {articolo.dataPubblicazione && (
                 <>
@@ -148,7 +148,7 @@ export default async function ArticoloPage({
             </div>
           </header>
 
-          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-2xl border border-border">
+          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-md shadow-[0_12px_28px_rgb(42_31_14/0.12)]">
             <CoverImage
               src={articolo.copertina}
               alt={articolo.titolo}
@@ -165,7 +165,7 @@ export default async function ArticoloPage({
             )}
           </Prose>
 
-          <div className="mt-10 flex flex-col gap-6 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="border-border mt-10 flex flex-col gap-6 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
             <Link
               href="/news"
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-teal-700 underline-offset-4 hover:underline"
@@ -178,8 +178,8 @@ export default async function ArticoloPage({
         </article>
 
         {correlatiRaw.length > 0 && (
-          <section className="mt-16 border-t border-border pt-12">
-            <h2 className="mb-6 text-2xl font-bold text-ink">
+          <section className="border-border mt-16 border-t pt-12">
+            <h2 className="text-ink mb-6 text-2xl font-bold">
               {t("articoliCorrelati")}
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils/cn";
 
 /**
- * Card — superficie base "warm minimal": bianco su crema, bordo tenue,
- * raggio morbido, ombra leggera. Building block per EventCard/ArticleCard.
+ * Card — foglio di carta (redesign "Il foglio"): crema chiaro, angoli appena
+ * arrotondati, ombra morbida, niente bordo. Building block per
+ * EventCard/ArticleCard; la superficie è la classe `.foglio` di globals.css.
  */
 export function Card({
   children,
@@ -13,14 +14,5 @@ export function Card({
   className?: string;
   as?: React.ElementType;
 }) {
-  return (
-    <Tag
-      className={cn(
-        "rounded-xl border border-border bg-surface shadow-sm",
-        className,
-      )}
-    >
-      {children}
-    </Tag>
-  );
+  return <Tag className={cn("foglio", className)}>{children}</Tag>;
 }

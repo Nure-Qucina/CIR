@@ -65,6 +65,7 @@ export default async function PrivacyCookiePage({
           { label: tc("home"), href: "/" },
           { label: t("privacyCookie") },
         ]}
+        illustrazione="documento"
       />
       <Container className="py-12 sm:py-16">
         <div className="mx-auto max-w-3xl">

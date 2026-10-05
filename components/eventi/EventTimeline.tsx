@@ -189,7 +189,7 @@ function Timeline({ eventi }: { eventi: EventoView[] }) {
 function EmptyState() {
   const t = useTranslations("eventi");
   return (
-    <div className="rounded-2xl border border-border bg-cream-50 p-10 text-center">
+    <div className="foglio p-10 text-center">
       <p className="text-lg font-semibold text-ink">{t("emptyTitolo")}</p>
       <p className="mx-auto mt-2 max-w-md text-ink-soft">{t("emptyBody")}</p>
       <a
