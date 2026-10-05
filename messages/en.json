@@ -387,5 +387,22 @@
     "confirmedTitle": "Subscription confirmed",
     "confirmedBody": "Thank you! Your subscription to the newsletter of the Islamic Community of Rome has been confirmed. You will receive our updates on the Community’s activities and projects.",
     "confirmedCta": "Back to home"
+  },
+  "newsletterForm": {
+    "occhiello": "Newsletter",
+    "titolo": "Community news, straight to your inbox",
+    "sottotitolo": "Events, press releases and CIR initiatives. You can unsubscribe at any time.",
+    "email": "Email address",
+    "placeholder": "Your email",
+    "iscriviti": "Subscribe",
+    "invioInCorso": "Sending…",
+    "consenso": "I have read the <privacy>privacy policy</privacy> and want to receive the CIR newsletter.",
+    "quasiFatto": "Almost there!",
+    "controllaEmail": "We've sent you an email: click the link to confirm your subscription.",
+    "erroreEmail": "Please enter a valid email address.",
+    "erroreConsenso": "To subscribe you need to accept the privacy policy.",
+    "nonDisponibile": "Subscription is not available right now. Please try again later.",
+    "troppiTentativi": "Too many attempts. Please try again in a few minutes.",
+    "erroreInvio": "Something went wrong. Please try again shortly."
   }
 }

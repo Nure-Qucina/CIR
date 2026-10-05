@@ -20,12 +20,12 @@ export const ILLUSTRAZIONI = {
   microfoni: img("microfoni", 700, 660),
   calendario: img("calendario", 700, 547),
   busta: img("busta", 700, 771),
+  aeroplanino: img("busta-aereo", 245, 212), // newsletter
   fumettoArancio: img("fumetto-arancio", 346, 298),
   fumettoTeal: img("fumetto-teal", 315, 305),
   libri: img("libri", 700, 876),
   documento: img("documento", 700, 773),
   mappa: img("mappa", 900, 434),
-  panorama: img("panorama-roma", 2400, 1029), // Roma: acquedotto, pini, cupola, minareto
 } as const;
 
 export type NomeIllustrazione = keyof typeof ILLUSTRAZIONI;

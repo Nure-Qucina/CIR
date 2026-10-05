@@ -12,6 +12,7 @@ import { HeroFoglio } from "@/components/home/HeroFoglio";
 import { ValoriFoglietti } from "@/components/home/ValoriFoglietti";
 import { MediaBlock } from "@/components/home/MediaBlock";
 import { DonateBanner } from "@/components/home/DonateBanner";
+import { NewsletterBlock } from "@/components/home/NewsletterBlock";
 import { ArticleCard } from "@/components/news/ArticleCard";
 import { LangBadge } from "@/components/ui/LangBadge";
 import { getEventi } from "@/lib/content/eventi";
@@ -49,12 +50,11 @@ export default async function Home({
   const { locale } = await params;
   setRequestLocale(locale as Locale);
 
-  const [t, tEventi, ti, tChi, eventi, articoliEvidenza, categorieMap, site] =
+  const [t, tEventi, ti, eventi, articoliEvidenza, categorieMap, site] =
     await Promise.all([
       getTranslations({ locale: locale as Locale, namespace: "home" }),
       getTranslations({ locale: locale as Locale, namespace: "eventi" }),
       getTranslations({ locale: locale as Locale, namespace: "istituzionale" }),
-      getTranslations({ locale: locale as Locale, namespace: "chiSiamo" }),
       getEventi(locale as Locale),
       getArticoli({ inEvidenza: true, locale: locale as Locale }),
       getCategorieMap(locale as Locale),
@@ -96,30 +96,57 @@ export default async function Home({
         </Container>
       </FoglioSezione>
 
-      {/* C) Respiro tra i due fogli: il panorama di Roma in carta intagliata,
-          con il motto nel cielo di carta. */}
-      <section aria-labelledby="panorama-home" className="overflow-hidden">
-        <Container className="pt-14 text-center sm:pt-20">
-          <h2
-            id="panorama-home"
-            className="text-ink mx-auto max-w-3xl font-serif text-[clamp(1.6rem,3.6vw,2.6rem)] leading-tight text-balance italic"
-          >
-            {tChi("titolo")}
-          </h2>
-        </Container>
-        <Image
-          src={ILLUSTRAZIONI.panorama.src}
-          width={ILLUSTRAZIONI.panorama.width}
-          height={ILLUSTRAZIONI.panorama.height}
-          alt=""
-          sizes="100vw"
-          className="sfuma-alto -mt-6 h-[280px] w-full object-cover object-[70%_100%] sm:-mt-16 sm:h-auto"
-        />
-      </section>
+      {/* C) Voci della comunità: le news, tra i valori e l'evento */}
+      {newsHome.length > 0 && (
+        <section aria-labelledby="news-home">
+          <Container className="py-16 sm:py-20">
+            <div className="flex items-end justify-between gap-4">
+              <div className="flex items-end gap-3 sm:gap-4">
+                <Image
+                  src={ILLUSTRAZIONI.documento.src}
+                  width={ILLUSTRAZIONI.documento.width}
+                  height={ILLUSTRAZIONI.documento.height}
+                  alt=""
+                  sizes="80px"
+                  className="ritaglio h-auto w-14 shrink-0 -rotate-[8deg] sm:w-20"
+                />
+                <div>
+                  <p className="text-sm font-semibold tracking-[0.2em] text-orange-700 uppercase">
+                    {t("newsOcchiello")}
+                  </p>
+                  <h2
+                    id="news-home"
+                    className="text-ink mt-3 text-[length:var(--text-h2)] font-bold"
+                  >
+                    {t("dalleNostre", { labelNews: site.labelNews })}
+                  </h2>
+                </div>
+              </div>
+              <Link
+                href="/news"
+                className="hidden shrink-0 items-center gap-1.5 text-sm font-semibold text-teal-700 underline-offset-4 hover:underline sm:inline-flex"
+              >
+                {t("tuttiGliArticoli")}
+                <ArrowRight size={15} className="rtl:rotate-180" aria-hidden />
+              </Link>
+            </div>
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {newsHome.map((a) => (
+                <ArticleCard
+                  key={a.slug}
+                  articolo={a}
+                  categoria={categorieMap.get(a.categoria)}
+                  locale={locale as Locale}
+                />
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* D) Evento in evidenza: foglio arancio */}
       {featured && (
-        <div className="relative -mt-9 sm:-mt-14">
+        <div>
           <FoglioSezione tono="arancio" aria-labelledby="evento-home">
             <Container className="py-12 sm:py-16">
               <div className="flex items-end justify-between gap-4">
@@ -227,53 +254,8 @@ export default async function Home({
         </div>
       )}
 
-      {/* E) News in evidenza */}
-      {newsHome.length > 0 && (
-        <section aria-labelledby="news-home">
-          <Container className="py-16 sm:py-20">
-            <div className="flex items-end justify-between gap-4">
-              <div className="flex items-end gap-3 sm:gap-4">
-                <Image
-                  src={ILLUSTRAZIONI.documento.src}
-                  width={ILLUSTRAZIONI.documento.width}
-                  height={ILLUSTRAZIONI.documento.height}
-                  alt=""
-                  sizes="80px"
-                  className="ritaglio h-auto w-14 shrink-0 -rotate-[8deg] sm:w-20"
-                />
-                <div>
-                  <p className="text-sm font-semibold tracking-[0.2em] text-orange-700 uppercase">
-                    {t("newsOcchiello")}
-                  </p>
-                  <h2
-                    id="news-home"
-                    className="text-ink mt-3 text-[length:var(--text-h2)] font-bold"
-                  >
-                    {t("dalleNostre", { labelNews: site.labelNews })}
-                  </h2>
-                </div>
-              </div>
-              <Link
-                href="/news"
-                className="hidden shrink-0 items-center gap-1.5 text-sm font-semibold text-teal-700 underline-offset-4 hover:underline sm:inline-flex"
-              >
-                {t("tuttiGliArticoli")}
-                <ArrowRight size={15} className="rtl:rotate-180" aria-hidden />
-              </Link>
-            </div>
-            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {newsHome.map((a) => (
-                <ArticleCard
-                  key={a.slug}
-                  articolo={a}
-                  categoria={categorieMap.get(a.categoria)}
-                  locale={locale as Locale}
-                />
-              ))}
-            </div>
-          </Container>
-        </section>
-      )}
+      {/* E) Newsletter: iscrizione con doppia conferma */}
+      <NewsletterBlock locale={locale as Locale} />
 
       {/* F) Media e comunicazione */}
       <MediaBlock locale={locale as Locale} />

@@ -387,5 +387,22 @@
     "confirmedTitle": "Iscrizione confermata",
     "confirmedBody": "Grazie! La tua iscrizione alla newsletter della Comunità Islamica di Roma è stata confermata. Riceverai i nostri aggiornamenti sulle attività e sui progetti della Comunità.",
     "confirmedCta": "Torna alla home"
+  },
+  "newsletterForm": {
+    "occhiello": "Newsletter",
+    "titolo": "Le novità della comunità, nella tua email",
+    "sottotitolo": "Eventi, comunicati e iniziative del CIR. Puoi annullare l'iscrizione in qualsiasi momento.",
+    "email": "Indirizzo email",
+    "placeholder": "La tua email",
+    "iscriviti": "Iscriviti",
+    "invioInCorso": "Invio in corso…",
+    "consenso": "Ho letto l’<privacy>informativa privacy</privacy> e voglio ricevere la newsletter del CIR.",
+    "quasiFatto": "Ci siamo quasi!",
+    "controllaEmail": "Ti abbiamo inviato un'email: clicca sul link per confermare l'iscrizione.",
+    "erroreEmail": "Inserisci un indirizzo email valido.",
+    "erroreConsenso": "Per iscriverti devi accettare l'informativa privacy.",
+    "nonDisponibile": "L'iscrizione non è disponibile in questo momento. Riprova più tardi.",
+    "troppiTentativi": "Troppi tentativi ravvicinati. Riprova tra qualche minuto.",
+    "erroreInvio": "Qualcosa è andato storto. Riprova tra poco."
   }
 }
