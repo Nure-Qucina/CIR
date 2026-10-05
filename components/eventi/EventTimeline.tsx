@@ -25,8 +25,9 @@ const FILTRI: Filtro[] = ["prossimi", "passati", "tutti"];
 
 /**
  * Pagina eventi: gli eventi in programma in card grandi, l'archivio come
- * elenco compatto raggruppato per anno (data in evidenza + miniatura), così
- * in uno schermo se ne vedono molti. Filtri con stato nell'URL.
+ * griglia di card medie raggruppate per anno (copertina in primo piano con la
+ * data sopra), così se ne vedono parecchi senza perdere le copertine.
+ * Filtri con stato nell'URL.
  * L'ordine arriva già da getEventi: futuri dal più vicino, passati dal più recente.
  */
 export function EventTimeline({ eventi }: { eventi: EventoView[] }) {
@@ -140,10 +141,10 @@ function Archivio({ eventi }: { eventi: EventoView[] }) {
             <p className="mb-3 font-serif text-2xl font-semibold text-orange-700">
               {anno}
             </p>
-            <ol className="grid gap-3 lg:grid-cols-2 lg:gap-4">
+            <ol className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 lg:gap-6">
               {delAnno.map((e) => (
                 <li key={e.slug}>
-                  <RigaEvento evento={e} />
+                  <CartaEvento evento={e} />
                 </li>
               ))}
             </ol>
@@ -154,35 +155,42 @@ function Archivio({ eventi }: { eventi: EventoView[] }) {
   );
 }
 
-/** Riga compatta dell'archivio: data, miniatura, titolo e luogo. */
-function RigaEvento({ evento }: { evento: EventoView }) {
+/**
+ * Card dell'archivio: la copertina viene prima di tutto (grande, in alto, con
+ * la data appoggiata sopra come un bigliettino), sotto solo titolo e luogo.
+ */
+function CartaEvento({ evento }: { evento: EventoView }) {
   const t = useTranslations("common");
   const luogo = [evento.luogo.nome, evento.luogo.citta]
     .filter(Boolean)
     .join(" · ");
   return (
-    <article className="foglio group relative grid grid-cols-[48px_88px_1fr] items-center gap-3 rounded-[3px] p-2.5 sm:grid-cols-[60px_128px_1fr] sm:gap-4">
-      <time
-        dateTime={isoDate(evento.dataInizio)}
-        className="text-center leading-none"
-      >
-        <span className="text-ink block font-serif text-3xl font-semibold">
-          {dayIt(evento.dataInizio)}
-        </span>
-        <span className="mt-1 block text-xs font-semibold tracking-wider text-orange-700 uppercase">
-          {monthShortIt(evento.dataInizio)}
-        </span>
-      </time>
-      <div className="relative aspect-[4/3] overflow-hidden rounded-[2px]">
-        <CoverImage
-          src={evento.copertina}
-          alt=""
-          sizes="(max-width: 640px) 88px, 128px"
-        />
+    <article className="foglio group relative flex h-full flex-col rounded-[3px] p-2 pb-3 sm:p-2.5 sm:pb-4">
+      <div className="relative">
+        <div className="relative aspect-[16/10] overflow-hidden rounded-[2px]">
+          <CoverImage
+            src={evento.copertina}
+            alt=""
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 45vw, 380px"
+            className="transition-transform duration-500 group-hover:scale-[1.03]"
+          />
+        </div>
+        {/* La data sta a cavallo del bordo inferiore: non copre la locandina. */}
+        <time
+          dateTime={isoDate(evento.dataInizio)}
+          className="bg-cream-50 absolute start-2 bottom-0 translate-y-1/2 rounded-[3px] px-2 py-1.5 text-center leading-none shadow-[0_4px_10px_rgb(42_31_14/0.25)] sm:px-2.5"
+        >
+          <span className="text-ink block font-serif text-xl font-semibold sm:text-2xl">
+            {dayIt(evento.dataInizio)}
+          </span>
+          <span className="mt-0.5 block text-[0.65rem] font-semibold tracking-wider text-orange-700 uppercase sm:text-xs">
+            {monthShortIt(evento.dataInizio)}
+          </span>
+        </time>
       </div>
-      <div className="min-w-0 py-1 pe-2">
-        <h3 className="text-ink line-clamp-2 text-[0.95rem] leading-snug font-bold sm:text-base">
-          {/* Il link copre tutta la riga (stretched link). */}
+      <div className="flex flex-1 flex-col px-1 pt-9 sm:px-1.5 sm:pt-10">
+        <h3 className="text-ink line-clamp-2 min-h-[2lh] text-sm leading-snug font-bold sm:text-base">
+          {/* Il link copre tutta la card (stretched link). */}
           <Link
             href={`/eventi/${evento.slug}`}
             className="underline-offset-4 group-hover:underline after:absolute after:inset-0"
@@ -191,7 +199,7 @@ function RigaEvento({ evento }: { evento: EventoView }) {
           </Link>
           {evento.isFallback && <LangBadge className="ms-2 align-middle" />}
         </h3>
-        <p className="text-ink-soft mt-1 flex items-center gap-1.5 text-xs sm:text-sm">
+        <p className="text-ink-soft mt-1.5 flex items-center gap-1.5 text-xs sm:text-sm">
           {luogo && (
             <>
               <MapPin size={13} className="text-teal shrink-0" aria-hidden />
@@ -199,13 +207,13 @@ function RigaEvento({ evento }: { evento: EventoView }) {
             </>
           )}
           {!evento.tuttoIlGiorno && (
-            <span className="shrink-0">
+            <span className="hidden shrink-0 sm:inline">
               {luogo && "· "}
               {formatTimeIt(evento.dataInizio)}
             </span>
           )}
         </p>
-        <span className="mt-1 hidden items-center gap-1 text-xs font-semibold text-teal-700 sm:inline-flex">
+        <span className="mt-auto hidden items-center gap-1 pt-2 text-xs font-semibold text-teal-700 sm:inline-flex">
           {t("dettagli")}
           <ArrowRight size={13} className="rtl:rotate-180" aria-hidden />
         </span>
