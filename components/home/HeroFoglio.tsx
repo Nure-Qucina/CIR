@@ -13,8 +13,9 @@ import type { Locale } from "@/i18n/routing";
  * girano intorno e il cartellino delle associazioni. Text-first: l'LCP resta
  * l'h1, la finestra ha priority perché è sopra la piega su desktop.
  *
- * Payoff e mission sono testi istituzionali (messages/*.json, namespace
- * "istituzionale"): vedi §12 del brief i18n.
+ * Payoff (spezzato in payoffInizio/Enfasi/Fine) e missione corta sono testi
+ * istituzionali (messages/*.json, namespace "istituzionale"): vedi §12 del
+ * brief i18n. La missione completa resta in Chi siamo.
  */
 export async function HeroFoglio({ locale }: { locale: Locale }) {
   const [t, ti] = await Promise.all([
@@ -30,11 +31,20 @@ export async function HeroFoglio({ locale }: { locale: Locale }) {
           <p className="text-sm font-semibold tracking-[0.22em] text-orange-700 uppercase">
             {t("occhiello")}
           </p>
-          <h1 className="text-ink mt-4 text-[clamp(2.4rem,6vw,4.25rem)] leading-[1.06] font-bold text-balance">
-            {ti("payoff")}
+          {/* Titolo spezzato: la parte in evidenza va a capo in serif corsivo
+              arancione. Il bengalese ha un pezzo finale perché l'ordine delle
+              parole è diverso. */}
+          <h1 className="text-ink mt-4 text-[clamp(2.4rem,6vw,4.25rem)] leading-[1.06] font-bold [:lang(bn)_&]:text-[clamp(1.9rem,4.2vw,3rem)] [:lang(bn)_&]:leading-[1.3]">
+            {ti("payoffInizio")}{" "}
+            <em className="block font-serif font-semibold text-orange-600 italic">
+              {ti("payoffEnfasi")}
+            </em>
+            {ti("payoffFine") && (
+              <span className="block">{ti("payoffFine")}</span>
+            )}
           </h1>
           <p className="text-ink-soft mt-6 max-w-xl text-lg leading-relaxed text-pretty">
-            {ti("mission")}
+            {ti("missionBreve")}
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Button href="/chi-siamo" size="lg">
