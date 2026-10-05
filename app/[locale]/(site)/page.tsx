@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/Button";
 import { FoglioSezione } from "@/components/carta/FoglioSezione";
 import { HeroFoglio } from "@/components/home/HeroFoglio";
 import { ValoriArcate } from "@/components/home/ValoriArcate";
-import { StoriaSentiero } from "@/components/home/StoriaSentiero";
 import { MediaBlock } from "@/components/home/MediaBlock";
 import { DonateBanner } from "@/components/home/DonateBanner";
 import { ArticleCard } from "@/components/news/ArticleCard";
@@ -19,7 +18,7 @@ import { getEventi } from "@/lib/content/eventi";
 import { getArticoli } from "@/lib/content/articoli";
 import { getCategorieMap } from "@/lib/content/categorie";
 import { getSiteConfig } from "@/lib/content/site";
-import type { Valore, MomentoStoria } from "@/lib/data/cir";
+import type { Valore } from "@/lib/data/cir";
 import { formatDateIt, formatTimeIt, isoDate } from "@/lib/utils/date";
 import { buildAlternates, buildOgLocale } from "@/lib/seo/metadata";
 import { ILLUSTRAZIONI } from "@/lib/carta";
@@ -61,7 +60,6 @@ export default async function Home({
       getSiteConfig(),
     ]);
   const valori = ti.raw("valori") as Valore[];
-  const storia = ti.raw("storia") as MomentoStoria[];
 
   // Evento in evidenza: il prossimo futuro, altrimenti l'ultimo passato.
   const featured = eventi.find((e) => !e.isPast) ?? eventi[0] ?? null;
@@ -88,33 +86,14 @@ export default async function Home({
             <p className="text-cream/85 mt-4">{t("valoriSottotitolo")}</p>
           </div>
           <ValoriArcate valori={valori} />
-        </Container>
-      </FoglioSezione>
-
-      {/* C) La nostra storia: il sentiero a tappe */}
-      <section aria-labelledby="storia-home">
-        <Container className="py-16 sm:py-20">
-          <div className="mx-auto mb-8 max-w-2xl text-center">
-            <p className="text-sm font-semibold tracking-[0.2em] text-orange-700 uppercase">
-              {t("storiaOcchiello")}
-            </p>
-            <h2
-              id="storia-home"
-              className="text-ink mt-3 text-[length:var(--text-h2)] font-bold text-balance"
-            >
-              {t("storiaTitolo")}
-            </h2>
-            <p className="text-ink-soft mt-4">{t("storiaSottotitolo")}</p>
-          </div>
-          <StoriaSentiero momenti={storia} />
-          <div className="mt-10 text-center">
-            <Button href="/chi-siamo" variant="ghost">
+          <div className="mt-12 text-center">
+            <Button href="/chi-siamo" size="lg">
               {t("scopriChiSiamo")}
-              <ArrowRight size={16} className="rtl:rotate-180" aria-hidden />
+              <ArrowRight size={18} className="rtl:rotate-180" aria-hidden />
             </Button>
           </div>
         </Container>
-      </section>
+      </FoglioSezione>
 
       {/* D) Evento in evidenza: foglio arancio */}
       {featured && (
