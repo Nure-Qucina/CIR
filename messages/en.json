@@ -407,7 +407,7 @@
     "quasiFatto": "Almost there!",
     "controllaEmail": "We've sent you an email: click the link to confirm your subscription.",
     "erroreEmail": "Please enter a valid email address.",
-    "erroreConsenso": "To subscribe you need to accept the privacy policy.",
+    "erroreConsenso": "To subscribe, tick the box to confirm you have read the privacy notice and want to receive the newsletter.",
     "nonDisponibile": "Subscription is not available right now. Please try again later.",
     "troppiTentativi": "Too many attempts. Please try again in a few minutes.",
     "erroreInvio": "Something went wrong. Please try again shortly."

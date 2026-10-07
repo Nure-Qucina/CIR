@@ -332,7 +332,7 @@ export default async function PrivacyCookiePage({
                 distingue le persone dai programmi automatici senza usare
                 cookie, e un limite ai tentativi ravvicinati calcolato con
                 codici ricavati dall’indirizzo IP e dall’email (servizio
-                Upstash), che si cancellano da soli entro un’ora.
+                Upstash), che si cancellano da soli entro due ore.
               </p>
               <Scheda
                 dati="Nome, cognome, email, importo, frequenza (unica o mensile), preferenza sulla visibilità del nome e lingua del sito; i dati del pagamento gestiti da Stripe; i dati tecnici della verifica anti-abuso."
@@ -354,7 +354,7 @@ export default async function PrivacyCookiePage({
                     par. 1, lett. a e art. 9, par. 2, lett. a).
                   </>
                 }
-                durata="10 anni dalla donazione, come previsto per le scritture contabili (art. 2220 del Codice civile). I codici anti-abuso si cancellano da soli entro un’ora."
+                durata="10 anni dalla donazione, come previsto per le scritture contabili (art. 2220 del Codice civile). I codici anti-abuso si cancellano da soli entro due ore."
                 obbligo="Sì: i dati del modulo servono per effettuare la donazione e inviarti la conferma."
               />
 

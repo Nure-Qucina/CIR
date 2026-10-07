@@ -407,7 +407,7 @@
     "quasiFatto": "Ci siamo quasi!",
     "controllaEmail": "Ti abbiamo inviato un'email: clicca sul link per confermare l'iscrizione.",
     "erroreEmail": "Inserisci un indirizzo email valido.",
-    "erroreConsenso": "Per iscriverti devi accettare l'informativa privacy.",
+    "erroreConsenso": "Per iscriverti spunta la casella: conferma di aver letto l’informativa e di voler ricevere la newsletter.",
     "nonDisponibile": "L'iscrizione non è disponibile in questo momento. Riprova più tardi.",
     "troppiTentativi": "Troppi tentativi ravvicinati. Riprova tra qualche minuto.",
     "erroreInvio": "Qualcosa è andato storto. Riprova tra poco."
