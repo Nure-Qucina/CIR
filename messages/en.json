@@ -263,25 +263,28 @@
       "messaggioInviatoBreve": "Message sent. Thank you!",
       "providerNonConfigurato": "Sending not active yet: the email provider needs to be configured (RESEND_API_KEY, CONTACT_FORM_TO).",
       "erroreInvio": "An error occurred while sending. Please try again later or contact us on social media.",
-      "aziendaLabel": "Company (leave blank)"
+      "aziendaLabel": "Company (leave blank)",
+      "informativa": "We will only use your details to reply to your message. Read the <privacy>privacy notice</privacy>."
     }
   },
   "legal": {
-    "privacyCookie": "Privacy & Cookies"
+    "privacyCookie": "Privacy & Cookies",
+    "soloItaliano": "This notice is available in Italian, which is the legally binding version.",
+    "domandeDati": "For any question about your data, write to {email}."
   },
   "cookieBanner": {
     "titolo": "We respect your privacy",
-    "descrizione": "We use technical cookies necessary for the site to work and, only with your consent, statistics and marketing cookies. Details in the <link>Privacy & Cookies notice</link>.",
-    "accettaTutti": "Accept all",
-    "rifiutaTutti": "Reject all",
+    "descrizione": "We only use technical cookies that the site needs to work. If you agree, we also measure visits in aggregate form, without cookies and without advertising. You can change your mind at any time. Details in the <link>Privacy & Cookies notice</link>.",
+    "accettaTutti": "Accept",
+    "rifiutaTutti": "Reject",
     "personalizza": "Customize",
-    "salvaPreferenze": "Save preferences",
+    "salvaPreferenze": "Save choices",
     "necessariTitolo": "Necessary",
-    "necessariDesc": "Essential for the site to work. Always active.",
+    "necessariDesc": "Remember your language and your choices and protect the donation form. Always active.",
     "statisticheTitolo": "Statistics",
-    "statisticheDesc": "Help us understand how the site is used, anonymously.",
-    "marketingTitolo": "Marketing",
-    "marketingDesc": "For any third-party content."
+    "statisticheDesc": "Tell us how many people visit the site, which pages they read and how fast they load. Aggregate data, no cookies (Vercel).",
+    "preferenze": "Cookie preferences",
+    "gestisciPreferenze": "Manage cookie preferences"
   },
   "notFound": {
     "errore404": "404 Error",

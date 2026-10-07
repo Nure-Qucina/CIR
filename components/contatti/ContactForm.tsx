@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { useTranslations } from "next-intl";
 import { CheckCircle2, AlertCircle, Send } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import {
   sendContactMessage,
   type ContactState,
@@ -139,6 +140,22 @@ export function ContactForm() {
       </div>
 
       <SubmitButton />
+
+      {/* Informativa breve nel punto di raccolta (art. 13 GDPR). Niente
+        casella "accetto": la base giuridica è la richiesta dell'utente,
+        non il consenso. */}
+      <p className="text-ink-soft text-sm">
+        {t.rich("informativa", {
+          privacy: (chunks) => (
+            <Link
+              href="/privacy"
+              className="font-semibold text-teal-700 underline underline-offset-2 hover:text-teal"
+            >
+              {chunks}
+            </Link>
+          ),
+        })}
+      </p>
     </form>
   );
 }

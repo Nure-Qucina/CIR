@@ -13,16 +13,18 @@ import {
 } from "@/lib/cookie-consent";
 
 /**
- * Banner consenso cookie — GDPR compliant, on-brand.
+ * Banner consenso cookie — linee guida del Garante (10/6/2021), on-brand.
  *
  *  - Compare al primo accesso (nessun consenso registrato) e riapribile da
  *    ovunque con `window.dispatchEvent(new Event("open-cookie-settings"))`
- *    (vedi CookieSettingsButton, nella pagina Privacy e Cookie).
- *  - "Accetta tutti" e "Rifiuta tutti" hanno pari prominenza (linee guida
- *    EDPB: rifiutare dev'essere facile quanto accettare).
- *  - Statistiche e Marketing sono OFF di default; i Necessari sono bloccati
- *    su ON. Nessun cookie non essenziale viene impostato prima del consenso
- *    (oggi il sito non ne usa affatto — vedi lib/cookie-consent.ts).
+ *    (vedi CookieSettingsButton: link "Preferenze cookie" nel footer di ogni
+ *    pagina e pulsante nella pagina Privacy e Cookie).
+ *  - "Accetta" e "Rifiuta" hanno pari prominenza (rifiutare dev'essere facile
+ *    quanto accettare).
+ *  - Un'unica categoria facoltativa, Statistiche (Vercel Web Analytics e
+ *    Speed Insights, caricati da ConsentedAnalytics solo dopo il sì), OFF di
+ *    default; i Necessari sono bloccati su ON. Nessuno strumento di
+ *    marketing o profilazione: se ne arriva uno, nuova categoria qui.
  *  - Non bloccante (aria-modal="false"): non oscura la pagina, ma resta finché
  *    l'utente non compie una scelta esplicita (nessun "chiudi = consenso").
  */
@@ -31,7 +33,6 @@ export function CookieBanner() {
   const [visible, setVisible] = useState(false);
   const [details, setDetails] = useState(false);
   const [statistiche, setStatistiche] = useState(false);
-  const [marketing, setMarketing] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
   // Mostra al primo accesso; ascolta la riapertura dalle preferenze.
@@ -42,9 +43,7 @@ export function CookieBanner() {
     if (!readConsent()) setVisible(true);
 
     const reopen = () => {
-      const current = readConsent();
-      setStatistiche(current?.statistiche ?? false);
-      setMarketing(current?.marketing ?? false);
+      setStatistiche(readConsent()?.statistiche ?? false);
       setDetails(true);
       setVisible(true);
     };
@@ -57,7 +56,7 @@ export function CookieBanner() {
     if (visible) panelRef.current?.focus();
   }, [visible]);
 
-  function salva(prefs: { statistiche: boolean; marketing: boolean }) {
+  function salva(prefs: { statistiche: boolean }) {
     writeConsent(prefs);
     setVisible(false);
     setDetails(false);
@@ -96,7 +95,7 @@ export function CookieBanner() {
             {t.rich("descrizione", {
               link: (chunks) => (
                 <Link
-                  href="/privacy"
+                  href="/privacy#cookie"
                   className="font-semibold text-teal-700 underline underline-offset-2 hover:text-teal"
                 >
                   {chunks}
@@ -119,12 +118,6 @@ export function CookieBanner() {
                 checked={statistiche}
                 onChange={setStatistiche}
               />
-              <CategoryRow
-                titolo={t("marketingTitolo")}
-                descrizione={t("marketingDesc")}
-                checked={marketing}
-                onChange={setMarketing}
-              />
             </div>
           )}
 
@@ -133,14 +126,14 @@ export function CookieBanner() {
             <Button
               size="sm"
               variant="secondary"
-              onClick={() => salva({ statistiche: true, marketing: true })}
+              onClick={() => salva({ statistiche: true })}
             >
               {t("accettaTutti")}
             </Button>
             <Button
               size="sm"
               variant="secondary"
-              onClick={() => salva({ statistiche: false, marketing: false })}
+              onClick={() => salva({ statistiche: false })}
             >
               {t("rifiutaTutti")}
             </Button>
@@ -148,7 +141,7 @@ export function CookieBanner() {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => salva({ statistiche, marketing })}
+                onClick={() => salva({ statistiche })}
               >
                 {t("salvaPreferenze")}
               </Button>

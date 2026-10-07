@@ -3,6 +3,7 @@ import { Mail, Phone } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { getSiteConfig } from "@/lib/content/site";
 import { Strappo } from "@/components/carta/Strappo";
+import { CookieSettingsButton } from "@/components/legal/CookieSettingsButton";
 import { FacebookIcon, InstagramIcon } from "@/components/ui/SocialIcons";
 import type { Locale } from "@/i18n/routing";
 
@@ -159,6 +160,15 @@ export async function Footer({ locale }: { locale: Locale }) {
               >
                 {tLegal("privacyCookie")}
               </Link>
+              <span aria-hidden="true" className="text-cream/40">
+                ·
+              </span>
+              {/* Riapre il banner: le scelte sui cookie si cambiano da ogni
+                pagina, non solo dall'informativa. */}
+              <CookieSettingsButton
+                variant="link"
+                className="text-cream/85 hover:text-cream cursor-pointer underline-offset-4 hover:underline"
+              />
               <span aria-hidden="true" className="text-cream/40">
                 ·
               </span>

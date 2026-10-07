@@ -263,25 +263,28 @@
       "messaggioInviatoBreve": "Messaggio inviato. Grazie!",
       "providerNonConfigurato": "Invio non ancora attivo: il provider email va configurato (RESEND_API_KEY, CONTACT_FORM_TO).",
       "erroreInvio": "Si è verificato un errore nell'invio. Riprova più tardi o scrivici sui social.",
-      "aziendaLabel": "Azienda (non compilare)"
+      "aziendaLabel": "Azienda (non compilare)",
+      "informativa": "Useremo i tuoi dati solo per rispondere al messaggio. Leggi l’<privacy>informativa privacy</privacy>."
     }
   },
   "legal": {
-    "privacyCookie": "Privacy e Cookie"
+    "privacyCookie": "Privacy e Cookie",
+    "soloItaliano": "Questa informativa è disponibile in italiano, che è la versione giuridicamente valida.",
+    "domandeDati": "Per qualsiasi domanda sui tuoi dati scrivi a {email}."
   },
   "cookieBanner": {
     "titolo": "Rispettiamo la tua privacy",
-    "descrizione": "Usiamo cookie tecnici necessari al funzionamento del sito e, solo con il tuo consenso, cookie di statistica e marketing. Dettagli nella <link>informativa Privacy e Cookie</link>.",
-    "accettaTutti": "Accetta tutti",
-    "rifiutaTutti": "Rifiuta tutti",
+    "descrizione": "Usiamo solo cookie tecnici, necessari al funzionamento del sito. Se lo accetti, misuriamo anche le visite in forma aggregata, senza cookie e senza pubblicità. Puoi cambiare idea quando vuoi. Dettagli nell’<link>informativa Privacy e Cookie</link>.",
+    "accettaTutti": "Accetta",
+    "rifiutaTutti": "Rifiuta",
     "personalizza": "Personalizza",
-    "salvaPreferenze": "Salva preferenze",
+    "salvaPreferenze": "Salva le scelte",
     "necessariTitolo": "Necessari",
-    "necessariDesc": "Indispensabili per il funzionamento del sito. Sempre attivi.",
+    "necessariDesc": "Ricordano la lingua e le tue scelte e proteggono il modulo di donazione. Sempre attivi.",
     "statisticheTitolo": "Statistiche",
-    "statisticheDesc": "Ci aiutano a capire come viene usato il sito, in forma anonima.",
-    "marketingTitolo": "Marketing",
-    "marketingDesc": "Per eventuali contenuti di terze parti."
+    "statisticheDesc": "Ci dicono quante persone visitano il sito, quali pagine leggono e quanto velocemente si caricano. Dati aggregati, senza cookie (Vercel).",
+    "preferenze": "Preferenze cookie",
+    "gestisciPreferenze": "Gestisci preferenze cookie"
   },
   "notFound": {
     "errore404": "Errore 404",

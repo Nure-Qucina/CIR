@@ -168,6 +168,14 @@ npx lighthouse http://localhost:3100/ar --view
 npx lighthouse http://localhost:3100/bn --view
 ```
 
+## Privacy e cookie
+
+- **Informativa**: `app/[locale]/(site)/privacy/page.tsx` (testo in italiano in tutte le lingue, con una nota tradotta su en/ar/bn). Descrive il comportamento reale del codice: **se aggiungi un fornitore, uno script, un cookie o un modulo, aggiorna l'informativa, l'elenco in `components/legal/ElencoCookie.tsx` e la data `ULTIMO_AGGIORNAMENTO`**.
+- **Banner**: `components/legal/CookieBanner.tsx`, consenso in `lib/cookie-consent.ts` (cookie `cir-cookie-consent`, 6 mesi). Unica categoria facoltativa: *Statistiche*. Nessuno strumento di marketing.
+- **Statistiche**: Vercel Web Analytics e Speed Insights si caricano **solo dopo il consenso** tramite `components/legal/ConsentedAnalytics.tsx`. Non montare `<Analytics />` o `<SpeedInsights />` direttamente nei layout.
+- **Nuovo strumento non tecnico** (pixel, video incorporati, mappe, chat…): va caricato solo con `hasConsentFor(...)`, con una categoria nel banner e un nuovo `CONSENT_VERSION` (così il banner viene richiesto di nuovo a tutti).
+- Le preferenze si riaprono da **"Preferenze cookie"** nel footer di ogni pagina (`CookieSettingsButton`).
+
 ## Dati ancora da fornire
 
 Vedi **`DA-FORNIRE.md`**: contatti reali, logo ufficiale, foto, date/autori reali degli articoli.
