@@ -22,7 +22,7 @@
     "visibilityLabel": "Name visibility",
     "visibilityPublic": "Show my name publicly as a supporter",
     "visibilityAnonymous": "Do not show my name publicly",
-    "visibilityHint": "CIR and Stripe will still process the data needed to manage the donation and the payment, as described in the Privacy Notice.",
+    "visibilityHint": "CIR and Stripe will still process the data needed to manage the donation and the payment, as described in the <privacy>Privacy Notice</privacy>.",
     "stepAmount": "Amount",
     "stepPayment": "Payment",
     "stepConfirm": "Confirmation",

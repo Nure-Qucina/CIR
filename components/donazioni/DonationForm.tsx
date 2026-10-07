@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 import type { Stripe } from "@stripe/stripe-js";
 import type { Locale } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/lib/utils/cn";
@@ -685,7 +686,21 @@ export function DonationForm({ locale }: { locale: Locale }) {
                 );
               })}
             </div>
-            <p className="text-ink-soft mt-3 text-sm">{t("visibilityHint")}</p>
+            <p className="text-ink-soft mt-3 text-sm">
+              {t.rich("visibilityHint", {
+                privacy: (chunks) => (
+                  // Nuova scheda: chi legge l'informativa non perde il modulo.
+                  <Link
+                    href="/privacy"
+                    target="_blank"
+                    rel="noopener"
+                    className="hover:text-teal font-semibold text-teal-700 underline underline-offset-2"
+                  >
+                    {chunks}
+                  </Link>
+                ),
+              })}
+            </p>
           </fieldset>
           {shouldRenderNewsletterConsent(newsletterEnabled) ? (
             <label

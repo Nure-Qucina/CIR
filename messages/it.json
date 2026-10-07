@@ -22,7 +22,7 @@
     "visibilityLabel": "Visibilità del nome",
     "visibilityPublic": "Mostra il mio nome pubblicamente come sostenitore",
     "visibilityAnonymous": "Non mostrare pubblicamente il mio nome",
-    "visibilityHint": "I dati necessari alla gestione della donazione e del pagamento saranno comunque trattati da CIR e Stripe secondo l’Informativa Privacy.",
+    "visibilityHint": "I dati necessari alla gestione della donazione e del pagamento saranno comunque trattati da CIR e Stripe secondo l’<privacy>Informativa Privacy</privacy>.",
     "stepAmount": "Importo",
     "stepPayment": "Pagamento",
     "stepConfirm": "Conferma",

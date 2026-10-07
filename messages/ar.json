@@ -22,7 +22,7 @@
     "visibilityLabel": "ظهور الاسم",
     "visibilityPublic": "أظهر اسمي علنًا كداعم",
     "visibilityAnonymous": "لا تُظهر اسمي علنًا",
-    "visibilityHint": "ستظل CIR وStripe تعالجان البيانات اللازمة لإدارة التبرع والدفع وفقًا لإشعار الخصوصية.",
+    "visibilityHint": "ستظل CIR وStripe تعالجان البيانات اللازمة لإدارة التبرع والدفع وفقًا <privacy>لإشعار الخصوصية</privacy>.",
     "stepAmount": "المبلغ",
     "stepPayment": "الدفع",
     "stepConfirm": "التأكيد",

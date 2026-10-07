@@ -22,7 +22,7 @@
     "visibilityLabel": "নাম প্রকাশ",
     "visibilityPublic": "সমর্থক হিসেবে আমার নাম প্রকাশ্যে দেখান",
     "visibilityAnonymous": "আমার নাম প্রকাশ্যে দেখাবেন না",
-    "visibilityHint": "অনুদান ও পেমেন্ট পরিচালনার জন্য প্রয়োজনীয় তথ্য CIR ও Stripe গোপনীয়তা নোটিশ অনুযায়ী এখনও প্রক্রিয়া করবে।",
+    "visibilityHint": "অনুদান ও পেমেন্ট পরিচালনার জন্য প্রয়োজনীয় তথ্য CIR ও Stripe <privacy>গোপনীয়তা নোটিশ</privacy> অনুযায়ী এখনও প্রক্রিয়া করবে।",
     "stepAmount": "পরিমাণ",
     "stepPayment": "পেমেন্ট",
     "stepConfirm": "নিশ্চিতকরণ",
