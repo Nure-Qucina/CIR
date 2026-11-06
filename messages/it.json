@@ -257,8 +257,10 @@
       "emailLabel": "Email",
       "messaggioLabel": "Messaggio",
       "erroreNome": "Inserisci il tuo nome.",
+      "erroreNomeLungo": "Il nome può avere al massimo 80 caratteri.",
       "erroreEmail": "Inserisci un'email valida.",
       "erroreMessaggio": "Scrivi un messaggio di almeno 10 caratteri.",
+      "erroreMessaggioLungo": "Il messaggio può avere al massimo 5.000 caratteri.",
       "erroreGenerico": "Controlla i campi evidenziati.",
       "invioInCorso": "Invio in corso…",
       "inviaMessaggio": "Invia messaggio",
@@ -267,6 +269,8 @@
       "messaggioInviatoBreve": "Messaggio inviato. Grazie!",
       "providerNonConfigurato": "Invio non ancora attivo: il provider email va configurato (RESEND_API_KEY, CONTACT_FORM_TO).",
       "erroreInvio": "Si è verificato un errore nell'invio. Riprova più tardi o scrivici sui social.",
+      "erroreTroppiInvii": "Hai già inviato diversi messaggi poco fa. Riprova tra una ventina di minuti.",
+      "erroreVerifica": "Non siamo riusciti a verificare l'invio. Ricarica la pagina e riprova.",
       "aziendaLabel": "Azienda (non compilare)",
       "informativa": "Useremo i tuoi dati solo per rispondere al messaggio. Leggi l’<privacy>informativa privacy</privacy>."
     }

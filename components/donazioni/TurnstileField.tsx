@@ -54,10 +54,13 @@ export function TurnstileField({
   siteKey,
   onToken,
   resetSignal = 0,
+  action = TURNSTILE_ACTION,
 }: {
   siteKey: string;
   onToken: (token: string) => void;
   resetSignal?: number;
+  /** Azione Turnstile verificata lato server (default: checkout donazioni). */
+  action?: string;
 }) {
   const host = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
@@ -75,7 +78,7 @@ export function TurnstileField({
         if (cancelled || !host.current || !window.turnstile) return;
         widgetId.current = window.turnstile.render(host.current, {
           sitekey: siteKey,
-          action: TURNSTILE_ACTION,
+          action,
           appearance: "interaction-only",
           callback: (token) => onTokenRef.current(token),
           "expired-callback": () => onTokenRef.current(""),
@@ -92,7 +95,7 @@ export function TurnstileField({
         widgetId.current = null;
       }
     };
-  }, [siteKey]);
+  }, [siteKey, action]);
 
   useEffect(() => {
     if (resetSignal === 0) return;

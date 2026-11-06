@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useTranslations } from "next-intl";
 import { CheckCircle2, AlertCircle, Send } from "lucide-react";
@@ -10,16 +10,27 @@ import {
   type ContactState,
 } from "@/app/[locale]/(site)/contatti/actions";
 import { cn } from "@/lib/utils/cn";
+import { TurnstileField } from "@/components/donazioni/TurnstileField";
+import {
+  CONTACT_LIMITS,
+  CONTACT_TURNSTILE_ACTION,
+  CONTACT_TURNSTILE_FIELD,
+} from "@/lib/contatti/guard";
 
-const initial: ContactState = { status: "idle", message: "" };
+/** Chiave pubblica Turnstile (inserita in build). Vuota = controllo spento (sviluppo). */
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? "";
 
-function SubmitButton() {
+type FormState = ContactState & { invii?: number };
+
+const initial: FormState = { status: "idle", message: "" };
+
+function SubmitButton({ bloccato = false }: { bloccato?: boolean }) {
   const { pending } = useFormStatus();
   const t = useTranslations("contatti.form");
   return (
     <button
       type="submit"
-      disabled={pending}
+      disabled={pending || bloccato}
       className="inline-flex items-center justify-center gap-2 rounded-xl bg-orange px-6 py-3 font-semibold text-ink transition-colors hover:bg-orange-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:pointer-events-none disabled:opacity-60"
     >
       {pending ? t("invioInCorso") : t("inviaMessaggio")}
@@ -32,8 +43,17 @@ const fieldBase =
   "mt-1.5 w-full rounded-xl border bg-surface px-4 py-2.5 text-ink placeholder:text-ink-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal";
 
 export function ContactForm() {
-  const [state, formAction] = useActionState(sendContactMessage, initial);
+  // `invii` conta le risposte del server: il token Turnstile vale una volta
+  // sola, quindi a ogni risposta (errore compreso) il widget ne chiede uno nuovo.
+  const [state, formAction] = useActionState(
+    async (prev: FormState, formData: FormData): Promise<FormState> => ({
+      ...(await sendContactMessage(prev, formData)),
+      invii: (prev.invii ?? 0) + 1,
+    }),
+    initial,
+  );
   const t = useTranslations("contatti.form");
+  const [token, setToken] = useState("");
 
   if (state.status === "success") {
     return (
@@ -71,6 +91,7 @@ export function ContactForm() {
           name="nome"
           type="text"
           autoComplete="name"
+          maxLength={CONTACT_LIMITS.nomeMax}
           aria-invalid={Boolean(state.errors?.nome)}
           aria-describedby={state.errors?.nome ? "nome-err" : undefined}
           className={cn(
@@ -94,6 +115,7 @@ export function ContactForm() {
           name="email"
           type="email"
           autoComplete="email"
+          maxLength={CONTACT_LIMITS.emailMax}
           aria-invalid={Boolean(state.errors?.email)}
           aria-describedby={state.errors?.email ? "email-err" : undefined}
           className={cn(
@@ -116,6 +138,7 @@ export function ContactForm() {
           id="messaggio"
           name="messaggio"
           rows={6}
+          maxLength={CONTACT_LIMITS.messaggioMax}
           aria-invalid={Boolean(state.errors?.messaggio)}
           aria-describedby={
             state.errors?.messaggio ? "messaggio-err" : undefined
@@ -139,7 +162,19 @@ export function ContactForm() {
         <input id="azienda" name="azienda" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <SubmitButton />
+      {TURNSTILE_SITE_KEY ? (
+        <>
+          <TurnstileField
+            siteKey={TURNSTILE_SITE_KEY}
+            action={CONTACT_TURNSTILE_ACTION}
+            onToken={setToken}
+            resetSignal={state.invii ?? 0}
+          />
+          <input type="hidden" name={CONTACT_TURNSTILE_FIELD} value={token} />
+        </>
+      ) : null}
+
+      <SubmitButton bloccato={Boolean(TURNSTILE_SITE_KEY) && !token} />
 
       {/* Informativa breve nel punto di raccolta (art. 13 GDPR). Niente
         casella "accetto": la base giuridica è la richiesta dell'utente,

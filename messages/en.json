@@ -257,8 +257,10 @@
       "emailLabel": "Email",
       "messaggioLabel": "Message",
       "erroreNome": "Please enter your name.",
+      "erroreNomeLungo": "The name can be at most 80 characters long.",
       "erroreEmail": "Please enter a valid email address.",
       "erroreMessaggio": "Please write a message of at least 10 characters.",
+      "erroreMessaggioLungo": "The message can be at most 5,000 characters long.",
       "erroreGenerico": "Please check the highlighted fields.",
       "invioInCorso": "Sending…",
       "inviaMessaggio": "Send message",
@@ -267,6 +269,8 @@
       "messaggioInviatoBreve": "Message sent. Thank you!",
       "providerNonConfigurato": "Sending not active yet: the email provider needs to be configured (RESEND_API_KEY, CONTACT_FORM_TO).",
       "erroreInvio": "An error occurred while sending. Please try again later or contact us on social media.",
+      "erroreTroppiInvii": "You have already sent several messages a moment ago. Please try again in about twenty minutes.",
+      "erroreVerifica": "We could not verify your submission. Please reload the page and try again.",
       "aziendaLabel": "Company (leave blank)",
       "informativa": "We will only use your details to reply to your message. Read the <privacy>privacy notice</privacy>."
     }
