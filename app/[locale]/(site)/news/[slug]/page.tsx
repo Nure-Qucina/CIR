@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { MdxImage } from "@/components/news/MdxImage";
 import { Clock, ArrowLeft } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
@@ -169,7 +170,10 @@ export default async function ArticoloPage({
 
           <Prose className="mt-10">
             {articolo.corpo ? (
-              <MDXRemote source={articolo.corpo} />
+              <MDXRemote
+                source={articolo.corpo}
+                components={{ img: MdxImage }}
+              />
             ) : (
               <p>{articolo.estratto}</p>
             )}

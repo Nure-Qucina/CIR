@@ -100,6 +100,16 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/\\[locale\\]": ["./content/**/*"],
   },
+  /**
+   * MdxImage (foto nel corpo degli articoli) legge le misure dei file in
+   * public/ con un percorso costruito a runtime: il tracer copierebbe allora
+   * l'intera cartella public/ (~43 MB, e cresce con ogni upload) nella
+   * funzione delle pagine news. Serve solo in build (pagine SSG): si esclude.
+   * public/ resta servita dalla CDN come sempre.
+   */
+  outputFileTracingExcludes: {
+    "/\\[locale\\]": ["./public/**/*"],
+  },
 };
 
 export default withNextIntl(nextConfig);
