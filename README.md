@@ -168,6 +168,31 @@ npx lighthouse http://localhost:3100/ar --view
 npx lighthouse http://localhost:3100/bn --view
 ```
 
+## Sicurezza: host ammessi (CSP)
+
+Il sito invia una **Content Security Policy** (`next.config.ts`, `cspCompleta`): il browser carica script, immagini, iframe e connessioni **solo** dagli host elencati. Oggi: il sito stesso, Stripe (`js.stripe.com`, `*.js.stripe.com`, `hooks.stripe.com`, `api.stripe.com`, Link), Cloudflare Turnstile, tile OpenStreetMap, Vercel (Analytics/Speed Insights, toolbar delle Preview), GitHub e Google Fonts per Keystatic.
+
+- **Sul sito pubblico è obbligatoria**: ciò che non è in lista viene bloccato (la pagina si apre, ma quel pezzo manca).
+- **Su `/keystatic` e `/api/keystatic` è in osservazione** (`Content-Security-Policy-Report-Only`): segnala ma non blocca, finché l'editor dopo il login GitHub non è stato verificato.
+
+> ⚠️ **Regola**: se aggiungi un **servizio esterno nuovo** — video YouTube/Vimeo incorporato, immagini da un altro sito, mappa Google, widget di prenotazione, chat, un nuovo metodo di pagamento, un altro script di statistiche — **aggiungi il suo host alla lista in `next.config.ts`** nella regola giusta (`script-src`, `frame-src`, `img-src`, `connect-src`…), **prova la pagina** e controlla la cassetta qui sotto. Senza questo passaggio il nuovo pezzo non comparirà ai visitatori. Se è uno strumento non tecnico, vale anche la sezione *Privacy e cookie*.
+
+### Cassetta delle segnalazioni
+
+Ogni blocco (o osservazione su Keystatic) viene inviato dal browser del visitatore a `/api/csp-report` (`app/api/csp-report/route.ts`, `lib/csp-report.ts`) e registrato nei log di Vercel, senza dati personali (niente IP, niente query string):
+
+```
+[csp] blocco script-src-elem https://host-bloccato.example su /donazioni
+[csp] osservazione connect-src https://uploads.github.com su /keystatic/collection/articoli
+```
+
+Per leggerle: **Vercel → progetto `cir` → Logs**, cerca `[csp]`. Sul piano Hobby i log restano poco (circa un'ora): controllali **subito dopo** una modifica o una pubblicazione. Le segnalazioni causate dalle estensioni del browser vengono scartate.
+
+- Un `blocco` su una pagina pubblica = un pezzo che i visitatori non vedono: aggiungere l'host (se legittimo) o capire da dove arriva.
+- ⚠️ **Non aggiungere mai un host alla lista solo perché compare nel log.** La cassetta è pubblica: chiunque può inviare una segnalazione finta. Si aggiunge solo un servizio che il sito usa davvero e che avete aggiunto voi.
+- Un `blocco` su `/donazioni` è **urgente**: se serve, Vercel → Deployments → *Instant Rollback* sulla versione precedente.
+- Le `osservazione` su `/keystatic` servono a completare la lista prima di renderla obbligatoria anche lì.
+
 ## Privacy e cookie
 
 - **Informativa**: `app/[locale]/(site)/privacy/page.tsx` (testo in italiano in tutte le lingue, con una nota tradotta su en/ar/bn). Descrive il comportamento reale del codice: **se aggiungi un fornitore, uno script, un cookie o un modulo, aggiorna l'informativa, l'elenco in `components/legal/ElencoCookie.tsx` e la data `ULTIMO_AGGIORNAMENTO`**.

@@ -60,6 +60,10 @@ const cspCompleta = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'self'",
+  // Cassetta delle segnalazioni (app/api/csp-report): report-to per
+  // Chrome/Edge (con l'header Reporting-Endpoints), report-uri per gli altri.
+  "report-uri /api/csp-report",
+  "report-to csp",
 ]
   .map((d) => d.replace(/\s+/g, " ").trim())
   .join("; ");
@@ -68,6 +72,7 @@ const cspMinima = "frame-ancestors 'self'; object-src 'none'; base-uri 'self'";
 
 const securityHeaders = [
   { key: "Content-Security-Policy", value: cspCompleta },
+  { key: "Reporting-Endpoints", value: 'csp="/api/csp-report"' },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
