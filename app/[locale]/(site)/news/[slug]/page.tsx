@@ -26,7 +26,17 @@ import { getSiteConfig } from "@/lib/content/site";
 import { formatDateIt, isoDate } from "@/lib/utils/date";
 import { buildAlternates, buildOgLocale } from "@/lib/seo/metadata";
 
-export const revalidate = 3600;
+/**
+ * Niente rigenerazione a tempo: i contenuti stanno nei file del deploy e ogni
+ * salvataggio Keystatic fa già un nuovo deploy. Rigenerare non porterebbe
+ * dati nuovi ma costerebbe ISR writes: Next non produce un output identico
+ * byte per byte (l'ordine dei pezzi in streaming cambia), quindi Vercel
+ * conta ogni rigenerazione come una scrittura nuova.
+ */
+export const revalidate = false;
+
+/** Solo gli slug noti alla build: un URL inventato dà 404 senza finire nella cache ISR. */
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const slugs = await getArticoliSlugs();

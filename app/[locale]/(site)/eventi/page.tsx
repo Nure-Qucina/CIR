@@ -28,7 +28,12 @@ export async function generateMetadata({
 }
 
 // ISR: rigenera ogni ora.
-export const revalidate = 3600;
+/**
+ * Una volta al giorno, non ogni ora: i contenuti arrivano col deploy, qui
+ * cambia solo ciò che dipende dalla data (eventi passati, agevolazioni
+ * scadute). Ogni rigenerazione è una ISR write anche a contenuto invariato.
+ */
+export const revalidate = 86400;
 
 export default async function EventiPage({
   params,

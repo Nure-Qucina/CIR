@@ -32,7 +32,14 @@ export async function generateMetadata({
   };
 }
 
-export const revalidate = 3600;
+/**
+ * Niente rigenerazione a tempo: i contenuti stanno nei file del deploy e ogni
+ * salvataggio Keystatic fa già un nuovo deploy. Rigenerare non porterebbe
+ * dati nuovi ma costerebbe ISR writes: Next non produce un output identico
+ * byte per byte (l'ordine dei pezzi in streaming cambia), quindi Vercel
+ * conta ogni rigenerazione come una scrittura nuova.
+ */
+export const revalidate = false;
 
 export default async function MoscheePage({
   params,

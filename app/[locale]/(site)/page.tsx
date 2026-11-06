@@ -24,7 +24,12 @@ import { formatDateIt, formatTimeIt, isoDate } from "@/lib/utils/date";
 import { buildAlternates, buildOgLocale } from "@/lib/seo/metadata";
 import { ILLUSTRAZIONI } from "@/lib/carta";
 
-export const revalidate = 3600;
+/**
+ * Una volta al giorno, non ogni ora: i contenuti arrivano col deploy, qui
+ * cambia solo ciò che dipende dalla data (eventi passati, agevolazioni
+ * scadute). Ogni rigenerazione è una ISR write anche a contenuto invariato.
+ */
+export const revalidate = 86400;
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

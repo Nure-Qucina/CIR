@@ -22,8 +22,14 @@ function escapeIcs(text: string): string {
     .replace(/\n/g, "\\n");
 }
 
-function nowStampUtc(): string {
-  return new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+/**
+ * DTSTAMP fisso, ricavato dall'inizio evento (in UTC, come vuole RFC 5545).
+ * Non l'ora corrente: il .ics finisce nell'HTML della pagina, e un valore che
+ * cambia a ogni render rende la pagina "nuova" a ogni rigenerazione ISR
+ * (= una ISR write pagata ogni volta).
+ */
+function stampUtc(evento: Evento): string {
+  return `${toIcsFloating(evento.dataInizio)}Z`;
 }
 
 function endValue(evento: Evento): string {
@@ -50,7 +56,7 @@ export function buildIcs(evento: Evento, siteUrl: string): string {
     "CALSCALE:GREGORIAN",
     "BEGIN:VEVENT",
     `UID:${evento.slug}@comunitaislamicadiroma.it`,
-    `DTSTAMP:${nowStampUtc()}`,
+    `DTSTAMP:${stampUtc(evento)}`,
     `DTSTART:${toIcsFloating(evento.dataInizio)}`,
     `DTEND:${toIcsFloating(endValue(evento))}`,
     `SUMMARY:${escapeIcs(evento.titolo)}`,

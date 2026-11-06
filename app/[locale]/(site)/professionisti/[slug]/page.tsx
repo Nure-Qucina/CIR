@@ -30,7 +30,15 @@ import {
   whatsappHref,
 } from "@/lib/content/rete";
 
-export const revalidate = 3600;
+/**
+ * Una volta al giorno, non ogni ora: i contenuti arrivano col deploy, qui
+ * cambia solo ciò che dipende dalla data (eventi passati, agevolazioni
+ * scadute). Ogni rigenerazione è una ISR write anche a contenuto invariato.
+ */
+export const revalidate = 86400;
+
+/** Solo gli slug noti alla build: un URL inventato dà 404 senza finire nella cache ISR. */
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const slugs = await getProfessionistiSlugs();
