@@ -26,6 +26,13 @@ export const ILLUSTRAZIONI = {
   libri: img("libri", 700, 876),
   documento: img("documento", 700, 773),
   mappa: img("mappa", 900, 434),
+  // La rete (novembre 2026): icone del menu e aree dei professionisti.
+  // Generate su Higgsfield nello stesso stile, sfondo già scontornato.
+  moschea: img("menu-moschee", 283, 360),
+  bottega: img("menu-sponsor", 360, 355),
+  valigetta: img("menu-professionisti", 360, 359),
+  bilancia: img("bilancia", 606, 579),
+  creativita: img("creativita", 846, 664),
 } as const;
 
 export type NomeIllustrazione = keyof typeof ILLUSTRAZIONI;

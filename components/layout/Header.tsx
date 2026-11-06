@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { getTranslations } from "next-intl/server";
 import { getSiteConfig } from "@/lib/content/site";
 import { buttonClassName } from "@/components/ui/Button";
@@ -7,6 +8,7 @@ import { Logo } from "./Logo";
 import { MobileMenu } from "./MobileMenu";
 import { NavLink } from "./NavLink";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ReteMenu } from "./ReteMenu";
 import type { Locale } from "@/i18n/routing";
 
 /**
@@ -15,7 +17,7 @@ import type { Locale } from "@/i18n/routing";
  * sono il menu mobile e il selettore lingua.
  */
 export async function Header({ locale }: { locale: Locale }) {
-  const [t, tc, { labelNews }] = await Promise.all([
+  const [t, tc, { labelNews, reteVisibile }] = await Promise.all([
     getTranslations({ locale, namespace: "nav" }),
     getTranslations({ locale, namespace: "common" }),
     getSiteConfig(),
@@ -48,9 +50,18 @@ export async function Header({ locale }: { locale: Locale }) {
         >
           <ul className="flex items-center gap-1">
             {nav.map((item) => (
-              <li key={item.href}>
-                <NavLink href={item.href}>{item.label}</NavLink>
-              </li>
+              <Fragment key={item.href}>
+                <li>
+                  <NavLink href={item.href}>{item.label}</NavLink>
+                </li>
+                {/* «La rete» (Moschee, Sponsor, Professionisti) dopo Chi siamo,
+                    solo se accesa in Keystatic (Configurazione sito) */}
+                {reteVisibile && item.href === "/chi-siamo" && (
+                  <li>
+                    <ReteMenu />
+                  </li>
+                )}
+              </Fragment>
             ))}
           </ul>
         </nav>
@@ -67,7 +78,7 @@ export async function Header({ locale }: { locale: Locale }) {
           >
             {tc("dona")}
           </Link>
-          <MobileMenu nav={nav} />
+          <MobileMenu nav={nav} rete={reteVisibile} />
         </div>
       </div>
     </header>

@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import type { Metadata } from "next";
 import { reader } from "./reader";
 import type { SiteConfig, SocialLink } from "./types";
 
@@ -52,6 +53,7 @@ export const getSiteConfig = cache(async (): Promise<SiteConfig> => {
     labelNews,
     social,
     donazioniUrl: site?.donazioniUrl || DEFAULTS.donazioniUrl,
+    reteVisibile: site?.reteVisibile ?? false,
     contatti: {
       email,
       telefono,
@@ -60,3 +62,13 @@ export const getSiteConfig = cache(async (): Promise<SiteConfig> => {
     },
   };
 });
+
+/**
+ * Robots delle pagine «La rete»: finché l'interruttore in Keystatic è spento
+ * le pagine si aprono col link diretto (per controllare i contenuti) ma
+ * Google non le indicizza.
+ */
+export async function robotsRete(): Promise<Metadata["robots"]> {
+  const { reteVisibile } = await getSiteConfig();
+  return reteVisibile ? undefined : { index: false, follow: false };
+}

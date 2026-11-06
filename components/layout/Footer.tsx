@@ -27,6 +27,13 @@ export async function Footer({ locale }: { locale: Locale }) {
 
   const navRapidi = [
     { href: "/chi-siamo", label: tNav("chiSiamo") },
+    ...(site.reteVisibile
+      ? [
+          { href: "/moschee", label: tNav("moschee") },
+          { href: "/sponsor", label: tNav("sponsor") },
+          { href: "/professionisti", label: tNav("professionisti") },
+        ]
+      : []),
     { href: "/eventi", label: tNav("eventi") },
     { href: "/news", label: site.labelNews },
     { href: "/contatti", label: tNav("contatti") },
