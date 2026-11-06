@@ -12,14 +12,32 @@ const TEAL = "#5F746E";
 const INK = "#2A1F0E";
 const INK_SOFT = "#5A4F3E";
 
+// Per ora non usato: le anteprime ar/bn sono in italiano (vedi ogLocale).
+// Resta pronto per anteprime tradotte future.
 const SCRIPT_FONT: Partial<Record<Locale, string>> = {
-  ar: "Noto Naskh Arabic",
+  // Non Noto Naskh Arabic: Satori non supporta una sua tabella di sostituzione
+  // (lookupType 5, substFormat 3) e l'immagine fallisce appena il testo contiene
+  // lettere arabe. Cairo è resa correttamente, con le lettere legate.
+  ar: "Cairo",
   bn: "Noto Sans Bengali",
 };
 
 /**
+ * Lingua con cui disegnare un'anteprima OG. Satori non gestisce bene arabo e
+ * bengalese su più parole (ordine delle parole invertito in arabo, vocali
+ * bengalesi fuori posto, testo che esce dal riquadro): per ar/bn si usa
+ * l'anteprima italiana, come già fa l'immagine radice del sito (6/11/2026).
+ * Per anteprime tradotte si potranno usare immagini caricate da Keystatic.
+ */
+export function ogLocale(locale: Locale): Locale {
+  return locale === "ar" || locale === "bn" ? "it" : locale;
+}
+
+/**
  * Template OG on-brand (crema + barra teal + accento arancione).
  * `occhiello` = categoria/contesto, `titolo` = headline, `meta` = data/luogo.
+ * Oggi i chiamanti passano solo it/en (vedi ogLocale); il percorso ar/bn
+ * resta per anteprime tradotte future.
  * `locale`: per ar/bn scarica il font dello script (Satori/next-og non legge
  * i font caricati via next/font — servono i bytes TTF, vedi loadGoogleFont)
  * limitato ai soli caratteri usati nell'immagine (§9 brief i18n).
@@ -156,6 +174,8 @@ export async function renderOg({
         </div>
       </div>
     ),
-    { ...OG_SIZE, fonts },
+    // Con fonts: [] next/og non usa il font predefinito (`[] || default` è []),
+    // e Satori fallisce con "No fonts are loaded": per it/en il font si omette.
+    { ...OG_SIZE, ...(fonts.length > 0 ? { fonts } : {}) },
   );
 }

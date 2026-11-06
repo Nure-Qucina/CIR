@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { renderOg, OG_SIZE, OG_CONTENT_TYPE } from "@/lib/seo/ogTemplate";
+import { renderOg, ogLocale, OG_SIZE, OG_CONTENT_TYPE } from "@/lib/seo/ogTemplate";
 import { getEventoBySlug } from "@/lib/content/eventi";
 import { formatDateIt } from "@/lib/utils/date";
 import type { Locale } from "@/i18n/routing";
@@ -13,10 +13,12 @@ export default async function Image({
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { locale, slug } = await params;
+  const { locale: richiesta, slug } = await params;
+  // ar/bn: anteprima italiana (vedi ogLocale).
+  const locale = ogLocale(richiesta as Locale);
   const [t, evento] = await Promise.all([
-    getTranslations({ locale: locale as Locale, namespace: "eventi" }),
-    getEventoBySlug(slug, locale as Locale),
+    getTranslations({ locale, namespace: "eventi" }),
+    getEventoBySlug(slug, locale),
   ]);
 
   const meta = evento
@@ -32,6 +34,6 @@ export default async function Image({
     occhiello: t("ogOcchiello"),
     titolo: evento?.titolo || "Comunità Islamica di Roma",
     meta,
-    locale: locale as Locale,
+    locale,
   });
 }

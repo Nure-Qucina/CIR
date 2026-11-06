@@ -57,7 +57,7 @@ export async function generateMetadata({
       locale as Locale,
       availableLocales,
     ),
-    openGraph: buildOgLocale(locale as Locale),
+    openGraph: buildOgLocale(locale as Locale, { immagineRadice: false }),
   };
 }
 

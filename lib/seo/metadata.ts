@@ -44,7 +44,10 @@ const OG_LOCALE: Record<Locale, string> = {
  * quello del layout viene rimpiazzato per intero, non unito. Includiamo
  * quindi qui l'intero oggetto invece di limitarci a `locale`.
  */
-export function buildOgLocale(currentLocale: Locale) {
+export function buildOgLocale(
+  currentLocale: Locale,
+  { immagineRadice = true }: { immagineRadice?: boolean } = {},
+) {
   return {
     type: "website" as const,
     siteName: "Comunità Islamica di Roma",
@@ -52,5 +55,13 @@ export function buildOgLocale(currentLocale: Locale) {
     alternateLocale: routing.locales
       .filter((l) => l !== currentLocale)
       .map((l) => OG_LOCALE[l]),
+    // Senza questo le pagine che usano buildOgLocale (home, sezioni) non hanno
+    // og:image: il loro `openGraph` sostituisce quello del layout. L'immagine
+    // radice è in italiano per tutte le lingue (app/[locale]/opengraph-image.tsx).
+    // Le pagine con un proprio opengraph-image.tsx (news/eventi [slug]) passano
+    // immagineRadice: false, altrimenti questo valore vincerebbe sul loro file.
+    ...(immagineRadice
+      ? { images: [{ url: "/opengraph-image", width: 1200, height: 630 }] }
+      : {}),
   };
 }

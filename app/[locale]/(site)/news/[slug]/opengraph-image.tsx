@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { renderOg, OG_SIZE, OG_CONTENT_TYPE } from "@/lib/seo/ogTemplate";
+import { renderOg, ogLocale, OG_SIZE, OG_CONTENT_TYPE } from "@/lib/seo/ogTemplate";
 import { getArticoloBySlug } from "@/lib/content/articoli";
 import { getCategoriaBySlug } from "@/lib/content/categorie";
 import type { Locale } from "@/i18n/routing";
@@ -13,13 +13,15 @@ export default async function Image({
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { locale, slug } = await params;
+  const { locale: richiesta, slug } = await params;
+  // ar/bn: anteprima italiana (vedi ogLocale).
+  const locale = ogLocale(richiesta as Locale);
   const [t, articolo] = await Promise.all([
-    getTranslations({ locale: locale as Locale, namespace: "news" }),
-    getArticoloBySlug(slug, locale as Locale),
+    getTranslations({ locale, namespace: "news" }),
+    getArticoloBySlug(slug, locale),
   ]);
   const categoria = articolo?.categoria
-    ? await getCategoriaBySlug(articolo.categoria, locale as Locale)
+    ? await getCategoriaBySlug(articolo.categoria, locale)
     : null;
 
   return renderOg({
@@ -28,6 +30,6 @@ export default async function Image({
         ? t("comunicatoStampa")
         : categoria?.nome || t("ogArticolo"),
     titolo: articolo?.titolo || "Comunità Islamica di Roma",
-    locale: locale as Locale,
+    locale,
   });
 }
