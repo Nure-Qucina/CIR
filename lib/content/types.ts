@@ -105,4 +105,6 @@ export type SiteConfig = {
   /** URL campagna donazioni esterna legacy. Non controlla i CTA Dona del sito. */
   donazioniUrl: string;
   contatti: Contatti;
+  /** Sezioni «La rete» (Moschee, Sponsor, Professionisti) nel menu e su Google. */
+  reteVisibile: boolean;
 };

@@ -11,6 +11,13 @@ import {
   getCategorie,
   getCategoriaAvailableLocales,
 } from "@/lib/content/categorie";
+import {
+  getProfessionistiSlugs,
+  getSponsorSlugs,
+  lingueProfessionista,
+  lingueSponsor,
+} from "@/lib/content/rete";
+import { getSiteConfig } from "@/lib/content/site";
 import { getPathname } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 
@@ -43,10 +50,20 @@ function localizedEntries(
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [eventiSlugs, articoliSlugs, categorie] = await Promise.all([
+  const [
+    eventiSlugs,
+    articoliSlugs,
+    categorie,
+    sponsorSlugs,
+    professionistiSlugs,
+    { reteVisibile },
+  ] = await Promise.all([
     getEventiSlugs(),
     getArticoliSlugs(),
     getCategorie(),
+    getSponsorSlugs(),
+    getProfessionistiSlugs(),
+    getSiteConfig(),
   ]);
 
   const now = new Date();
@@ -108,5 +125,57 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     )
   ).flat();
 
-  return [...statiche, ...eventiUrls, ...articoliUrls, ...categorieUrls];
+  // «La rete» entra nella sitemap solo quando è accesa in Keystatic.
+  const reteStatiche: MetadataRoute.Sitemap = reteVisibile
+    ? [
+        ...localizedEntries("/moschee", ALL, {
+          lastModified: now,
+          priority: 0.8,
+        }),
+        ...localizedEntries("/sponsor", ALL, {
+          lastModified: now,
+          priority: 0.6,
+        }),
+        ...localizedEntries("/professionisti", ALL, {
+          lastModified: now,
+          priority: 0.7,
+        }),
+      ]
+    : [];
+
+  const sponsorUrls = (
+    await Promise.all(
+      (reteVisibile ? sponsorSlugs : []).map(async (slug) =>
+        localizedEntries(`/sponsor/${slug}`, await lingueSponsor(slug), {
+          lastModified: now,
+          priority: 0.5,
+        }),
+      ),
+    )
+  ).flat();
+
+  const professionistiUrls = (
+    await Promise.all(
+      (reteVisibile ? professionistiSlugs : []).map(async (slug) =>
+        localizedEntries(
+          `/professionisti/${slug}`,
+          await lingueProfessionista(slug),
+          {
+            lastModified: now,
+            priority: 0.5,
+          },
+        ),
+      ),
+    )
+  ).flat();
+
+  return [
+    ...statiche,
+    ...eventiUrls,
+    ...articoliUrls,
+    ...categorieUrls,
+    ...reteStatiche,
+    ...sponsorUrls,
+    ...professionistiUrls,
+  ];
 }

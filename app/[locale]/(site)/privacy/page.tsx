@@ -13,7 +13,7 @@ import { routing, type Locale } from "@/i18n/routing";
 import { buildAlternates, buildOgLocale } from "@/lib/seo/metadata";
 
 /** Da aggiornare a ogni modifica sostanziale del testo. */
-const ULTIMO_AGGIORNAMENTO = "7 ottobre 2026";
+const ULTIMO_AGGIORNAMENTO = "6 novembre 2026";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -510,6 +510,27 @@ export default async function PrivacyCookiePage({
                 calendario o per aprire una mappa sono semplici link: Facebook,
                 Instagram, WhatsApp, Google e gli altri servizi ricevono dati
                 solo se li apri, secondo le loro informative.
+              </p>
+              <p>
+                <strong>Mappa delle moschee.</strong> La mappa della pagina
+                Moschee è disegnata con Leaflet, una libreria ospitata sul
+                nostro sito, e scarica le immagini della cartina dai server di
+                OpenStreetMap (OpenStreetMap Foundation, Regno Unito). Per
+                inviarle, quei server ricevono il tuo indirizzo IP e le
+                informazioni tecniche del browser, come accade con qualsiasi
+                immagine caricata da un altro sito; non vengono usati cookie.
+                Succede solo quando la mappa viene mostrata, nella pagina
+                Moschee. Il Regno Unito garantisce una protezione dei dati
+                adeguata secondo la Commissione europea; i dati sono trattati
+                secondo la{" "}
+                <a
+                  href="https://osmfoundation.org/wiki/Privacy_Policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  privacy policy di OpenStreetMap
+                </a>
+                .
               </p>
 
               <Titolo id="diritti">8. I tuoi diritti</Titolo>

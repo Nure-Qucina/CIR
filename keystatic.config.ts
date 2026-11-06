@@ -1,4 +1,19 @@
 import { config, collection, singleton, fields } from "@keystatic/core";
+import {
+  ZONE_ROMA as ZONE,
+  MUNICIPI,
+  SERVIZI_MOSCHEA as SERVIZI,
+  LINGUE as LINGUE_RO,
+  GRUPPI_SPONSOR as GRUPPI,
+  AREE_PROFESSIONISTI as AREE,
+} from "./lib/content/rete-opzioni";
+
+// Keystatic vuole array mutabili: copie delle opzioni condivise col sito.
+const ZONE_ROMA = ZONE.map((o) => ({ ...o }));
+const SERVIZI_MOSCHEA = SERVIZI.map((o) => ({ ...o }));
+const LINGUE = LINGUE_RO.map((o) => ({ ...o }));
+const GRUPPI_SPONSOR = GRUPPI.map((o) => ({ ...o }));
+const AREE_PROFESSIONISTI = AREE.map((o) => ({ ...o }));
 
 /**
  * Configurazione Keystatic — CMS git-based.
@@ -68,6 +83,11 @@ export default config({
     : { kind: "local" },
   ui: {
     brand: { name: "CIR — Redazione" },
+    navigation: {
+      Contenuti: ["articoli", "eventi", "categorie"],
+      "La rete": ["moschee", "sponsor", "professionisti"],
+      Impostazioni: ["site"],
+    },
   },
   collections: {
     categorie: collection({
@@ -399,6 +419,409 @@ export default config({
         ),
       },
     }),
+
+    // ─── La rete: Moschee, Sponsor, Professionisti ─────────────────────────
+    // Stesso schema delle altre raccolte: spunta Bozza in cima, campi IT
+    // principali, traduzioni EN/AR/BN facoltative (fallback all'italiano).
+
+    moschee: collection({
+      label: "Moschee",
+      slugField: "nome",
+      path: "content/moschee/*",
+      format: { data: "json" },
+      columns: ["nome", "zona", "bozza"],
+      schema: {
+        nome: fields.slug({
+          name: { label: "Nome della moschea o del centro" },
+          slug: { label: "Slug (URL)" },
+        }),
+        bozza: fields.checkbox({
+          label: "Bozza (nascosta dal sito)",
+          description:
+            "Se attivo, la moschea non compare sul sito né sulla mappa. Usalo finché i dati non sono confermati.",
+          defaultValue: false,
+        }),
+        associazione: fields.text({
+          label: "Associazione di riferimento",
+          description: "Facoltativo. Es. «Associazione Al-Nur».",
+          validation: { isRequired: false },
+        }),
+        zona: fields.select({
+          label: "Zona",
+          description: "Raggruppa l'elenco e i filtri della pagina.",
+          options: ZONE_ROMA,
+          defaultValue: "est",
+        }),
+        municipio: fields.select({
+          label: "Municipio",
+          options: MUNICIPI,
+          defaultValue: "V",
+        }),
+        quartiere: fields.text({
+          label: "Quartiere",
+          description:
+            "Es. Torpignattara. Si vede sempre, anche se l'indirizzo è nascosto.",
+          validation: { isRequired: false },
+        }),
+        indirizzo: fields.text({
+          label: "Indirizzo",
+          description: "Es. Via Roma 12. Il CAP non serve.",
+          validation: { isRequired: false },
+        }),
+        mostraIndirizzo: fields.checkbox({
+          label: "Mostra l'indirizzo sul sito",
+          description:
+            "Se spento, il sito mostra solo quartiere e municipio, e niente punto preciso sulla mappa. Chiedi sempre il permesso alla moschea.",
+          defaultValue: false,
+        }),
+        lat: fields.number({
+          label: "Latitudine",
+          description:
+            "Per la mappa. Su Google Maps: tasto destro sul punto, il primo numero copiato.",
+          validation: { isRequired: false },
+        }),
+        lng: fields.number({
+          label: "Longitudine",
+          description: "Il secondo numero copiato da Google Maps.",
+          validation: { isRequired: false },
+        }),
+        venerdi: fields.text({
+          label: "Orario della preghiera del venerdì",
+          description:
+            "Es. 13:15. Se cambia d'estate scrivi «13:15 (estate 13:30)».",
+          validation: { isRequired: false },
+        }),
+        servizi: fields.multiselect({
+          label: "Servizi",
+          options: SERVIZI_MOSCHEA,
+          defaultValue: [],
+        }),
+        lingueKhutba: fields.multiselect({
+          label: "Lingue della khutba",
+          options: LINGUE,
+          defaultValue: ["it", "ar"],
+        }),
+        foto: fields.image({
+          label: "Foto",
+          description: "Facoltativa.",
+          directory: "public/images/moschee",
+          publicPath: "/images/moschee",
+          validation: { isRequired: false },
+        }),
+        contatti: fields.object(
+          {
+            telefono: fields.text({
+              label: "Telefono",
+              validation: { isRequired: false },
+            }),
+            email: fields.text({
+              label: "Email",
+              validation: { isRequired: false },
+            }),
+            sito: fields.url({
+              label: "Sito o pagina social",
+              validation: { isRequired: false },
+            }),
+          },
+          { label: "Contatti (facoltativi)" },
+        ),
+      },
+    }),
+
+    sponsor: collection({
+      label: "Sponsor",
+      slugField: "nome",
+      path: "content/sponsor/*",
+      format: { data: "json" },
+      columns: ["nome", "gruppo", "bozza"],
+      schema: {
+        nome: fields.slug({
+          name: { label: "Nome dell'attività" },
+          slug: {
+            label: "Slug (URL)",
+            description: "Indirizzo: /sponsor/<slug>",
+          },
+        }),
+        bozza: fields.checkbox({
+          label: "Bozza (nascosto dal sito)",
+          description: "Se attivo, lo sponsor non compare sul sito.",
+          defaultValue: false,
+        }),
+        gruppo: fields.select({
+          label: "Categoria",
+          description: "Per i filtri della pagina Sponsor.",
+          options: GRUPPI_SPONSOR,
+          defaultValue: "alimentari",
+        }),
+        tipo: fields.text({
+          label: "Che attività è (IT)",
+          description: "Breve. Es. «Cucina tunisina», «Macelleria halal».",
+        }),
+        quartiere: fields.text({
+          label: "Quartiere",
+          validation: { isRequired: false },
+        }),
+        indirizzo: fields.text({
+          label: "Indirizzo",
+          validation: { isRequired: false },
+        }),
+        logo: fields.image({
+          label: "Logo",
+          description: "Quadrato, meglio se su sfondo chiaro.",
+          directory: "public/images/sponsor",
+          publicPath: "/images/sponsor",
+          validation: { isRequired: false },
+        }),
+        foto: fields.array(
+          fields.image({
+            label: "Foto",
+            directory: "public/images/sponsor",
+            publicPath: "/images/sponsor",
+          }),
+          {
+            label: "Foto del locale",
+            description: "Da 1 a 6. La prima è quella della card.",
+            validation: { length: { max: 6 } },
+          },
+        ),
+        fiducia: fields.text({
+          label: "Perché ci fidiamo (IT)",
+          description: "Una o due frasi, scritte dal CIR.",
+          multiline: true,
+        }),
+        descrizione: fields.text({
+          label: "Presentazione (IT)",
+          description: "Scritta dallo sponsor: chi sono, cosa offrono.",
+          multiline: true,
+          validation: { isRequired: false },
+        }),
+        orari: fields.text({
+          label: "Orari (IT)",
+          description: "Es. «Mar–Dom 12–15 e 19–23\nLunedì chiuso».",
+          multiline: true,
+          validation: { isRequired: false },
+        }),
+        vantaggio: fields.text({
+          label: "Vantaggio per la comunità (IT)",
+          description: "Facoltativo. Es. «−10% presentandoti come CIR».",
+          validation: { isRequired: false },
+        }),
+        contatti: fields.object(
+          {
+            telefono: fields.text({
+              label: "Telefono",
+              validation: { isRequired: false },
+            }),
+            sito: fields.url({
+              label: "Sito",
+              validation: { isRequired: false },
+            }),
+            instagram: fields.url({
+              label: "Instagram",
+              validation: { isRequired: false },
+            }),
+            facebook: fields.url({
+              label: "Facebook",
+              validation: { isRequired: false },
+            }),
+          },
+          { label: "Contatti" },
+        ),
+        ordine: fields.integer({
+          label: "Ordine",
+          description:
+            "Facoltativo. I numeri più bassi vengono prima; a parità, ordine alfabetico.",
+          validation: { isRequired: false },
+        }),
+        traduzioni: traduzioni(() => ({
+          tipo: fields.text({
+            label: "Che attività è",
+            validation: { isRequired: false },
+          }),
+          fiducia: fields.text({
+            label: "Perché ci fidiamo",
+            multiline: true,
+            validation: { isRequired: false },
+          }),
+          descrizione: fields.text({
+            label: "Presentazione",
+            multiline: true,
+            validation: { isRequired: false },
+          }),
+          orari: fields.text({
+            label: "Orari",
+            multiline: true,
+            validation: { isRequired: false },
+          }),
+          vantaggio: fields.text({
+            label: "Vantaggio per la comunità",
+            validation: { isRequired: false },
+          }),
+        })),
+      },
+    }),
+
+    professionisti: collection({
+      label: "Professionisti",
+      slugField: "nome",
+      path: "content/professionisti/*",
+      format: { data: "json" },
+      columns: ["nome", "area", "bozza"],
+      schema: {
+        nome: fields.slug({
+          name: {
+            label: "Nome o studio",
+            description: "Es. «Avv. Leila Benali».",
+          },
+          slug: {
+            label: "Slug (URL)",
+            description: "Indirizzo: /professionisti/<slug>",
+          },
+        }),
+        bozza: fields.checkbox({
+          label: "Bozza (nascosto dal sito)",
+          description: "Se attivo, il professionista non compare sul sito.",
+          defaultValue: false,
+        }),
+        area: fields.select({
+          label: "Area",
+          options: AREE_PROFESSIONISTI,
+          defaultValue: "legale",
+        }),
+        tipo: fields.select({
+          label: "Persona o azienda",
+          description:
+            "Per le persone si mostra la foto, per le aziende il logo.",
+          options: [
+            { label: "Persona", value: "persona" },
+            { label: "Azienda o studio", value: "azienda" },
+          ],
+          defaultValue: "persona",
+        }),
+        immagine: fields.image({
+          label: "Foto (persona) o logo (azienda)",
+          description:
+            "Foto: viso ben visibile, sfondo semplice. Si ritaglia in tondo.",
+          directory: "public/images/professionisti",
+          publicPath: "/images/professionisti",
+          validation: { isRequired: false },
+        }),
+        ruolo: fields.text({
+          label: "Di cosa si occupa, in breve (IT)",
+          description: "Es. «Diritto antidiscriminatorio».",
+        }),
+        zona: fields.text({
+          label: "Zona",
+          description: "Es. «Municipio V» o «Roma».",
+          validation: { isRequired: false },
+        }),
+        inStudio: fields.checkbox({
+          label: "Riceve in studio",
+          defaultValue: true,
+        }),
+        online: fields.checkbox({ label: "Anche online", defaultValue: false }),
+        albo: fields.text({
+          label: "Iscrizione all'albo",
+          description:
+            "Es. «Ordine degli Avvocati di Roma, n. 12345». Per le aziende: «Partita IVA verificata dal CIR».",
+          validation: { isRequired: false },
+        }),
+        lingue: fields.multiselect({
+          label: "Lingue parlate",
+          options: LINGUE,
+          defaultValue: ["it"],
+        }),
+        perche: fields.text({
+          label: "Perché lo consigliamo (IT)",
+          description: "Una frase, scritta dal CIR.",
+          multiline: true,
+        }),
+        descrizione: fields.text({
+          label: "Presentazione (IT)",
+          description:
+            "Scritta dal professionista: di cosa si occupa, come lavora.",
+          multiline: true,
+          validation: { isRequired: false },
+        }),
+        agevolazione: fields.object(
+          {
+            breve: fields.text({
+              label: "In breve",
+              description:
+                "Il testo grande del tagliando. Es. «−30%» o «Gratis».",
+            }),
+            suCosa: fields.text({
+              label: "Su cosa (IT)",
+              description: "Es. «sulle cause per discriminazione».",
+            }),
+            come: fields.text({
+              label: "Come ottenerla (IT)",
+              description: "Un passo per riga.",
+              multiline: true,
+              defaultValue: "Contatta lo studio\nDi' che vieni dal CIR",
+            }),
+            validaFino: fields.date({
+              label: "Valida fino al",
+              description:
+                "Facoltativo. Dopo questa data il tagliando sparisce da solo.",
+              validation: { isRequired: false },
+            }),
+          },
+          { label: "Agevolazione per la comunità" },
+        ),
+        contatti: fields.object(
+          {
+            telefono: fields.text({
+              label: "Telefono",
+              validation: { isRequired: false },
+            }),
+            whatsapp: fields.text({
+              label: "WhatsApp",
+              description: "Numero con prefisso, es. +39 333 1234567.",
+              validation: { isRequired: false },
+            }),
+            email: fields.text({
+              label: "Email",
+              validation: { isRequired: false },
+            }),
+            sito: fields.url({
+              label: "Sito",
+              validation: { isRequired: false },
+            }),
+            indirizzo: fields.text({
+              label: "Indirizzo dello studio",
+              validation: { isRequired: false },
+            }),
+          },
+          { label: "Contatti" },
+        ),
+        traduzioni: traduzioni(() => ({
+          ruolo: fields.text({
+            label: "Di cosa si occupa",
+            validation: { isRequired: false },
+          }),
+          perche: fields.text({
+            label: "Perché lo consigliamo",
+            multiline: true,
+            validation: { isRequired: false },
+          }),
+          descrizione: fields.text({
+            label: "Presentazione",
+            multiline: true,
+            validation: { isRequired: false },
+          }),
+          suCosa: fields.text({
+            label: "Agevolazione: su cosa",
+            validation: { isRequired: false },
+          }),
+          come: fields.text({
+            label: "Agevolazione: come ottenerla",
+            multiline: true,
+            validation: { isRequired: false },
+          }),
+        })),
+      },
+    }),
   },
 
   singletons: {
@@ -417,6 +840,12 @@ export default config({
           description:
             "CF dell'associazione (mostrato nel footer e nell'informativa privacy).",
           validation: { isRequired: false },
+        }),
+        reteVisibile: fields.checkbox({
+          label: "Mostra «La rete» sul sito",
+          description:
+            "Moschee, Sponsor e Professionisti. Finché è spenta le sezioni non compaiono nel menu, nel footer e su Google: si aprono solo con il link diretto, per controllare i contenuti prima di pubblicarli.",
+          defaultValue: false,
         }),
         payoff: fields.text({ label: "Payoff" }),
         descrizione: fields.text({ label: "Descrizione SEO", multiline: true }),
