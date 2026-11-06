@@ -6,10 +6,10 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 /**
  * Header di sicurezza (audit 6/11/2026, P1.1).
  *
- * La CSP completa è per ora in modalità "Report-Only": il browser segnala in
- * console cosa bloccherebbe, ma non blocca niente. Va resa obbligatoria
- * (Content-Security-Policy) dopo aver provato in Preview donazione con Stripe
- * di test, Turnstile, mappa moschee e Keystatic.
+ * La CSP completa è OBBLIGATORIA sul sito pubblico (6/11/2026, dopo la prova
+ * della pagina Dona fino al modulo Stripe: 0 violazioni). Su /keystatic e
+ * /api/keystatic resta in "Report-Only" finché non si verifica l'editor
+ * dopo il login GitHub: lì si applica solo la CSP minima.
  *
  * script-src tiene 'unsafe-inline' perché le pagine sono statiche (SSG/ISR):
  * una CSP a nonce renderebbe dinamica ogni pagina. La protezione utile resta:
@@ -22,7 +22,7 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
  */
 const isDev = process.env.NODE_ENV !== "production";
 
-const cspReportOnly = [
+const cspCompleta = [
   "default-src 'self'",
   [
     "script-src 'self' 'unsafe-inline'",
@@ -32,7 +32,7 @@ const cspReportOnly = [
     "https://va.vercel-scripts.com https://vercel.live",
   ].join(" "),
   // fonts.googleapis/gstatic: l'interfaccia di Keystatic carica Inter da Google.
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://vercel.live",
   [
     "img-src 'self' data: blob:",
     "https://tile.openstreetmap.org",
@@ -40,7 +40,7 @@ const cspReportOnly = [
     "https://avatars.githubusercontent.com",
     "https://vercel.live https://vercel.com",
   ].join(" "),
-  "font-src 'self' data: https://fonts.gstatic.com https://vercel.live",
+  "font-src 'self' data: https://fonts.gstatic.com https://vercel.live https://assets.vercel.com",
   [
     "connect-src 'self'",
     "https://api.stripe.com https://link.com https://*.link.com",
@@ -64,13 +64,10 @@ const cspReportOnly = [
   .map((d) => d.replace(/\s+/g, " ").trim())
   .join("; ");
 
+const cspMinima = "frame-ancestors 'self'; object-src 'none'; base-uri 'self'";
+
 const securityHeaders = [
-  // Obbligatoria da subito: solo regole che non possono rompere nulla.
-  {
-    key: "Content-Security-Policy",
-    value: "frame-ancestors 'self'; object-src 'none'; base-uri 'self'",
-  },
-  { key: "Content-Security-Policy-Report-Only", value: cspReportOnly },
+  { key: "Content-Security-Policy", value: cspCompleta },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -84,7 +81,17 @@ const nextConfig: NextConfig = {
   // Non dichiarare a tutti che il sito gira su Next.js (header X-Powered-By).
   poweredByHeader: false,
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    // Keystatic: CSP minima obbligatoria + completa in osservazione. Le regole
+    // successive sovrascrivono le precedenti per la stessa chiave.
+    const keystatic = [
+      { key: "Content-Security-Policy", value: cspMinima },
+      { key: "Content-Security-Policy-Report-Only", value: cspCompleta },
+    ];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      { source: "/keystatic/:path*", headers: keystatic },
+      { source: "/api/keystatic/:path*", headers: keystatic },
+    ];
   },
   /**
    * Il reader Keystatic legge content/ con percorsi costruiti a runtime, che
