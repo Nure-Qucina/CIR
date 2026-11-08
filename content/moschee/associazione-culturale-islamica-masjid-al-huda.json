@@ -1,0 +1,14 @@
+{
+  "nome": "Associazione culturale islamica masjid Al-Huda",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "via dei Frassini 4",
+  "mostraIndirizzo": true,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
