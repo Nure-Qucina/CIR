@@ -1,0 +1,14 @@
+{
+  "nome": "Baitul Aman Jame Masjid",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "via del Casale Giuliani 8",
+  "mostraIndirizzo": true,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
