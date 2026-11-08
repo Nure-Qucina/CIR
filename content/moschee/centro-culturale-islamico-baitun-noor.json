@@ -1,0 +1,14 @@
+{
+  "nome": "Centro Culturale Islamico Baitun Noor",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "Via Tolemaide 5",
+  "mostraIndirizzo": false,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
