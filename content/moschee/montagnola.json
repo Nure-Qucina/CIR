@@ -1,0 +1,14 @@
+{
+  "nome": "Montagnola",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "Via Aristide Leonori 64",
+  "mostraIndirizzo": true,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
