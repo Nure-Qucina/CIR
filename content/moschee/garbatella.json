@@ -1,0 +1,13 @@
+{
+  "nome": "garbatella",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "mostraIndirizzo": false,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
