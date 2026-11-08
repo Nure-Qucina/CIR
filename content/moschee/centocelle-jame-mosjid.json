@@ -1,0 +1,14 @@
+{
+  "nome": "Centocelle Jame Mosjid",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "via dei Gladioli 14/A",
+  "mostraIndirizzo": true,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
