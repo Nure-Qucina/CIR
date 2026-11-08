@@ -1,0 +1,14 @@
+{
+  "nome": "Moschea di Quba",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "Via della Maranella, 68",
+  "mostraIndirizzo": true,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
