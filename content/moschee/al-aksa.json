@@ -1,0 +1,14 @@
+{
+  "nome": "Al Aksa",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "tiburtina",
+  "mostraIndirizzo": false,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
