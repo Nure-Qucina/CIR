@@ -1,0 +1,14 @@
+{
+  "nome": "Moschea di Baitur Rahman",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "via Bixio 46A",
+  "mostraIndirizzo": true,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
