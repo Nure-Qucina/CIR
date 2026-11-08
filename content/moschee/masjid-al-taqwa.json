@@ -1,0 +1,14 @@
+{
+  "nome": "Masjid Al-Taqwa",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "via Antonio Tempesta 100",
+  "mostraIndirizzo": false,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
