@@ -1,0 +1,14 @@
+{
+  "nome": "Abu Bakar",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "Viale Irpinia 6",
+  "mostraIndirizzo": false,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
