@@ -1,0 +1,14 @@
+{
+  "nome": "Noor e Madina",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "via dei Quintili 81",
+  "mostraIndirizzo": true,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
