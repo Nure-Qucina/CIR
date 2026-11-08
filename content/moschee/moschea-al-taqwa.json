@@ -1,0 +1,14 @@
+{
+  "nome": "Moschea Al Taqwa",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "Lungomare degli Ardeatini 354",
+  "mostraIndirizzo": true,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
