@@ -1,0 +1,14 @@
+{
+  "nome": "TMC Mosjeed",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "via Ccarlo della Rocca 23",
+  "mostraIndirizzo": true,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
