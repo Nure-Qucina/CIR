@@ -1,0 +1,14 @@
+{
+  "nome": "Centro Cuturale Al-Abrar",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "via Tazio Nuvolari 2",
+  "mostraIndirizzo": true,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
