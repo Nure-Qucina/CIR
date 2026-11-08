@@ -1,0 +1,14 @@
+{
+  "nome": "Moschea Re di Roma",
+  "bozza": false,
+  "zona": "est",
+  "municipio": "V",
+  "indirizzo": "via Ceneda 33-35",
+  "mostraIndirizzo": false,
+  "servizi": [],
+  "lingueKhutba": [
+    "it",
+    "ar"
+  ],
+  "contatti": {}
+}
