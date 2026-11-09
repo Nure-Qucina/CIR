@@ -3,8 +3,10 @@
   "bozza": false,
   "gruppo": "ristorazione",
   "tipo": "Ristoante Indiano",
+  "quartiere": "Centocelle",
   "indirizzo": "Via dei Pioppi, 3, 00172 Roma RM (Centocelle)",
   "foto": [],
+  "fiducia": "Il Ristorante Indiano Ambasciata offre un viaggio nei sapori autentici dell'India. Gestito con passione e cura per il cliente, il locale propone un ricchissimo menu che spazia dai saporiti curry ai piatti tandoori, con un'ampia selezione di specialità tradizionali, incluse opzioni vegetariane e vegane, il tutto in un ambiente accogliente e curato.",
   "contatti": {
     "telefono": "06 8438 8129",
     "sito": "ristoranteindianoambasciata.it",
