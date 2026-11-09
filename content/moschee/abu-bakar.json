@@ -5,6 +5,8 @@
   "municipio": "V",
   "indirizzo": "Viale Irpinia 6",
   "mostraIndirizzo": false,
+  "lat": 41.893,
+  "lng": 12.55,
   "servizi": [],
   "lingueKhutba": [
     "it",
