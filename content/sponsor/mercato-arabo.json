@@ -2,9 +2,10 @@
   "nome": "Mercato Arabo",
   "bozza": false,
   "gruppo": "alimentari",
-  "tipo": "Il Mercato Arabo è uno storico punto di riferimento per chi cerca l'autenticità e i sapori del Maghreb. Il locale offre un ricco assortimento di prodotti alimentari di qualità, tra cui carne Halal fresca, spezie, legumi, oli e dolci tipici come i makroud. L'offerta si completa con articoli di artigianato tradizionale, come tajine e servizi da tè, e con prodotti di cosmetica naturale a base di olio di Argan e hennè.",
+  "tipo": "Mercato Etnico",
   "indirizzo": "Via degli Aceri 96",
   "foto": [],
+  "fiducia": "Il Mercato Arabo è uno storico punto di riferimento per chi cerca l'autenticità e i sapori del Maghreb. Il locale offre un ricco assortimento di prodotti alimentari di qualità, tra cui carne Halal fresca, spezie, legumi, oli e dolci tipici come i makroud. L'offerta si completa con articoli di artigianato tradizionale, come tajine e servizi da tè, e con prodotti di cosmetica naturale a base di olio di Argan e hennè.",
   "contatti": {
     "telefono": "06 2324 8002",
     "sito": "mercatoarabo.it",
