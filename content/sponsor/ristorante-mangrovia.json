@@ -1,0 +1,17 @@
+{
+  "nome": "Ristorante Mangrovia",
+  "bozza": false,
+  "gruppo": "ristorazione",
+  "tipo": "Ristorante",
+  "indirizzo": "Via Milazzo, 6/A-6/B, 00185 Roma RM (zona Stazione Termini / Via Marsala)",
+  "foto": [],
+  "fiducia": "Situato a Roma nelle immediate vicinanze della Stazione Termini, il Ristorante Mangrovia è un locale accogliente ed elegante. Propone una raffinata cucina italiana che unisce sapori tradizionali a un'atmosfera ideale sia per una pausa rilassante, che per una cena in compagnia nel centro della capitale.",
+  "contatti": {
+    "sito": "www.mangroviarestaurant.it"
+  },
+  "traduzioni": {
+    "en": {},
+    "ar": {},
+    "bn": {}
+  }
+}
