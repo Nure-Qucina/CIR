@@ -1,0 +1,18 @@
+{
+  "nome": "Ristorante Indiano Ambasciata",
+  "bozza": false,
+  "gruppo": "ristorazione",
+  "tipo": "Ristoante Indiano",
+  "indirizzo": "Via dei Pioppi, 3, 00172 Roma RM (Centocelle)",
+  "foto": [],
+  "contatti": {
+    "telefono": "06 8438 8129",
+    "sito": "ristoranteindianoambasciata.it",
+    "instagram": "@ristorante.indiano.ambasciata"
+  },
+  "traduzioni": {
+    "en": {},
+    "ar": {},
+    "bn": {}
+  }
+}
