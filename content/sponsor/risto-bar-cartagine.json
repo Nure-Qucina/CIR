@@ -1,0 +1,18 @@
+{
+  "nome": "Risto-bar Cartagine",
+  "bozza": false,
+  "gruppo": "alimentari",
+  "tipo": "Cucina Tunisina",
+  "indirizzo": "Via degli Aceri 116-118",
+  "foto": [],
+  "fiducia": "Il Ristobar Cartagine è un autentico punto di riferimento per chi vuole gustare i sapori tradizionali della cucina tunisina e maghrebina. In un'atmosfera calda, familiare e pulita, il locale propone piatti tipici preparati con grande fedeltà alla tradizione, tra cui ottimi cous cous, tajine e specialità di carne.",
+  "contatti": {
+    "telefono": "324 622 0497",
+    "instagram": "@ristorante.tunisino.cartagine"
+  },
+  "traduzioni": {
+    "en": {},
+    "ar": {},
+    "bn": {}
+  }
+}
