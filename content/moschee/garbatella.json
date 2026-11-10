@@ -1,8 +1,9 @@
 {
   "nome": "garbatella",
   "bozza": false,
-  "zona": "est",
-  "municipio": "V",
+  "zona": "sud",
+  "municipio": "VIII",
+  "quartiere": "Garbatella",
   "mostraIndirizzo": false,
   "servizi": [],
   "lingueKhutba": [

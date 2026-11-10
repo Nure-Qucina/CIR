@@ -2,7 +2,8 @@
   "nome": "ICT (Islamic Centre Torre Maura)",
   "bozza": false,
   "zona": "est",
-  "municipio": "V",
+  "municipio": "VI",
+  "quartiere": "Torre Maura",
   "mostraIndirizzo": false,
   "servizi": [],
   "lingueKhutba": [

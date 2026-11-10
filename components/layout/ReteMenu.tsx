@@ -53,6 +53,9 @@ export function ReteMenu() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Aperto passandoci sopra col mouse: il primo clic non deve richiuderlo
+  // (chi clicca «La rete» vuole vedere il pannello, non nasconderlo).
+  const apertoDaHover = useRef(false);
 
   const attiva = SEZIONI_RETE.some((s) => pathname.startsWith(s.href));
 
@@ -87,15 +90,30 @@ export function ReteMenu() {
   return (
     <div
       ref={wrapRef}
-      onPointerEnter={(e) => e.pointerType === "mouse" && apri()}
-      onPointerLeave={(e) => e.pointerType === "mouse" && chiudiPresto()}
+      onPointerEnter={(e) => {
+        if (e.pointerType !== "mouse") return;
+        if (!open) apertoDaHover.current = true;
+        apri();
+      }}
+      onPointerLeave={(e) => {
+        if (e.pointerType !== "mouse") return;
+        apertoDaHover.current = false;
+        chiudiPresto();
+      }}
     >
       <button
         ref={buttonRef}
         type="button"
         aria-expanded={open}
         aria-controls={panelId}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          if (apertoDaHover.current) {
+            apertoDaHover.current = false;
+            apri();
+            return;
+          }
+          setOpen((v) => !v);
+        }}
         className={cn(
           "relative rounded-full px-3 py-2 text-sm font-semibold transition-colors",
           open

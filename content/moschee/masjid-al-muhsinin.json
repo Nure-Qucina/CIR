@@ -1,10 +1,13 @@
 {
   "nome": "Masjid Al-Muhsinin",
   "bozza": false,
-  "zona": "est",
+  "zona": "fuori",
   "municipio": "V",
-  "indirizzo": "viale della Repubblica 40",
+  "quartiere": "Santa Maria delle Mole (Marino)",
+  "indirizzo": "Viale della Repubblica 56",
   "mostraIndirizzo": false,
+  "lat": 41.77126,
+  "lng": 12.59636,
   "servizi": [],
   "lingueKhutba": [
     "it",

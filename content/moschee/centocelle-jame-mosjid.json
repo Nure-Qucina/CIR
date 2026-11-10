@@ -3,8 +3,11 @@
   "bozza": false,
   "zona": "est",
   "municipio": "V",
-  "indirizzo": "via dei Gladioli 14/A",
+  "quartiere": "Centocelle",
+  "indirizzo": "Via dei Gladioli 14",
   "mostraIndirizzo": true,
+  "lat": 41.88019,
+  "lng": 12.56231,
   "servizi": [],
   "lingueKhutba": [
     "it",

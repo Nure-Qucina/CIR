@@ -1,10 +1,13 @@
 {
   "nome": "Moschea di Baitur Rahman",
   "bozza": false,
-  "zona": "est",
-  "municipio": "V",
-  "indirizzo": "via Bixio 46A",
+  "zona": "centro",
+  "municipio": "I",
+  "quartiere": "Esquilino",
+  "indirizzo": "Via Bixio 46/A",
   "mostraIndirizzo": true,
+  "lat": 41.89344,
+  "lng": 12.50856,
   "servizi": [],
   "lingueKhutba": [
     "it",

@@ -3,8 +3,11 @@
   "bozza": false,
   "zona": "est",
   "municipio": "V",
-  "indirizzo": "Via della Maranella, 68",
+  "quartiere": "Torpignattara",
+  "indirizzo": "Via della Marranella 68",
   "mostraIndirizzo": true,
+  "lat": 41.88231,
+  "lng": 12.54244,
   "servizi": [],
   "lingueKhutba": [
     "it",

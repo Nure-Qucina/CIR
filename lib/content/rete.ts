@@ -67,7 +67,9 @@ function toMoschea(slug: string, e: Raw): Moschea {
     nome: str(e.nome),
     associazione: opt(e.associazione),
     zona: (str(e.zona) || "est") as Zona,
-    municipio: str(e.municipio),
+    // Fuori Roma il municipio non esiste: il campo in Keystatic è obbligatorio,
+    // quindi qui lo si ignora e si mostra solo il quartiere/comune.
+    municipio: e.zona === "fuori" ? "" : str(e.municipio),
     quartiere: opt(e.quartiere),
     indirizzo: pubblico ? opt(e.indirizzo) : undefined,
     posizione:
@@ -204,6 +206,8 @@ export type Professionista = {
   tipo: "persona" | "azienda";
   immagine?: string;
   ruolo: string;
+  /** Ambiti di lavoro (uno per riga in Keystatic), mostrati come etichette. */
+  ambiti: string[];
   zona?: string;
   inStudio: boolean;
   online: boolean;
@@ -241,6 +245,7 @@ function toProfessionista(
   locale: Locale,
 ): Professionista {
   const ruolo = tradotto(e, "ruolo", e.ruolo, locale);
+  const ambiti = tradotto(e, "ambiti", e.ambiti, locale);
   const perche = tradotto(e, "perche", e.perche, locale);
   const descrizione = tradotto(e, "descrizione", e.descrizione, locale);
   const a = (e.agevolazione ?? {}) as Raw;
@@ -257,6 +262,10 @@ function toProfessionista(
     tipo: e.tipo === "azienda" ? "azienda" : "persona",
     immagine: opt(e.immagine),
     ruolo: ruolo.valore,
+    ambiti: ambiti.valore
+      .split("\n")
+      .map((s) => s.trim())
+      .filter(Boolean),
     zona: opt(e.zona),
     inStudio: Boolean(e.inStudio),
     online: Boolean(e.online),

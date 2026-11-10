@@ -3,8 +3,11 @@
   "bozza": false,
   "zona": "est",
   "municipio": "V",
-  "indirizzo": "via Antonio Tempesta 100",
+  "quartiere": "Torpignattara",
+  "indirizzo": "Via Antonio Tempesta 100",
   "mostraIndirizzo": false,
+  "lat": 41.88356,
+  "lng": 12.54056,
   "servizi": [],
   "lingueKhutba": [
     "it",

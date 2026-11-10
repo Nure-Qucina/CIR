@@ -1,10 +1,13 @@
 {
   "nome": "Moschea El Fath",
   "bozza": false,
-  "zona": "est",
-  "municipio": "V",
-  "indirizzo": "via della Magliana 76G",
+  "zona": "sud",
+  "municipio": "XI",
+  "quartiere": "Magliana",
+  "indirizzo": "Via della Magliana 76/G",
   "mostraIndirizzo": true,
+  "lat": 41.85731,
+  "lng": 12.45806,
   "servizi": [],
   "lingueKhutba": [
     "it",

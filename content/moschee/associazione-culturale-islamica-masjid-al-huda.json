@@ -3,8 +3,11 @@
   "bozza": false,
   "zona": "est",
   "municipio": "V",
-  "indirizzo": "via dei Frassini 4",
+  "quartiere": "Centocelle",
+  "indirizzo": "Via dei Frassini 4",
   "mostraIndirizzo": true,
+  "lat": 41.87775,
+  "lng": 12.56799,
   "servizi": [],
   "lingueKhutba": [
     "it",

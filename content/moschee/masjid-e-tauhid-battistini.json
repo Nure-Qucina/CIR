@@ -1,10 +1,13 @@
 {
   "nome": "Masjid e Tauhid battistini",
   "bozza": false,
-  "zona": "est",
-  "municipio": "V",
-  "indirizzo": "via Padre Anastasio Gutièrrez",
+  "zona": "ovest",
+  "municipio": "XIII",
+  "quartiere": "Battistini",
+  "indirizzo": "Via Padre Anastasio Gutièrrez",
   "mostraIndirizzo": true,
+  "lat": 41.90519,
+  "lng": 12.41581,
   "servizi": [],
   "lingueKhutba": [
     "it",

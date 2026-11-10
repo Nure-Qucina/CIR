@@ -1,8 +1,9 @@
 {
   "nome": "Moschea Al Taqwa",
   "bozza": false,
-  "zona": "est",
+  "zona": "fuori",
   "municipio": "V",
+  "quartiere": "Marina di Ardea (Ardea)",
   "indirizzo": "Lungomare degli Ardeatini 354",
   "mostraIndirizzo": true,
   "servizi": [],

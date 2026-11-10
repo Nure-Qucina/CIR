@@ -159,18 +159,51 @@ export default async function ProfessionistaPage({
             )}
 
             {p.perche && (
-              <p className="text-ink border-orange max-w-2xl border-s-[3px] ps-4 font-serif text-lg leading-snug italic">
-                {t("perche")}: {p.perche}
-              </p>
+              <figure className="border-orange flex max-w-2xl flex-col gap-1.5 border-s-[3px] ps-5">
+                <figcaption className="text-xs font-extrabold tracking-[0.16em] text-orange-700 uppercase">
+                  {t("perche")}
+                </figcaption>
+                <blockquote className="text-ink font-serif text-xl leading-snug italic sm:text-[22px]">
+                  {p.perche}
+                </blockquote>
+              </figure>
+            )}
+
+            {p.ambiti.length > 0 && (
+              <section className="flex max-w-2xl flex-col gap-3">
+                <h2 className="text-ink text-xl font-extrabold">
+                  {t("diCosaSiOccupa")}
+                </h2>
+                <ul className="grid gap-2 sm:grid-cols-2">
+                  {p.ambiti.map((a) => (
+                    <li
+                      key={a}
+                      className="foglio text-ink flex items-center gap-3 px-4 py-3 text-[15px] leading-snug font-semibold"
+                    >
+                      <span
+                        aria-hidden
+                        className="bg-orange h-2 w-2 shrink-0 rotate-45 rounded-[1px]"
+                      />
+                      {a}
+                    </li>
+                  ))}
+                </ul>
+              </section>
             )}
 
             {p.descrizione && (
               <section className="flex max-w-2xl flex-col gap-3">
                 <h2 className="text-ink text-xl font-extrabold">
-                  {t("diCosaSiOccupa")}
+                  {p.ambiti.length > 0 ? t("chiE") : t("diCosaSiOccupa")}
                 </h2>
-                <div className="text-ink font-serif text-lg leading-relaxed whitespace-pre-line">
-                  {p.descrizione}
+                <div className="text-ink-soft flex flex-col gap-3 text-[17px] leading-relaxed">
+                  {p.descrizione
+                    .split(/\n\s*\n/)
+                    .map((x) => x.trim())
+                    .filter(Boolean)
+                    .map((par) => (
+                      <p key={par}>{par}</p>
+                    ))}
                 </div>
               </section>
             )}

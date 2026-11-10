@@ -1,10 +1,13 @@
 {
   "nome": "Centro Cuturale Al-Abrar",
   "bozza": false,
-  "zona": "est",
-  "municipio": "V",
-  "indirizzo": "via Tazio Nuvolari 2",
+  "zona": "sud",
+  "municipio": "VIII",
+  "quartiere": "Roma 70",
+  "indirizzo": "Via Tazio Nuvolari 2",
   "mostraIndirizzo": true,
+  "lat": 41.83533,
+  "lng": 12.50505,
   "servizi": [],
   "lingueKhutba": [
     "it",

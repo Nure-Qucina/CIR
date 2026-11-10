@@ -3,10 +3,11 @@
   "bozza": false,
   "zona": "est",
   "municipio": "V",
+  "quartiere": "Prenestino",
   "indirizzo": "Viale Irpinia 6",
   "mostraIndirizzo": false,
-  "lat": 41.893,
-  "lng": 12.55,
+  "lat": 41.89306,
+  "lng": 12.54956,
   "servizi": [],
   "lingueKhutba": [
     "it",

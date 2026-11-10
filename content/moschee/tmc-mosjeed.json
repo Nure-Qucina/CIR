@@ -3,8 +3,11 @@
   "bozza": false,
   "zona": "est",
   "municipio": "V",
-  "indirizzo": "via Ccarlo della Rocca 23",
+  "quartiere": "Torpignattara",
+  "indirizzo": "Via Carlo della Rocca 23",
   "mostraIndirizzo": true,
+  "lat": 41.87806,
+  "lng": 12.54406,
   "servizi": [],
   "lingueKhutba": [
     "it",

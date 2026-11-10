@@ -1,10 +1,13 @@
 {
   "nome": "Centro Culturale Islamico Baitun Noor",
   "bozza": false,
-  "zona": "est",
-  "municipio": "V",
+  "zona": "centro",
+  "municipio": "I",
+  "quartiere": "Prati",
   "indirizzo": "Via Tolemaide 5",
   "mostraIndirizzo": false,
+  "lat": 41.90882,
+  "lng": 12.45442,
   "servizi": [],
   "lingueKhutba": [
     "it",

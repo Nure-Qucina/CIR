@@ -3,8 +3,11 @@
   "bozza": false,
   "zona": "est",
   "municipio": "V",
+  "quartiere": "Torpignattara",
   "indirizzo": "Via Galeazzo Alessi 202",
   "mostraIndirizzo": true,
+  "lat": 41.87932,
+  "lng": 12.54008,
   "servizi": [],
   "lingueKhutba": [
     "it",

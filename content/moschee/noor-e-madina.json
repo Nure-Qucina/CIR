@@ -3,8 +3,11 @@
   "bozza": false,
   "zona": "est",
   "municipio": "V",
-  "indirizzo": "via dei Quintili 81",
+  "quartiere": "Quadraro",
+  "indirizzo": "Via dei Quintili 81",
   "mostraIndirizzo": true,
+  "lat": 41.87061,
+  "lng": 12.54649,
   "servizi": [],
   "lingueKhutba": [
     "it",

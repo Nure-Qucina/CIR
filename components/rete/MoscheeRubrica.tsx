@@ -55,7 +55,7 @@ export function MoscheeRubrica({ moschee }: { moschee: Moschea[] }) {
             m.quartiere,
             m.indirizzo,
             m.associazione,
-            `municipio ${m.municipio}`,
+            m.municipio && `municipio ${m.municipio}`,
           ]
             .filter(Boolean)
             .join(" ")
@@ -177,7 +177,9 @@ export function MoscheeRubrica({ moschee }: { moschee: Moschea[] }) {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="text-xs font-bold tracking-[0.14em] text-teal-700 uppercase">
-                      {t("municipio", { m: scelta.municipio })}
+                      {scelta.municipio
+                        ? t("municipio", { m: scelta.municipio })
+                        : scelta.quartiere}
                     </p>
                     <h2 className="text-ink mt-1 text-lg leading-tight font-extrabold">
                       {scelta.nome}
@@ -265,8 +267,9 @@ export function MoscheeRubrica({ moschee }: { moschee: Moschea[] }) {
                         aria-hidden
                       />
                       {[
-                        m.indirizzo ?? m.quartiere,
-                        t("municipio", { m: m.municipio }),
+                        m.indirizzo,
+                        m.quartiere,
+                        m.municipio && t("municipio", { m: m.municipio }),
                       ]
                         .filter(Boolean)
                         .join(" · ")}

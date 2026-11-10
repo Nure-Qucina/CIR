@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Languages, ShieldCheck } from "lucide-react";
+import { ArrowRight, Languages, ShieldCheck } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import type { Professionista } from "@/lib/content/rete";
 import { telHref as tel, whatsappHref as wa } from "@/lib/content/rete-link";
@@ -25,6 +25,8 @@ export function useDove() {
 export function ProfessionistaCard({ p }: { p: Professionista }) {
   const t = useTranslations("rete.professionisti");
   const dove = useDove();
+  const ambiti = p.ambiti.slice(0, 4);
+  const altriAmbiti = p.ambiti.length - ambiti.length;
   return (
     <article className="foglio flex h-full flex-col overflow-hidden">
       <div className="flex flex-1 items-start gap-4 px-5 pt-5 pb-5 sm:gap-5 sm:px-6">
@@ -69,23 +71,50 @@ export function ProfessionistaCard({ p }: { p: Professionista }) {
             )}
           </p>
           {p.perche && (
-            <p className="text-ink-soft mt-1 font-serif text-[15px] leading-snug italic">
+            <p className="text-ink-soft mt-1 line-clamp-5 font-serif text-[15px] leading-snug italic sm:line-clamp-3">
               «{p.perche}»
             </p>
+          )}
+          {ambiti.length > 0 && (
+            <ul className="mt-2 flex flex-wrap gap-1.5">
+              {ambiti.map((a) => (
+                <li
+                  key={a}
+                  className="bg-cream-dark text-ink rounded-full px-2.5 py-1 text-xs font-semibold"
+                >
+                  {a}
+                </li>
+              ))}
+              {altriAmbiti > 0 && (
+                <li className="rounded-full px-1.5 py-1 text-xs font-semibold text-teal-700">
+                  +{altriAmbiti}
+                </li>
+              )}
+            </ul>
           )}
         </div>
       </div>
 
       {(p.agevolazione || p.contatti.telefono || p.contatti.whatsapp) && (
-        <div className="relative flex flex-wrap items-center gap-x-4 gap-y-3 border-t-2 border-dashed border-orange-500 bg-orange-100 px-5 py-3.5 sm:px-6">
-          <span
-            aria-hidden
-            className="bg-cream absolute -start-2.5 -top-2.5 h-5 w-5 rounded-full"
-          />
-          <span
-            aria-hidden
-            className="bg-cream absolute -end-2.5 -top-2.5 h-5 w-5 rounded-full"
-          />
+        <div
+          className={
+            p.agevolazione
+              ? "relative flex flex-wrap items-center gap-x-4 gap-y-3 border-t-2 border-dashed border-orange-500 bg-orange-100 px-5 py-3.5 sm:px-6"
+              : "border-border flex flex-wrap items-center gap-x-4 gap-y-3 border-t px-5 py-3.5 sm:px-6"
+          }
+        >
+          {p.agevolazione && (
+            <>
+              <span
+                aria-hidden
+                className="bg-cream absolute -start-2.5 -top-2.5 h-5 w-5 rounded-full"
+              />
+              <span
+                aria-hidden
+                className="bg-cream absolute -end-2.5 -top-2.5 h-5 w-5 rounded-full"
+              />
+            </>
+          )}
           {p.agevolazione && (
             <p className="flex min-w-0 flex-[1_1_220px] items-center gap-3">
               <span className="sr-only">{t("agevolazione")}: </span>
@@ -122,6 +151,15 @@ export function ProfessionistaCard({ p }: { p: Professionista }) {
               </a>
             )}
           </span>
+          {!p.agevolazione && (
+            <Link
+              href={`/professionisti/${p.slug}`}
+              className="ms-auto inline-flex min-h-11 items-center gap-1.5 text-sm font-bold text-teal-700 underline-offset-4 hover:underline"
+            >
+              {t("leggiProfilo")}
+              <ArrowRight size={15} className="rtl:rotate-180" aria-hidden />
+            </Link>
+          )}
         </div>
       )}
     </article>

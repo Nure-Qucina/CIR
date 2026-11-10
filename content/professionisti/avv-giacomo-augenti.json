@@ -4,25 +4,28 @@
   "area": "legale",
   "tipo": "persona",
   "immagine": "/images/professionisti/avv-giacomo-augenti/immagine.jpeg",
-  "ruolo": "Civilista",
+  "ruolo": "Avvocato civilista",
+  "ambiti": "Casa e immobili\nFamiglia e successioni\nDiritto commerciale\nResponsabilità civile\nCrisi d’impresa e insolvenza",
   "zona": "Roma",
   "inStudio": true,
   "online": false,
   "lingue": [
     "it"
   ],
-  "perche": "L’Avv. Giacomo Augenti è avvocato del Foro di Roma e patrocinante in Cassazione. È titolare dello Studio Legale Augenti, presso il quale svolge la propria attività professionale in ambito giudiziale e stragiudiziale, con particolare riferimento al diritto civile e commerciale.\n\nNel corso della propria esperienza professionale ha maturato una consolidata competenza in materia di diritto immobiliare, diritto di famiglia e delle successioni, diritto commerciale, responsabilità civile e procedure concorsuali, con particolare esperienza nella gestione delle controversie e delle questioni giuridiche connesse alla crisi d’impresa e all’insolvenza.\n\nLa sua attività professionale si caratterizza per un approccio attento e personalizzato alla gestione degli incarichi, fondato sul rapporto diretto con il cliente, sulla cura delle strategie difensive e sul costante approfondimento delle questioni giuridiche sottoposte alla sua attenzione.",
+  "perche": "Civilista di lunga esperienza, patrocinante in Cassazione: un riferimento per casa, famiglia, eredità e questioni d’impresa.",
   "agevolazione": {
     "come": "Contatta lo studio\nDi' che vieni dal CIR"
   },
   "contatti": {
     "telefono": "068844849",
     "sito": "https://www.studiolegaleaugenti.com/default.html",
-    "indirizzo": "Via Giovanni Battista Martini, 6, 00198 Roma RM"
+    "indirizzo": "Via Giovanni Battista Martini 6, Roma"
   },
   "traduzioni": {
     "en": {},
     "ar": {},
     "bn": {}
-  }
+  },
+  "albo": "Foro di Roma · Patrocinante in Cassazione",
+  "descrizione": "Avvocato del Foro di Roma e patrocinante in Cassazione, è titolare dello Studio Legale Augenti. Segue cause e accordi in diritto civile e commerciale, sia in tribunale sia fuori.\n\nHa una lunga esperienza nelle controversie su immobili, famiglia ed eredità e nelle questioni legate alla crisi d’impresa.\n\nLavora in modo diretto e personale: segue ogni incarico in prima persona, con cura della strategia e studio attento di ogni caso."
 }

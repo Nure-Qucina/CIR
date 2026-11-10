@@ -710,6 +710,13 @@ export default config({
           label: "Di cosa si occupa, in breve (IT)",
           description: "Es. «Diritto antidiscriminatorio».",
         }),
+        ambiti: fields.text({
+          label: "Ambiti di lavoro (IT)",
+          description:
+            "Da 3 a 5 voci brevi, una per riga (es. «Casa e immobili»). Compaiono come etichette sulla card e nella scheda.",
+          multiline: true,
+          validation: { isRequired: false },
+        }),
         zona: fields.text({
           label: "Zona",
           description: "Es. «Municipio V» o «Roma».",
@@ -733,8 +740,10 @@ export default config({
         }),
         perche: fields.text({
           label: "Perché lo consigliamo (IT)",
-          description: "Una frase, scritta dal CIR.",
+          description:
+            "Una frase sola, scritta dal CIR (massimo 240 caratteri). Il curriculum va in «Presentazione».",
           multiline: true,
+          validation: { length: { min: 0, max: 240 } },
         }),
         descrizione: fields.text({
           label: "Presentazione (IT)",
@@ -802,6 +811,11 @@ export default config({
           }),
           perche: fields.text({
             label: "Perché lo consigliamo",
+            multiline: true,
+            validation: { isRequired: false },
+          }),
+          ambiti: fields.text({
+            label: "Ambiti di lavoro (uno per riga)",
             multiline: true,
             validation: { isRequired: false },
           }),

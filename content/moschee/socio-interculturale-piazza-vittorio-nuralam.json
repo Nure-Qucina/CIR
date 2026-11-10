@@ -1,8 +1,9 @@
 {
   "nome": "Socio interculturale piazza vittorio (Nuralam)",
   "bozza": false,
-  "zona": "est",
-  "municipio": "V",
+  "zona": "centro",
+  "municipio": "I",
+  "quartiere": "Esquilino",
   "mostraIndirizzo": false,
   "servizi": [],
   "lingueKhutba": [

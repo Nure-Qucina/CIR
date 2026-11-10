@@ -1,10 +1,13 @@
 {
   "nome": "Montagnola",
   "bozza": false,
-  "zona": "est",
-  "municipio": "V",
+  "zona": "sud",
+  "municipio": "VIII",
+  "quartiere": "Montagnola",
   "indirizzo": "Via Aristide Leonori 64",
   "mostraIndirizzo": true,
+  "lat": 41.84968,
+  "lng": 12.48754,
   "servizi": [],
   "lingueKhutba": [
     "it",

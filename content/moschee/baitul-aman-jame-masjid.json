@@ -1,10 +1,13 @@
 {
   "nome": "Baitul Aman Jame Masjid",
   "bozza": false,
-  "zona": "est",
-  "municipio": "V",
-  "indirizzo": "via del Casale Giuliani 8",
+  "zona": "nord",
+  "municipio": "III",
+  "quartiere": "Tufello",
+  "indirizzo": "Via del Casale Giuliani 8",
   "mostraIndirizzo": true,
+  "lat": 41.94437,
+  "lng": 12.52494,
   "servizi": [],
   "lingueKhutba": [
     "it",
