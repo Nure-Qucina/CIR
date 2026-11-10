@@ -1,0 +1,28 @@
+{
+  "nome": "Osmetica",
+  "bozza": true,
+  "gruppo": "servizi",
+  "tipo": "Profumeria Online",
+  "quartiere": "Roma",
+  "indirizzo": "Via Flavio Stilicone, 92 (Non è il negozio Fisico)",
+  "logo": "/images/sponsor/osmetica/logo.jpg",
+  "foto": [
+    "/images/sponsor/osmetica/foto/0.jpg",
+    "/images/sponsor/osmetica/foto/1.jpeg",
+    "/images/sponsor/osmetica/foto/2.jpg"
+  ],
+  "fiducia": "Osmetica è un e-commerce e brand italiano specializzato nella vendita online e in punti vendita fisici di profumeria, skincare e make-up selezionato, con un ampio catalogo (tra cui profumi arabi e di nicchia). Selezione curata di profumi (brand come Lattafa, Swiss Arabian, Khadlaj, French Avenue e Arabiyat Prestige), cosmetici, k-beauty e prodotti per la cura della pelle.",
+  "descrizione": "L'arte del profumo, senza compromessi sull'autenticità. Una passione che diventa profumeria online. Osmetica è la profumeria online per chi cerca fragranze, cosmetici e skincare originali, scelti con cura e consegnati a casa in pochi giorni. Lavoriamo con case di nicchia italiane e con distillerie del Golfo per la linea di profumi arabi, che curiamo in modo particolare.",
+  "vantaggio": "-10% Con Il Codice Promozionale \"COMUNITA10\"",
+  "contatti": {
+    "telefono": "info@osmetica.it",
+    "sito": "osmetica.it",
+    "instagram": "@osmetica.it",
+    "facebook": "Osmetica"
+  },
+  "traduzioni": {
+    "en": {},
+    "ar": {},
+    "bn": {}
+  }
+}
