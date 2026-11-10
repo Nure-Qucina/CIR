@@ -1,0 +1,28 @@
+{
+  "nome": "Avv. Andrea Augenti",
+  "bozza": false,
+  "area": "legale",
+  "tipo": "persona",
+  "immagine": "/images/professionisti/avv-andrea-augenti/immagine.jpeg",
+  "ruolo": "Avvocato penalista",
+  "zona": "Roma",
+  "inStudio": true,
+  "online": false,
+  "lingue": [
+    "it"
+  ],
+  "perche": "Avvocato penalista del Foro di Roma e Segretario della XLV Conferenza dei Giovani Avvocati presso l’Ordine degli Avvocati di Roma. Si è laureato in Giurisprudenza presso l’Università degli Studi Roma Tre, discutendo una tesi sui reati di riciclaggio, e ha conseguito un Master in Diritto Penale d’Impresa presso la LUISS Guido Carli. È consulente in materia di responsabilità amministrativa degli enti ai sensi del D.Lgs. 231/2001. Si occupa di diritto penale d’impresa (reati societari e tributari, reati fallimentari e fattispecie previste dal Codice della crisi d’impresa e dell’insolvenza), reati contro la persona, diritto penale antidiscriminatorio, con particolare attenzione ai reati motivati dall’odio razziale e religioso, nonché di diffamazione a mezzo stampa e sui social network. È in possesso della certificazione Cambridge English di livello C1 e svolge attività di consulenza e assistenza legale anche in lingua inglese.",
+  "agevolazione": {
+    "come": "Contatta lo studio\nDi' che vieni dal CIR"
+  },
+  "contatti": {
+    "telefono": "068844849",
+    "sito": "https://www.studiolegaleaugenti.com/default.html",
+    "indirizzo": "Via Giovanni Battista Martini, 6, 00198 Roma RM"
+  },
+  "traduzioni": {
+    "en": {},
+    "ar": {},
+    "bn": {}
+  }
+}
